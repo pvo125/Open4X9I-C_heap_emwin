@@ -37,6 +37,7 @@
 .\output\tsc2046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 .\output\tsc2046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 .\output\tsc2046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
+.\output\tsc2046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 .\output\tsc2046.o: ..\user\inc\GUI.h
 .\output\tsc2046.o: ..\user\inc\GUI_ConfDefaults.h
 .\output\tsc2046.o: ..\user\GUI\GUIConf.h

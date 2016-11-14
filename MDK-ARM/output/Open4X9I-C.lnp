@@ -25,6 +25,7 @@
 ".\output\stm32f4xx_hal_spi.o"
 ".\output\stm32f4xx_hal_gpio.o"
 ".\output\stm32f4xx_hal_rtc.o"
+".\output\stm32f4xx_hal_uart.o"
 ".\output\system_stm32f4xx.o"
 ".\output\gui_x.o"
 ".\output\guiconf.o"

@@ -60,14 +60,14 @@ void bxCAN_Init(void){
 	CAN2->BTR&=~CAN_BTR_LBKM;	
 	CAN2->BTR&=~CAN_BTR_SILM;	
 
-	CAN2->BTR|=CAN_BTR_BRP&44;														/* tq=(44+1)*tPCLK1=1uS   */
+	CAN2->BTR|=CAN_BTR_BRP&29;														/* tq=(29+1)*tPCLK1=2/3 uS   */
 	CAN2->BTR|=CAN_BTR_SJW_0;															/*SJW[1:0]=1  (SJW[1:0]+1)*tCAN=tRJW PROP_SEG =+- 2* tq	*/		
 	
-	CAN2->BTR&=~CAN_BTR_TS1_0;
-	CAN2->BTR|=CAN_BTR_TS1_2|CAN_BTR_TS1_1;								/* TS1[3:0]=0X06 */ //tBS1=1*(6+1)=7uS
+	//CAN2->BTR&=~CAN_BTR_TS1_0;
+	CAN2->BTR|=CAN_BTR_TS1_2;								/* TS1[3:0]=0X07 */ //tBS1=tq*(7+1)=8tq
 	
-	CAN2->BTR&=~CAN_BTR_TS2_1;	
-	CAN2->BTR|=CAN_BTR_TS2_0;															/* TS2[2:0]=0X01 */ //tBS2=1*(1+1)=2uS
+	//CAN2->BTR&=~CAN_BTR_TS2_1;	
+	//CAN2->BTR|=CAN_BTR_TS2_0;				  			/* TS2[2:0]=0X02 */ //tBS2=tq*(2+1)=3tq
 																												// | 1uS |  	7uS 					 |  2uS			| 		T=10uS f=100kHz
 																												// |-------------------------|----------|		
 																												//				Sample point = 80%

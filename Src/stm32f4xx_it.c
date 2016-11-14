@@ -41,6 +41,16 @@
 #include "DIALOG.h"
 #include "PS2_Mouse.h"
 #include "CAN.h"
+extern  uint8_t RxBuffer[];
+extern  uint8_t TxBuffer[];
+
+extern volatile uint8_t tx_message;
+extern volatile uint8_t rx_message;
+
+static volatile uint8_t RXcount,TXcount;
+extern volatile uint8_t count_message;
+
+
 extern volatile GUI_TIMER_TIME OS_TimeMS;
 volatile uint32_t TimeMS;
 extern void Touch_GetData(void);
@@ -53,7 +63,9 @@ extern GUI_PID_STATE State;
 extern PROGBAR_Handle PROGBAR_MEM;
 uint32_t GUI_UsedBytes;
 uint8_t backlight_count=0;
-static volatile uint8_t row;
+//static volatile uint8_t row;
+
+
 
 extern PS2_MOUSE_t 		PS2_MOUSE;
 extern volatile uint8_t scancode;
@@ -71,6 +83,7 @@ extern LTDC_HandleTypeDef hltdc;
 extern RTC_HandleTypeDef hrtc;
 extern TIM_HandleTypeDef htim6;
 extern TIM_HandleTypeDef htim7;
+extern UART_HandleTypeDef huart1;
 
 /******************************************************************************/
 /*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
@@ -107,13 +120,82 @@ void RTC_WKUP_IRQHandler(void)
   /* USER CODE BEGIN RTC_WKUP_IRQn 0 */
 	//RTC->ISR&=~RTC_ISR_WUTF;
 		HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-		WM_SendMessageNoPara(hWin2,WM_USER);
+	
+//	WM_SendMessageNoPara(hWin2,WM_USER);
+
 	/* USER CODE END RTC_WKUP_IRQn 0 */
   HAL_RTCEx_WakeUpTimerIRQHandler(&hrtc);
   /* USER CODE BEGIN RTC_WKUP_IRQn 1 */
 		
   /* USER CODE END RTC_WKUP_IRQn 1 */
 }
+ void USART1_IRQHandler(void){
+ 
+  
+ /* USER CODE BEGIN USART1_IRQn 0 */
+		
+	 
+	
+		if(USART1->SR & USART_SR_RXNE)
+		{
+			
+			if(USART1->DR!='\r')
+				{
+				RxBuffer[RXcount]=USART1->DR;
+				RXcount++;
+				}
+			else
+				{
+				RxBuffer[RXcount]=USART1->DR;
+				//RxBuffer[RXcount+1]='\0';	
+				//GUI_DispString((const char*)RxBuffer);
+				//GUI_DispNextLine();
+				RXcount=0;
+				if(rx_message==1)
+					rx_message=2;
+				
+							
+				//	else if(rx_message==1)
+					
+				//	else if(rx_message==2)
+						
+				}
+			//USART1->SR &=~USART_SR_RXNE;
+		}
+		else if(USART1->SR & USART_SR_TXE)
+		{
+			TXcount++;
+			if(TxBuffer[TXcount]!='\0')
+			{
+				USART1->DR=TxBuffer[TXcount];
+				
+			}
+			else
+			{
+				//USART1->CR1 &=~USART_CR1_TXEIE;
+				
+				TXcount=0;
+				__HAL_UART_DISABLE_IT(&huart1, UART_IT_TXE);
+				NVIC_ClearPendingIRQ(USART1_IRQn);
+			
+			}
+		
+		}
+		/*if((USART1->SR & USART_SR_TC))
+		{
+		
+		}*/
+	
+	 
+	 
+  /* USER CODE END USART1_IRQn 0 */
+	//HAL_UART_IRQHandler(&huart1);
+	/* USER CODE BEGIN USART1_IRQn 1 */
+	
+  /* USER CODE END USART1_IRQn 1 */ 
+ 
+ }
+
 
 /**
 * @brief This function handles RTC alarms A and B interrupt through EXTI line 17.

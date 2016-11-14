@@ -734,6 +734,28 @@ void HAL_SDRAM_MspDeInit(SDRAM_HandleTypeDef* hsdram){
 
 /* USER CODE BEGIN 1 */
 
+void HAL_UART_MspInit(UART_HandleTypeDef *huart){
+	
+	GPIO_InitTypeDef GPIO_InitStruct;
+	
+	if(huart->Instance==USART1)
+	{
+		__USART1_CLK_ENABLE();
+		
+		GPIO_InitStruct.Pin=GPIO_PIN_9|GPIO_PIN_10;
+		GPIO_InitStruct.Alternate=GPIO_AF7_USART1;
+		GPIO_InitStruct.Mode=GPIO_MODE_AF_PP;
+		GPIO_InitStruct.Pull=GPIO_NOPULL;
+		GPIO_InitStruct.Speed=GPIO_SPEED_LOW;
+		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+		
+		HAL_NVIC_SetPriority(USART1_IRQn, 0, 1);
+    HAL_NVIC_EnableIRQ(USART1_IRQn);
+				
+	}
+
+}
+
 /* USER CODE END 1 */
 
 /**

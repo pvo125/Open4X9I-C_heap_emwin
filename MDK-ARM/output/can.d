@@ -37,6 +37,7 @@
 .\output\can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 .\output\can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 .\output\can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
+.\output\can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 .\output\can.o: ..\user\bxCAN\CAN.h
 .\output\can.o: ..\user\inc\DIALOG.h
 .\output\can.o: ..\user\inc\WM.h

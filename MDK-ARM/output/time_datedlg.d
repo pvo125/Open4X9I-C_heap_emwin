@@ -37,6 +37,7 @@
 .\output\time_datedlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 .\output\time_datedlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 .\output\time_datedlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
+.\output\time_datedlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 .\output\time_datedlg.o: ..\user\inc\DIALOG.h
 .\output\time_datedlg.o: ..\user\inc\WM.h
 .\output\time_datedlg.o: ..\user\inc\GUI_ConfDefaults.h

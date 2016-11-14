@@ -37,4 +37,5 @@
 .\output\ps2_mouse.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 .\output\ps2_mouse.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 .\output\ps2_mouse.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
+.\output\ps2_mouse.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 .\output\ps2_mouse.o: ..\user\PS2_mouse\PS2_Mouse.h

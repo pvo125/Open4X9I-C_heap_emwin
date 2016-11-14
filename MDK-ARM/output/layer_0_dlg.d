@@ -37,6 +37,7 @@
 .\output\layer_0_dlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 .\output\layer_0_dlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 .\output\layer_0_dlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
+.\output\layer_0_dlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 .\output\layer_0_dlg.o: ..\user\inc\DIALOG.h
 .\output\layer_0_dlg.o: ..\user\inc\WM.h
 .\output\layer_0_dlg.o: ..\user\inc\GUI_ConfDefaults.h

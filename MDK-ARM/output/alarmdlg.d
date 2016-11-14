@@ -37,6 +37,7 @@
 .\output\alarmdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 .\output\alarmdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 .\output\alarmdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
+.\output\alarmdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 .\output\alarmdlg.o: ..\user\inc\DIALOG.h
 .\output\alarmdlg.o: ..\user\inc\WM.h
 .\output\alarmdlg.o: ..\user\inc\GUI_ConfDefaults.h

@@ -83,6 +83,8 @@ typedef enum {
   MOUSE_NEW_DATA        // Neue Daten vorhanden
 }PS2_MOUSE_STATUS_t;
 
+
+
 typedef struct {
   uint8_t mode;
 	uint8_t receive_code;   // empfangene Daten

@@ -32,7 +32,7 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
-
+#include <string.h>
 /* USER CODE BEGIN Includes */
 #include "GUI.h"
 #include "DIALOG.h"
@@ -42,7 +42,10 @@
 #define SDRAM_SIZE (uint32_t)0x800000
 #define REFRESH_COUNT           ((uint32_t)1386)   /* SDRAM refresh counter */
 #define SDRAM_TIMEOUT           ((uint32_t)0xFFFF)
+#define ID_BUTTON_YES (GUI_ID_USER + 0x01)
+#define ID_BUTTON_NO (GUI_ID_USER + 0x20)
 
+WM_HWIN hButton_YES,hButton_NO;
 //#define ID_ICON_date   (GUI_ID_USER + 0x05)
 
 //#define ID_ICON_exit   (GUI_ID_USER + 0x07)
@@ -71,6 +74,9 @@ TIM_HandleTypeDef htim6;
 TIM_HandleTypeDef htim7;
 TIM_HandleTypeDef htim13;
 
+UART_HandleTypeDef huart1;
+DMA_HandleTypeDef  hdma2;
+
 SDRAM_HandleTypeDef hsdram2;
 
 
@@ -81,9 +87,21 @@ RTC_AlarmTypeDef sAlarmA,sAlarmB;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
+uint8_t str1[]="get size\n\r";
+uint8_t str2[]="get data\n\r";
+	
+volatile uint8_t download_firmware;
+volatile uint8_t tx_message=0;
+volatile uint8_t rx_message=0;
+
+volatile uint32_t size=0,dec=1;
+
+uint8_t yes=1,no=1;
 uint8_t Input_Device; 
 extern PS2_MOUSE_t 		PS2_MOUSE;
  
+ uint8_t RxBuffer[12];
+ uint8_t TxBuffer[12];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -99,7 +117,8 @@ static void MX_SPI5_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM7_Init(void);
 static void MX_TIM13_Init(void);
-
+static void MX_UART1_Init(void);
+static void MX_DMA2_Init(void);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 void SDRAM_Initialization_sequence(uint32_t RefreshCount);
@@ -108,9 +127,86 @@ extern uint16_t Touch_GetResult(void);
 extern void Touch_calibration(void);
 extern CANRX_TypeDef CAN_Data_RX1;
 
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
+
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
+
+/****************************************************************/
+/*											Функция  сallback Boot_menu							*/
+/****************************************************************/
+static void _cbBoot_menu(WM_MESSAGE* pMsg) {
+  
+	int     NCode;
+  int     Id;
+	uint8_t i;
+	
+	switch(pMsg->MsgId) {
+  case WM_NOTIFY_PARENT:
+				Id    = WM_GetId(pMsg->hWinSrc);
+				NCode = pMsg->Data.v;
+				switch(Id){
+					case ID_BUTTON_YES:
+					switch(NCode){
+							case WM_NOTIFICATION_RELEASED:
+								
+								//HAL_UART_Transmit(&huart1, str1, 10,10);
+								//HAL_UART_Transmit_IT(&huart1,str1,10);
+								//HAL_UART_Receive_IT(&huart1,RxBuffer,9);
+								for(i=0;i<10;i++)
+									TxBuffer[i]=str1[i];
+								USART1->DR=TxBuffer[0];
+								__HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
+							
+							yes=0;
+								
+							break;
+						}
+					break;
+					case ID_BUTTON_NO:
+					switch(NCode){
+							case WM_NOTIFICATION_RELEASED:
+							//HAL_UART_Transmit(&huart1, str2, 10,10);	
+							HAL_UART_Transmit_IT(&huart1,str2,10);
+							HAL_UART_Receive_IT(&huart1,RxBuffer,9);
+								no=0;
+								
+							break;
+						}
+						
+				}	
+	break;
+	default:
+    WM_DefaultProc(pMsg);
+  }
+}	
+
+void Boot_menu (void){
+		
+	yes=1; no=1;
+	
+	GUI_SetFont(GUI_FONT_16_1); 
+	GUI_SetColor(GUI_YELLOW);
+	
+	 //GUI_DispStringAt(" BOOT FROM SD CARD ? ",170,50);
+	 BUTTON_SetDefaultSkin(BUTTON_SKIN_FLEX);
+   hButton_YES=BUTTON_CreateEx(300,100,40,30,WM_HBKWIN,WM_CF_SHOW,0,ID_BUTTON_YES);
+	 BUTTON_SetText(hButton_YES, "1");
+	 hButton_NO=BUTTON_CreateEx(300,150,40,30,WM_HBKWIN,WM_CF_SHOW,0,ID_BUTTON_NO);
+	 BUTTON_SetText(hButton_NO, "2");
+	 WM_SetCallback(WM_HBKWIN, _cbBoot_menu);
+		while(1)
+		{
+			GUI_Exec();
+		}
+		/*WM_DeleteWindow(hButton_YES);
+		WM_DeleteWindow(hButton_NO);
+		hButton_YES=0;
+		hButton_NO=0;
+		GUI_Clear();*/
+		
+	}
 
 /* USER CODE END 0 */
 
@@ -118,7 +214,10 @@ int main(void)
 
 {
   /* USER CODE BEGIN 1 */
-		
+	uint8_t i,m;
+	char temp;
+	char *p;
+	volatile int cmp;
 	/* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -146,6 +245,9 @@ int main(void)
 	MX_TIM13_Init();
 	 /* USER CODE BEGIN 3 */
 	__HAL_SPI_ENABLE(&hspi2);
+	
+	MX_UART1_Init();
+		
 	
 	DBGMCU->APB1FZ|=DBGMCU_APB1_FZ_DBG_TIM4_STOP;
 	
@@ -221,17 +323,61 @@ int main(void)
 		
 		HAL_TIM_PWM_Start(&htim13, TIM_CHANNEL_1);
 			
-		MainTask();
-			
+		//MainTask();
+		__HAL_LTDC_LAYER_DISABLE(&hltdc, 1);
+		 __HAL_LTDC_RELOAD_CONFIG(&hltdc); 
+	hltdc.Instance->SRCR = LTDC_SRCR_IMR;
+		for(i=20;i<70;i++)
+		{
+			TIM13->CCR1=i;
+			GUI_Delay(50);
+		}
+		//Boot_menu();	
 		
 	/* USER CODE END 3 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+				
+	
 	
 	 while (1)
-  {
-			
+	{
+		cmp=strcmp("hello st\r",(const char*)RxBuffer);
+		if(!cmp) 
+		{
+			*(uint32_t*)(RxBuffer+0)=(uint32_t)0;
+			*(uint32_t*)(RxBuffer+4)=(uint32_t)0;	
+			*(uint32_t*)(RxBuffer+8)=(uint32_t)0;
+			for(i=0;i<10;i++)
+				TxBuffer[i]=str1[i];							//		"get size\n\r"
+			USART1->DR=TxBuffer[0];
+			__HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
+			rx_message=1;								                   
+		
+		}
+		if(rx_message==2)			
+		{
+			//p=strchr((char*)RxBuffer,'\0');		// '\r' = ENTER key
+			m=strlen((char*)RxBuffer)-1;
+			p=(char*)(RxBuffer+m-1);
+			for(i=0;i<m;i++)
+				{
+					temp=*(char*)(p-i);
+					size+=(temp&0x0f)*dec;
+					dec*=10;
+				}
+			for(i=0;i<10;i++)
+				TxBuffer[i]=str2[i];							//		"get data\n\r"
+			USART1->DR=TxBuffer[0];
+			__HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
+			rx_message=0;
+					
+		}
+	
+
+
+		
 	}
 	/* USER CODE END WHILE */
   
@@ -309,7 +455,45 @@ void MX_DMA2D_Init(void)
   HAL_DMA2D_Init(&hdma2d);
 
 }
+void MX_DMA2_Init(void){
 
+	hdma2.Instance=DMA2_Stream2;
+  hdma2.Init.Channel=DMA_CHANNEL_4;
+	 hdma2.Init.Direction=DMA_PERIPH_TO_MEMORY;
+	 hdma2.Init.FIFOMode=DMA_FIFOMODE_DISABLE;
+	 hdma2.Init.FIFOThreshold=DMA_FIFO_THRESHOLD_1QUARTERFULL;
+	 hdma2.Init.MemBurst=DMA_MBURST_SINGLE;
+	 hdma2.Init.MemDataAlignment=DMA_MDATAALIGN_BYTE;
+	 hdma2.Init.MemInc=DMA_MINC_ENABLE;
+	 hdma2.Init.Mode=DMA_NORMAL;
+	 hdma2.Init.PeriphBurst=DMA_PBURST_SINGLE;
+	 hdma2.Init.PeriphDataAlignment=DMA_PDATAALIGN_BYTE;
+	 hdma2.Init.PeriphInc=DMA_PINC_DISABLE;
+	 hdma2.Init.Priority=DMA_PRIORITY_LOW;
+	 HAL_DMA_Init(&hdma2);
+	
+	
+}
+
+void MX_UART1_Init(void)
+{
+	
+	
+	huart1.Instance=USART1;
+	huart1.Init.BaudRate=115200;
+	huart1.Init.OverSampling=UART_OVERSAMPLING_16;
+	huart1.Init.HwFlowCtl=UART_HWCONTROL_NONE;
+	huart1.Init.Mode=UART_MODE_TX_RX;
+	huart1.Init.Parity=UART_PARITY_NONE;
+	huart1.Init.StopBits=UART_STOPBITS_1;
+	huart1.Init.WordLength=UART_WORDLENGTH_8B;
+	HAL_UART_Init(&huart1);
+	
+	//__HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
+	__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+	
+
+}	
 /* LTDC init function */
 void MX_LTDC_Init(void)
 {
@@ -684,6 +868,15 @@ void SDRAM_Initialization_sequence(uint32_t RefreshCount)
 	while(FMC_Bank5_6->SDSR&FMC_SDSR_BUSY);
 	for(tmpmrd=SDRAM_BASE;tmpmrd<(SDRAM_BASE+SDRAM_SIZE);tmpmrd+=4)
 	*(uint32_t*)tmpmrd=0x0;
+}
+
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+
+	GUI_DispString((const char*)RxBuffer);
+	GUI_DispNextLine();
+	
+
 }
 
 /* USER CODE END 4 */
