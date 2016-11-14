@@ -1,5 +1,5 @@
 .\output\alarm_b_d.o: ..\user\icons\alarm_b_d.c
-.\output\alarm_b_d.o: D:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
+.\output\alarm_b_d.o: E:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
 .\output\alarm_b_d.o: ..\user\inc\GUI.h
 .\output\alarm_b_d.o: ..\user\inc\GUI_ConfDefaults.h
 .\output\alarm_b_d.o: ..\user\GUI\GUIConf.h

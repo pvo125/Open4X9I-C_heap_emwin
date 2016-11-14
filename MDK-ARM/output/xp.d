@@ -1,5 +1,5 @@
 .\output\xp.o: ..\user\backgroung\xp.c
-.\output\xp.o: D:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
+.\output\xp.o: E:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
 .\output\xp.o: ..\user\inc\GUI.h
 .\output\xp.o: ..\user\inc\GUI_ConfDefaults.h
 .\output\xp.o: ..\user\GUI\GUIConf.h

@@ -7,14 +7,14 @@
 .\output\main.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 .\output\main.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h
 .\output\main.o: ../Drivers/CMSIS/Include/core_cm4.h
-.\output\main.o: D:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\output\main.o: E:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 .\output\main.o: ../Drivers/CMSIS/Include/core_cmInstr.h
 .\output\main.o: ../Drivers/CMSIS/Include/core_cmFunc.h
 .\output\main.o: ../Drivers/CMSIS/Include/core_cmSimd.h
 .\output\main.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 .\output\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 .\output\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-.\output\main.o: D:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+.\output\main.o: E:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 .\output\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 .\output\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 .\output\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
@@ -38,7 +38,7 @@
 .\output\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 .\output\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 .\output\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-.\output\main.o: D:\Keil\ARM\ARMCC\bin\..\include\string.h
+.\output\main.o: E:\Keil\ARM\ARMCC\bin\..\include\string.h
 .\output\main.o: ..\user\inc\GUI.h
 .\output\main.o: ..\user\inc\GUI_ConfDefaults.h
 .\output\main.o: ..\user\GUI\GUIConf.h
@@ -56,7 +56,7 @@
 .\output\main.o: ..\user\inc\GUI_Private.h
 .\output\main.o: ..\user\inc\LCD_Protected.h
 .\output\main.o: ..\user\inc\GUI_Debug.h
-.\output\main.o: D:\Keil\ARM\ARMCC\bin\..\include\stddef.h
+.\output\main.o: E:\Keil\ARM\ARMCC\bin\..\include\stddef.h
 .\output\main.o: ..\user\inc\SCROLLBAR.h
 .\output\main.o: ..\user\inc\WIDGET.h
 .\output\main.o: ..\user\inc\CALENDAR.h

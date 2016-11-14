@@ -247,6 +247,7 @@ int main(void)
 	__HAL_SPI_ENABLE(&hspi2);
 	
 	MX_UART1_Init();
+	MX_DMA2_Init();
 		
 	
 	DBGMCU->APB1FZ|=DBGMCU_APB1_FZ_DBG_TIM4_STOP;
@@ -372,7 +373,14 @@ int main(void)
 			USART1->DR=TxBuffer[0];
 			__HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
 			rx_message=0;
-					
+			
+			__HAL_UART_DISABLE_IT(&huart1, UART_IT_RXNE);	
+			huart1.State=HAL_UART_STATE_BUSY_RX;
+			HAL_UART_DMAResume(&huart1);	
+			
+			HAL_DMA_Start(&hdma2,(uint32_t)&USART1->DR,(uint32_t)0xD0400000,5000);
+			
+				
 		}
 	
 
@@ -457,8 +465,11 @@ void MX_DMA2D_Init(void)
 }
 void MX_DMA2_Init(void){
 
-	hdma2.Instance=DMA2_Stream2;
-  hdma2.Init.Channel=DMA_CHANNEL_4;
+	
+	__DMA2_CLK_ENABLE();
+	
+	 hdma2.Instance=DMA2_Stream2;
+	 hdma2.Init.Channel=DMA_CHANNEL_4;
 	 hdma2.Init.Direction=DMA_PERIPH_TO_MEMORY;
 	 hdma2.Init.FIFOMode=DMA_FIFOMODE_DISABLE;
 	 hdma2.Init.FIFOThreshold=DMA_FIFO_THRESHOLD_1QUARTERFULL;
@@ -471,6 +482,8 @@ void MX_DMA2_Init(void){
 	 hdma2.Init.PeriphInc=DMA_PINC_DISABLE;
 	 hdma2.Init.Priority=DMA_PRIORITY_LOW;
 	 HAL_DMA_Init(&hdma2);
+	
+	NVIC_EnableIRQ(DMA2_Stream2_IRQn);
 	
 	
 }

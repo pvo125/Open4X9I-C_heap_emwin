@@ -1,5 +1,5 @@
 .\output\paint.o: ..\user\icons\paint.c
-.\output\paint.o: D:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
+.\output\paint.o: E:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
 .\output\paint.o: ..\user\inc\GUI.h
 .\output\paint.o: ..\user\inc\GUI_ConfDefaults.h
 .\output\paint.o: ..\user\GUI\GUIConf.h

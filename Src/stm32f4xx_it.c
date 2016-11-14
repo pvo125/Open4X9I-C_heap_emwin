@@ -324,6 +324,11 @@ void TIM7_IRQHandler(void)
   /* USER CODE END TIM7_IRQn 1 */
 }
 
+void DMA2_Stream2_IRQHandler(void)
+{
+
+}
+
 /**
 * @brief This function handles LTDC global interrupt.
 */
