@@ -391,6 +391,8 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 									progbar=PROGBAR_CreateEx(120,240,100,10,pMsg->hWin,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
 									PROGBAR_SetText(progbar,"");	
 									PROGBAR_SetMinMax(progbar,0,100);
+									CAN_Transmit_RemoteFrame(((CANNode.index+1)<<8)|0x89);   // (Core4X9I 0x289) remote UPDATE_FIRMWARE_REQ 0xX89
+								
 								break;
 							}
 					break;			

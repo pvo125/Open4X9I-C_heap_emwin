@@ -106,8 +106,7 @@ void bxCAN_Init(void){
 																						//								fmi=03 ID=0x187 IDE=0 RTR=1
 	CAN1->sFilterRegister[18].FR1=0x1FFF3100;	//Filters bank 18 fmi=04 ID=0xX88 IDE=0 RTR=0	фильтр для сообщ(0x188,0x288,0x388..)на запрос GET_NETNAME 0x088
 																						//								
-																						
-	CAN1->sFilterRegister[18].FR2=0x31303120;	//Filters bank 18 fmi=05 ID=0x189 IDE=0 RTR=0
+	CAN1->sFilterRegister[18].FR2=0x1FFF3120;	//Filters bank 18 fmi=05 ID=0xX89 IDE=0 RTR=0	фильтр для сообщ(0x189,0x289,0x389...) на запрос 0xX89 remote UPDATE_FIRMWARE_REQ 
 																						// 								
 	CAN1->sFilterRegister[19].FR1=0x31503140;	//Filters bank 19 fmi=06 ID=0x18A IDE=0 RTR=0	
 																						//								fmi=07 ID=0x18A IDE=0 RTR=1
