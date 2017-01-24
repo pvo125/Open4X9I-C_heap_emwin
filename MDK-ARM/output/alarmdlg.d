@@ -7,14 +7,14 @@
 .\output\alarmdlg.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 .\output\alarmdlg.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h
 .\output\alarmdlg.o: ../Drivers/CMSIS/Include/core_cm4.h
-.\output\alarmdlg.o: E:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\output\alarmdlg.o: D:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 .\output\alarmdlg.o: ../Drivers/CMSIS/Include/core_cmInstr.h
 .\output\alarmdlg.o: ../Drivers/CMSIS/Include/core_cmFunc.h
 .\output\alarmdlg.o: ../Drivers/CMSIS/Include/core_cmSimd.h
 .\output\alarmdlg.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 .\output\alarmdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 .\output\alarmdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-.\output\alarmdlg.o: E:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+.\output\alarmdlg.o: D:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 .\output\alarmdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 .\output\alarmdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 .\output\alarmdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
@@ -55,7 +55,7 @@
 .\output\alarmdlg.o: ..\user\inc\GUI_Private.h
 .\output\alarmdlg.o: ..\user\inc\LCD_Protected.h
 .\output\alarmdlg.o: ..\user\inc\GUI_Debug.h
-.\output\alarmdlg.o: E:\Keil\ARM\ARMCC\bin\..\include\stddef.h
+.\output\alarmdlg.o: D:\Keil\ARM\ARMCC\bin\..\include\stddef.h
 .\output\alarmdlg.o: ..\user\inc\SCROLLBAR.h
 .\output\alarmdlg.o: ..\user\inc\WIDGET.h
 .\output\alarmdlg.o: ..\user\inc\CALENDAR.h

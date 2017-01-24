@@ -41,16 +41,21 @@
 #include "DIALOG.h"
 #include "PS2_Mouse.h"
 #include "CAN.h"
+
+#define ID_PROGBAR_1     	(GUI_ID_USER + 0x10)
+
 extern  uint8_t RxBuffer[];
 extern  uint8_t TxBuffer[];
 
+//const char str3[]="ok";
+extern char str2[];
 extern volatile uint8_t tx_message;
 extern volatile uint8_t rx_message;
 
 static volatile uint8_t RXcount,TXcount;
 extern volatile uint8_t count_message;
-
-
+extern volatile int size;
+extern volatile int transaction;
 extern volatile GUI_TIMER_TIME OS_TimeMS;
 volatile uint32_t TimeMS;
 extern void Touch_GetData(void);
@@ -84,7 +89,7 @@ extern RTC_HandleTypeDef hrtc;
 extern TIM_HandleTypeDef htim6;
 extern TIM_HandleTypeDef htim7;
 extern UART_HandleTypeDef huart1;
-
+extern DMA_HandleTypeDef  hdma2;
 /******************************************************************************/
 /*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
@@ -326,7 +331,50 @@ void TIM7_IRQHandler(void)
 
 void DMA2_Stream2_IRQHandler(void)
 {
-
+	PROGBAR_Handle progbar;
+	uint8_t i;
+	
+	progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
+	__HAL_DMA_CLEAR_FLAG(&hdma2,DMA_FLAG_TCIF2_6);	
+	
+	
+	if((size-transaction)<10000)
+	{
+		if((size-transaction)==0)
+		{
+			__HAL_DMA_DISABLE_IT(&hdma2,DMA_IT_TC);
+			tx_message=1;
+		}
+		else
+		{	
+			for(i=0;i<9;i++)
+				TxBuffer[i]=str2[i];							//		"get data"
+		 USART1->DR=TxBuffer[0];
+		 __HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
+		 DMA2_Stream2->M0AR=(uint32_t)(0xd0400000+transaction);	
+		 DMA2_Stream2->NDTR=(uint32_t)(size-transaction);
+		 __HAL_DMA_ENABLE(&hdma2); //DMA2_Stream2->CR |=DMA_SxCR_EN;
+		 transaction+=(size-transaction);
+		i=(transaction*100)/size;
+		PROGBAR_SetValue(progbar,i);	
+		}
+	}
+	else
+	{
+		
+		for(i=0;i<9;i++)
+			TxBuffer[i]=str2[i];							//	"get data"
+		USART1->DR=TxBuffer[0];
+		__HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
+		DMA2_Stream2->M0AR=(uint32_t)(0xd0400000+transaction);
+		DMA2_Stream2->NDTR=10000;
+		DMA2_Stream2->CR |=DMA_SxCR_EN;
+		transaction+=10000;
+		i=(transaction*100)/size;
+		PROGBAR_SetValue(progbar,i);
+		
+	}
+	
 }
 
 /**

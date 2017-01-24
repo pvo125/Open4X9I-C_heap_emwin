@@ -43,7 +43,7 @@
         <PageWidth>79</PageWidth>
         <PageLength>66</PageLength>
         <TabStop>8</TabStop>
-        <ListingPath></ListingPath>
+        <ListingPath>.\output\</ListingPath>
       </OPTLEX>
       <ListingPage>
         <CreateCListing>1</CreateCListing>
@@ -164,21 +164,38 @@
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>str1</ItemText>
+          <ItemText>hdma2</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>size,0x0A</ItemText>
+          <ItemText>size</ItemText>
+        </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>dec</ItemText>
+        </Ww>
+        <Ww>
+          <count>7</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>netname_array</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
-          <SubType>2</SubType>
-          <ItemText>0x10000000</ItemText>
+          <SubType>0</SubType>
+          <ItemText>\\Open4X9I_C\../user/GUI_DIALOG/CAN_NETDLG.c\netname_array[1]</ItemText>
         </Mm>
       </MemoryWindow1>
+      <MemoryWindow2>
+        <Mm>
+          <WinNumber>2</WinNumber>
+          <SubType>0</SubType>
+          <ItemText>0xD0400000</ItemText>
+        </Mm>
+      </MemoryWindow2>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>
@@ -227,8 +244,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>298</TopLine>
-      <CurrentLine>201</CurrentLine>
+      <TopLine>198</TopLine>
+      <CurrentLine>202</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>../Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/arm/startup_stm32f429xx.s</PathWithFileName>
       <FilenameWithoutPath>startup_stm32f429xx.s</FilenameWithoutPath>
@@ -239,7 +256,7 @@
 
   <Group>
     <GroupName>Drivers/STM32F4xx_HAL_Driver</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -347,8 +364,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>463</TopLine>
-      <CurrentLine>443</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_dma.c</FilenameWithoutPath>
@@ -651,8 +668,8 @@
       <Focus>0</Focus>
       <ColumnNumber>10</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1122</TopLine>
-      <CurrentLine>1139</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_uart.c</FilenameWithoutPath>
@@ -699,8 +716,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>78</TopLine>
+      <CurrentLine>79</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\GUI\GUI_X.c</PathWithFileName>
       <FilenameWithoutPath>GUI_X.c</FilenameWithoutPath>
@@ -1001,10 +1018,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>17</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>161</TopLine>
-      <CurrentLine>250</CurrentLine>
+      <TopLine>130</TopLine>
+      <CurrentLine>134</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>../Src/main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -1019,8 +1036,8 @@
       <Focus>0</Focus>
       <ColumnNumber>18</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>650</TopLine>
-      <CurrentLine>743</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>../Src/stm32f4xx_hal_msp.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_msp.c</FilenameWithoutPath>
@@ -1035,8 +1052,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>68</TopLine>
+      <CurrentLine>70</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>../Src/stm32f4xx_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_it.c</FilenameWithoutPath>
@@ -1081,7 +1098,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>14</ColumnNumber>
+      <ColumnNumber>2</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
@@ -1095,7 +1112,7 @@
 
   <Group>
     <GroupName>GUI_DIALOG</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1105,10 +1122,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>2</ColumnNumber>
+      <ColumnNumber>43</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>662</TopLine>
+      <CurrentLine>679</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\GUI_DIALOG\Layer_0_DLG.c</PathWithFileName>
       <FilenameWithoutPath>Layer_0_DLG.c</FilenameWithoutPath>
@@ -1153,10 +1170,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>45</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>371</TopLine>
+      <CurrentLine>391</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\GUI_DIALOG\CAN_NETDLG.c</PathWithFileName>
       <FilenameWithoutPath>CAN_NETDLG.c</FilenameWithoutPath>

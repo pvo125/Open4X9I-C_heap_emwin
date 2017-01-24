@@ -8,7 +8,7 @@
 
 #define NUMBER_NODE 5					// Зададим максимальное количество для CAN сети
 
-const char  *netname_array[]={"Open4X9I","Core4X9I","F103_KIT","32VLDisc"}; //массив указателей на имена узлов CAN сети соотв. netname_index (0,1,2...)
+const char  *netname_array[]={"Open4X9I","Core4x9I","F103_KIT","32VLDisc"}; //массив указателей на имена узлов CAN сети соотв. netname_index (0,1,2...)
 volatile uint8_t netname_index;
 uint8_t window_index;
 uint8_t count_node;
@@ -23,7 +23,7 @@ WM_HWIN CANNodeDialog(uint8_t index);
 
 extern volatile uint32_t TimeMS;
 volatile uint8_t new_node=0;
-
+extern volatile uint8_t download_firmware;
 
 extern WM_HWIN hWin1;
 					
@@ -61,12 +61,14 @@ extern GUI_CONST_STORAGE GUI_BITMAP bmchip;
 #define ID_TEXT_REC    (GUI_ID_USER+0x38)
 #define ID_TEXT_TEC    (GUI_ID_USER+0x39)
 #define ID_TEXT_ERF    (GUI_ID_USER+0x3A)
+#define ID_BUTTON_UPDATE    (GUI_ID_USER+0x3B)
+#define ID_PROGBAR_1     	(GUI_ID_USER + 0x3C)
 /*********************************************************************
 *
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aCANNodeDialog[] = {
-  { FRAMEWIN_CreateIndirect,NULL , ID_FRAMEWIN_1 , 100, 20, 230, 230, 0, 0x0, 15},
+  { FRAMEWIN_CreateIndirect,NULL , ID_FRAMEWIN_1 , 20, 5, 230, 270, 0, 0x0, 15},
 	{ TEXT_CreateIndirect, "Time", ID_TEXT_TIME, 15, 14, 50, 20, 0, 0x0,0},
 	{ TEXT_CreateIndirect, "Date", ID_TEXT_DATE, 15, 35, 50, 20, 0, 0x0,0},
 	{ TEXT_CreateIndirect, "TIMER", ID_TEXT_TIMER, 15, 55, 50, 20, 0, 0x0,0},
@@ -74,6 +76,8 @@ static const GUI_WIDGET_CREATE_INFO _aCANNodeDialog[] = {
 	{ TEXT_CreateIndirect, "Enable", ID_TEXT_ENABLE, 30, 105, 50, 20, 0, 0x0,0},
 	{ TEXT_CreateIndirect, "PhaseVal", ID_TEXT_PHASEVAL, 30, 150, 70, 20, 0, 0x0,0},
 	{ TEXT_CreateIndirect, "BrezVal", ID_TEXT_BREZVAL, 30, 150, 70, 20, 0, 0x0,0},
+	
+	{ BUTTON_CreateIndirect, "Update_firmware", ID_BUTTON_UPDATE, 5, 200, 100, 30, 0, 0x0,0},
 	
 	{ DROPDOWN_CreateIndirect, NULL, ID_DROPDOWN_MODE, 100, 75, 60, 30, 0, 0x0,0},
 	{ DROPDOWN_CreateIndirect, NULL, ID_DROPDOWN_ENABLE, 100, 105, 70, 30, 0, 0x0,0},
@@ -105,6 +109,8 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 	uint8_t index;
 	int     NCode;
   int     Id;
+	PROGBAR_Handle progbar;
+	
   switch (pMsg->MsgId) {
 			case WM_DELETE:
 				FRAMEWIN_GetUserData(pMsg->hWin,&index,1);
@@ -131,6 +137,12 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 				hItem=WM_GetClientWindow(pMsg->hWin);	
 				WM_CreateTimer(hItem,0,1000,0);				// Создадим таймер для обновления соотв. окна диалога для каждого узла.
 				
+				Id=strcmp((const char*)netname_array[window_index],(const char*)0xD0400020);
+				if(Id)
+				{
+					hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_UPDATE);
+					WM_DisableWindow(hItem);	
+				}
 					hItem=WM_GetDialogItem(pMsg->hWin,ID_TEXT_BREZVAL);
 					WM_HideWindow(hItem);
 					hItem=WM_GetDialogItem(pMsg->hWin,ID_SPINBOX_VALUE_B);
@@ -370,8 +382,18 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 								FRAMEWIN_SetUserData(pMsg->hWin,&CANNode,sizeof(CANNode));
 								//widget_changing=0;
 							break;
+							
 							}
-					break;		
+					break;
+					case ID_BUTTON_UPDATE: // Notifications sent by BUTTON_UPDATE
+							switch(NCode){
+								case WM_NOTIFICATION_RELEASED:
+									progbar=PROGBAR_CreateEx(120,240,100,10,pMsg->hWin,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
+									PROGBAR_SetText(progbar,"");	
+									PROGBAR_SetMinMax(progbar,0,100);
+								break;
+							}
+					break;			
 						}
 				break;
 				default:
@@ -517,7 +539,7 @@ static void _cbCANNetExplore(WM_MESSAGE * pMsg) {
 								{
 									if((WinHandle[window_index])==0)
 										CANNodeDialog(window_index);	
-								}						
+								}					
 							break;
 							}
 					break;

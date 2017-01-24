@@ -915,9 +915,9 @@ ARM Macro Assembler    Page 15
 
 
 put\startup_stm32f429xx.d -o.\output\startup_stm32f429xx.o -ID:\Keil\ARM\RV31\I
-NC -ID:\Keil\ARM\CMSIS\Include --predefine="__MICROLIB SETA 1" --list=startup_s
-tm32f429xx.lst ../Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/arm/startu
-p_stm32f429xx.s
+NC -ID:\Keil\ARM\CMSIS\Include --predefine="__MICROLIB SETA 1" --list=.\output\
+startup_stm32f429xx.lst ../Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/a
+rm/startup_stm32f429xx.s
 
 
 

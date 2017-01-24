@@ -32,7 +32,6 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
-#include <string.h>
 /* USER CODE BEGIN Includes */
 #include "GUI.h"
 #include "DIALOG.h"
@@ -42,10 +41,11 @@
 #define SDRAM_SIZE (uint32_t)0x800000
 #define REFRESH_COUNT           ((uint32_t)1386)   /* SDRAM refresh counter */
 #define SDRAM_TIMEOUT           ((uint32_t)0xFFFF)
-#define ID_BUTTON_YES (GUI_ID_USER + 0x01)
-#define ID_BUTTON_NO (GUI_ID_USER + 0x20)
 
-WM_HWIN hButton_YES,hButton_NO;
+//#define ID_BUTTON_YES (GUI_ID_USER + 0x01)
+//#define ID_BUTTON_NO (GUI_ID_USER + 0x20)
+//WM_HWIN hButton_YES,hButton_NO;
+
 //#define ID_ICON_date   (GUI_ID_USER + 0x05)
 
 //#define ID_ICON_exit   (GUI_ID_USER + 0x07)
@@ -87,22 +87,9 @@ RTC_AlarmTypeDef sAlarmA,sAlarmB;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
-uint8_t str1[]="get size\n\r";
-uint8_t str2[]="get data\n\r";
-	
-volatile uint8_t download_firmware;
-volatile uint8_t tx_message=0;
-volatile uint8_t rx_message=0;
-
-volatile uint32_t size=0,dec=1;
-
-uint8_t yes=1,no=1;
 uint8_t Input_Device; 
 extern PS2_MOUSE_t 		PS2_MOUSE;
- 
- uint8_t RxBuffer[12];
- uint8_t TxBuffer[12];
-/* USER CODE END PV */
+ /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -127,97 +114,18 @@ extern uint16_t Touch_GetResult(void);
 extern void Touch_calibration(void);
 extern CANRX_TypeDef CAN_Data_RX1;
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
+//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
 
-/****************************************************************/
-/*											Функция  сallback Boot_menu							*/
-/****************************************************************/
-static void _cbBoot_menu(WM_MESSAGE* pMsg) {
-  
-	int     NCode;
-  int     Id;
-	uint8_t i;
-	
-	switch(pMsg->MsgId) {
-  case WM_NOTIFY_PARENT:
-				Id    = WM_GetId(pMsg->hWinSrc);
-				NCode = pMsg->Data.v;
-				switch(Id){
-					case ID_BUTTON_YES:
-					switch(NCode){
-							case WM_NOTIFICATION_RELEASED:
-								
-								//HAL_UART_Transmit(&huart1, str1, 10,10);
-								//HAL_UART_Transmit_IT(&huart1,str1,10);
-								//HAL_UART_Receive_IT(&huart1,RxBuffer,9);
-								for(i=0;i<10;i++)
-									TxBuffer[i]=str1[i];
-								USART1->DR=TxBuffer[0];
-								__HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
-							
-							yes=0;
-								
-							break;
-						}
-					break;
-					case ID_BUTTON_NO:
-					switch(NCode){
-							case WM_NOTIFICATION_RELEASED:
-							//HAL_UART_Transmit(&huart1, str2, 10,10);	
-							HAL_UART_Transmit_IT(&huart1,str2,10);
-							HAL_UART_Receive_IT(&huart1,RxBuffer,9);
-								no=0;
-								
-							break;
-						}
-						
-				}	
-	break;
-	default:
-    WM_DefaultProc(pMsg);
-  }
-}	
-
-void Boot_menu (void){
-		
-	yes=1; no=1;
-	
-	GUI_SetFont(GUI_FONT_16_1); 
-	GUI_SetColor(GUI_YELLOW);
-	
-	 //GUI_DispStringAt(" BOOT FROM SD CARD ? ",170,50);
-	 BUTTON_SetDefaultSkin(BUTTON_SKIN_FLEX);
-   hButton_YES=BUTTON_CreateEx(300,100,40,30,WM_HBKWIN,WM_CF_SHOW,0,ID_BUTTON_YES);
-	 BUTTON_SetText(hButton_YES, "1");
-	 hButton_NO=BUTTON_CreateEx(300,150,40,30,WM_HBKWIN,WM_CF_SHOW,0,ID_BUTTON_NO);
-	 BUTTON_SetText(hButton_NO, "2");
-	 WM_SetCallback(WM_HBKWIN, _cbBoot_menu);
-		while(1)
-		{
-			GUI_Exec();
-		}
-		/*WM_DeleteWindow(hButton_YES);
-		WM_DeleteWindow(hButton_NO);
-		hButton_YES=0;
-		hButton_NO=0;
-		GUI_Clear();*/
-		
-	}
-
 /* USER CODE END 0 */
 
 int main(void)
-
 {
   /* USER CODE BEGIN 1 */
-	uint8_t i,m;
-	char temp;
-	char *p;
-	volatile int cmp;
+		uint8_t i;
 	/* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -324,10 +232,11 @@ int main(void)
 		
 		HAL_TIM_PWM_Start(&htim13, TIM_CHANNEL_1);
 			
-		//MainTask();
+		
 		__HAL_LTDC_LAYER_DISABLE(&hltdc, 1);
 		 __HAL_LTDC_RELOAD_CONFIG(&hltdc); 
-	hltdc.Instance->SRCR = LTDC_SRCR_IMR;
+		hltdc.Instance->SRCR = LTDC_SRCR_IMR;
+		MainTask();
 		for(i=20;i<70;i++)
 		{
 			TIM13->CCR1=i;
@@ -344,45 +253,7 @@ int main(void)
 	
 	 while (1)
 	{
-		cmp=strcmp("hello st\r",(const char*)RxBuffer);
-		if(!cmp) 
-		{
-			*(uint32_t*)(RxBuffer+0)=(uint32_t)0;
-			*(uint32_t*)(RxBuffer+4)=(uint32_t)0;	
-			*(uint32_t*)(RxBuffer+8)=(uint32_t)0;
-			for(i=0;i<10;i++)
-				TxBuffer[i]=str1[i];							//		"get size\n\r"
-			USART1->DR=TxBuffer[0];
-			__HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
-			rx_message=1;								                   
 		
-		}
-		if(rx_message==2)			
-		{
-			//p=strchr((char*)RxBuffer,'\0');		// '\r' = ENTER key
-			m=strlen((char*)RxBuffer)-1;
-			p=(char*)(RxBuffer+m-1);
-			for(i=0;i<m;i++)
-				{
-					temp=*(char*)(p-i);
-					size+=(temp&0x0f)*dec;
-					dec*=10;
-				}
-			for(i=0;i<10;i++)
-				TxBuffer[i]=str2[i];							//		"get data\n\r"
-			USART1->DR=TxBuffer[0];
-			__HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
-			rx_message=0;
-			
-			__HAL_UART_DISABLE_IT(&huart1, UART_IT_RXNE);	
-			huart1.State=HAL_UART_STATE_BUSY_RX;
-			HAL_UART_DMAResume(&huart1);	
-			
-			HAL_DMA_Start(&hdma2,(uint32_t)&USART1->DR,(uint32_t)0xD0400000,5000);
-			
-				
-		}
-	
 
 
 		
@@ -391,8 +262,12 @@ int main(void)
   
 	/* USER CODE BEGIN 4 */
 	
+	
+	
 	/* USER CODE END 4 */
 }
+
+
 
 /** System Clock Configuration
 */
@@ -881,15 +756,6 @@ void SDRAM_Initialization_sequence(uint32_t RefreshCount)
 	while(FMC_Bank5_6->SDSR&FMC_SDSR_BUSY);
 	for(tmpmrd=SDRAM_BASE;tmpmrd<(SDRAM_BASE+SDRAM_SIZE);tmpmrd+=4)
 	*(uint32_t*)tmpmrd=0x0;
-}
-
-
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
-
-	GUI_DispString((const char*)RxBuffer);
-	GUI_DispNextLine();
-	
-
 }
 
 /* USER CODE END 4 */

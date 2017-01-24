@@ -7,14 +7,14 @@
 .\output\can_netdlg.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 .\output\can_netdlg.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h
 .\output\can_netdlg.o: ../Drivers/CMSIS/Include/core_cm4.h
-.\output\can_netdlg.o: E:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\output\can_netdlg.o: D:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 .\output\can_netdlg.o: ../Drivers/CMSIS/Include/core_cmInstr.h
 .\output\can_netdlg.o: ../Drivers/CMSIS/Include/core_cmFunc.h
 .\output\can_netdlg.o: ../Drivers/CMSIS/Include/core_cmSimd.h
 .\output\can_netdlg.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 .\output\can_netdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 .\output\can_netdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-.\output\can_netdlg.o: E:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+.\output\can_netdlg.o: D:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 .\output\can_netdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 .\output\can_netdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 .\output\can_netdlg.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
@@ -55,7 +55,7 @@
 .\output\can_netdlg.o: ..\user\inc\GUI_Private.h
 .\output\can_netdlg.o: ..\user\inc\LCD_Protected.h
 .\output\can_netdlg.o: ..\user\inc\GUI_Debug.h
-.\output\can_netdlg.o: E:\Keil\ARM\ARMCC\bin\..\include\stddef.h
+.\output\can_netdlg.o: D:\Keil\ARM\ARMCC\bin\..\include\stddef.h
 .\output\can_netdlg.o: ..\user\inc\SCROLLBAR.h
 .\output\can_netdlg.o: ..\user\inc\WIDGET.h
 .\output\can_netdlg.o: ..\user\inc\CALENDAR.h
@@ -84,5 +84,5 @@
 .\output\can_netdlg.o: ..\user\inc\TREEVIEW.h
 .\output\can_netdlg.o: ..\user\inc\KNOB.h
 .\output\can_netdlg.o: ..\user\bxCAN\CAN.h
-.\output\can_netdlg.o: E:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
-.\output\can_netdlg.o: E:\Keil\ARM\ARMCC\bin\..\include\string.h
+.\output\can_netdlg.o: D:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
+.\output\can_netdlg.o: D:\Keil\ARM\ARMCC\bin\..\include\string.h

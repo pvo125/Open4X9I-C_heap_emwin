@@ -59,4 +59,4 @@
 
 --diag_suppress=L6329 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
---list "Open4X9I-C.map" -o .\output\Open4X9I-C.axf
+--list ".\output\Open4X9I-C.map" -o .\output\Open4X9I-C.axf

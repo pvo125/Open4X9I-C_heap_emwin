@@ -2,7 +2,7 @@
 .\output\tsc2046.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 .\output\tsc2046.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h
 .\output\tsc2046.o: ../Drivers/CMSIS/Include/core_cm4.h
-.\output\tsc2046.o: E:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\output\tsc2046.o: D:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 .\output\tsc2046.o: ../Drivers/CMSIS/Include/core_cmInstr.h
 .\output\tsc2046.o: ../Drivers/CMSIS/Include/core_cmFunc.h
 .\output\tsc2046.o: ../Drivers/CMSIS/Include/core_cmSimd.h
@@ -14,7 +14,7 @@
 .\output\tsc2046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
 .\output\tsc2046.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 .\output\tsc2046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-.\output\tsc2046.o: E:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+.\output\tsc2046.o: D:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 .\output\tsc2046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 .\output\tsc2046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 .\output\tsc2046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
@@ -55,7 +55,7 @@
 .\output\tsc2046.o: ..\user\inc\GUI_Private.h
 .\output\tsc2046.o: ..\user\inc\LCD_Protected.h
 .\output\tsc2046.o: ..\user\inc\GUI_Debug.h
-.\output\tsc2046.o: E:\Keil\ARM\ARMCC\bin\..\include\stddef.h
+.\output\tsc2046.o: D:\Keil\ARM\ARMCC\bin\..\include\stddef.h
 .\output\tsc2046.o: ..\user\inc\SCROLLBAR.h
 .\output\tsc2046.o: ..\user\inc\WIDGET.h
 .\output\tsc2046.o: ..\user\inc\CALENDAR.h
@@ -83,4 +83,4 @@
 .\output\tsc2046.o: ..\user\inc\TEXT.h
 .\output\tsc2046.o: ..\user\inc\TREEVIEW.h
 .\output\tsc2046.o: ..\user\inc\KNOB.h
-.\output\tsc2046.o: E:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
+.\output\tsc2046.o: D:\Keil\ARM\ARMCC\bin\..\include\stdlib.h

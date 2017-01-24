@@ -2,7 +2,7 @@
 .\output\system_stm32f4xx.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 .\output\system_stm32f4xx.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h
 .\output\system_stm32f4xx.o: ../Drivers/CMSIS/Include/core_cm4.h
-.\output\system_stm32f4xx.o: E:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\output\system_stm32f4xx.o: D:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 .\output\system_stm32f4xx.o: ../Drivers/CMSIS/Include/core_cmInstr.h
 .\output\system_stm32f4xx.o: ../Drivers/CMSIS/Include/core_cmFunc.h
 .\output\system_stm32f4xx.o: ../Drivers/CMSIS/Include/core_cmSimd.h
@@ -14,7 +14,7 @@
 .\output\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
 .\output\system_stm32f4xx.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 .\output\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-.\output\system_stm32f4xx.o: E:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+.\output\system_stm32f4xx.o: D:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 .\output\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 .\output\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 .\output\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h

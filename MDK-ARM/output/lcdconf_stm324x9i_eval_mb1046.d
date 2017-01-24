@@ -9,14 +9,14 @@
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ../Drivers/CMSIS/Include/core_cm4.h
-.\output\lcdconf_stm324x9i_eval_mb1046.o: E:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\output\lcdconf_stm324x9i_eval_mb1046.o: D:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ../Drivers/CMSIS/Include/core_cmInstr.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ../Drivers/CMSIS/Include/core_cmFunc.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ../Drivers/CMSIS/Include/core_cmSimd.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-.\output\lcdconf_stm324x9i_eval_mb1046.o: E:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+.\output\lcdconf_stm324x9i_eval_mb1046.o: D:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
@@ -51,5 +51,5 @@
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ..\user\inc\GUI_Private.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ..\user\inc\LCD_Protected.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ..\user\inc\GUI_Debug.h
-.\output\lcdconf_stm324x9i_eval_mb1046.o: E:\Keil\ARM\ARMCC\bin\..\include\stddef.h
+.\output\lcdconf_stm324x9i_eval_mb1046.o: D:\Keil\ARM\ARMCC\bin\..\include\stddef.h
 .\output\lcdconf_stm324x9i_eval_mb1046.o: ..\user\inc\WM_GUI.h
