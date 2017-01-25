@@ -4,9 +4,10 @@
 CANTX_TypeDef CAN_Data_TX;
 CANRX_TypeDef CAN_Data_RX[2];
 
-
-//extern CANNode_TypeDef CANNode_Struct[];
+extern volatile uint32_t countbyte_firmware;
 extern volatile int size;
+extern volatile uint8_t download_firmware;
+
 extern volatile uint8_t new_node;
 extern WM_HWIN WinHandle[];
 extern uint8_t backlight_count;
@@ -107,7 +108,7 @@ void bxCAN_Init(void){
 																						//								fmi=03 ID=0x187 IDE=0 RTR=1
 	CAN1->sFilterRegister[18].FR1=0x1FFF3100;	//Filters bank 18 fmi=04 ID=0xX88 IDE=0 RTR=0	фильтр для сообщ(0x188,0x288,0x388..)на запрос GET_NETNAME 0x088
 																						//								
-	CAN1->sFilterRegister[18].FR2=0x1FFF3120;	//Filters bank 18 fmi=05 ID=0xX89 IDE=0 RTR=0	фильтр для сообщ(0x189,0x289,0x389...) на запрос 0xX89 remote UPDATE_FIRMWARE_REQ 
+	CAN1->sFilterRegister[18].FR2=0x1FFF4E40;	//Filters bank 18 fmi=05 ID=0xX72 IDE=0 RTR=0	фильтр для сообщ(0x172,0x272,0x372...) на запрос 0xX71 UPDATE_FIRMWARE_REQ 
 																						// 								
 	CAN1->sFilterRegister[19].FR1=0x31503140;	//Filters bank 19 fmi=06 ID=0x18A IDE=0 RTR=0	
 																						//								fmi=07 ID=0x18A IDE=0 RTR=1
@@ -320,9 +321,9 @@ void CAN_RXProcess0(void){
 ******************************************************************************************************************/
 void CAN_RXProcess1(void){
 	uint8_t index;
-	uint32_t size_integer,size_remain;
+	//uint32_t size_integer,size_remain;
 	uint32_t i;
-	static uint32_t CAN_update_counter;
+	//static uint32_t CAN_update_counter;
 	
 	switch(CAN_Data_RX[1].FMI) {
 		case 4://(id=x88 data get netname ответы с net name)
@@ -330,17 +331,36 @@ void CAN_RXProcess1(void){
 			new_node=1;
 		break;
 		
-		case 5:	//(id=0xX89 ) ответы на запрос UPDATE_FIRMWARE_REQ
+		case 5:	//(id=0xX72 ) ответы на запрос UPDATE_FIRMWARE_REQ
 			index=CAN_Data_RX[1].Data[0];
 			if((CAN_Data_RX[1].Data[1]=='o')&&(CAN_Data_RX[1].Data[2]=='k'))
-			{
-				size/8;
-				CAN_update_counter+=8;
-				
-				for(i=0;i<size/8;i++)
-				CAN_Data_TX.Data[0]=*(uint8_t*)0xD0400000;
-				
-			
+			{								
+				if(size>=8)
+				{
+					for(i=0;i<8;i++)
+						{
+							CAN_Data_TX.Data[i]=*(uint8_t*)(0xD0400000+countbyte_firmware);
+							countbyte_firmware++;
+						}
+					CAN_Data_TX.ID=(index<<8)|0x73;
+					CAN_Data_TX.DLC=8;	
+					CAN_Transmit_DataFrame(&CAN_Data_TX);
+					size-=8;	
+				}
+				else
+				{
+					for(i=0;i<size;i++)
+						{
+							CAN_Data_TX.Data[i]=*(uint8_t*)(0xD0400000+countbyte_firmware);
+							countbyte_firmware++;
+						}
+					CAN_Data_TX.ID=(index<<8)|0x73;
+					CAN_Data_TX.DLC=(uint8_t)size;	
+					CAN_Transmit_DataFrame(&CAN_Data_TX);
+					size=0;
+					download_firmware=1;		
+				}
+					
 			
 			}
 						

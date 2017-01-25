@@ -672,6 +672,7 @@ while(1)
 		cmp=strcmp("hello st\r",(const char*)RxBuffer);
 		if(!cmp) 
 		{
+			
 			*(uint32_t*)(RxBuffer+0)=(uint32_t)0;
 			*(uint32_t*)(RxBuffer+4)=(uint32_t)0;	
 			*(uint32_t*)(RxBuffer+8)=(uint32_t)0;
@@ -684,6 +685,7 @@ while(1)
 		}
 		if(rx_message==2)			
 		{
+			size=0;
 			//p=strchr((char*)RxBuffer,'\0');		// '\r' = ENTER key
 			m=strlen((char*)RxBuffer)-1;
 			p=(char*)(RxBuffer+m-1);
@@ -738,7 +740,7 @@ while(1)
 			__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
 			hdma2.State = HAL_DMA_STATE_READY;
 			__HAL_UNLOCK(&hdma2);
-			size=0;
+			//size=0;
 			dec=1;
 			HAL_UART_DMAStop(&huart1);
 			WM_DeleteWindow(progbar);

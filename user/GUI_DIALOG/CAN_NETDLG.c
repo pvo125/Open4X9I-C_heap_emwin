@@ -8,6 +8,7 @@
 
 #define NUMBER_NODE 5					// Зададим максимальное количество для CAN сети
 
+volatile uint32_t countbyte_firmware;			// Глобальная переменная счетчик отправленных байт firmware  при обновлении по CAN
 const char  *netname_array[]={"Open4X9I","Core4x9I","F103_KIT","32VLDisc"}; //массив указателей на имена узлов CAN сети соотв. netname_index (0,1,2...)
 volatile uint8_t netname_index;
 uint8_t window_index;
@@ -139,17 +140,18 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 				
 				Id=strcmp((const char*)netname_array[window_index],(const char*)0xD0400020);
 				if(Id)
-				{
-					hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_UPDATE);
-					WM_DisableWindow(hItem);	
-				}
-					hItem=WM_GetDialogItem(pMsg->hWin,ID_TEXT_BREZVAL);
-					WM_HideWindow(hItem);
-					hItem=WM_GetDialogItem(pMsg->hWin,ID_SPINBOX_VALUE_B);
-					WM_HideWindow(hItem);
-					hItem=WM_GetDialogItem(pMsg->hWin,ID_SPINBOX_VALUE_P);
-					SPINBOX_SetFont(hItem,GUI_FONT_16B_ASCII);
-					SPINBOX_SetValue(hItem,CANNode.timerPhase_value);
+					{
+						hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_UPDATE);
+						WM_DisableWindow(hItem);	
+					}
+				
+				hItem=WM_GetDialogItem(pMsg->hWin,ID_TEXT_BREZVAL);
+				WM_HideWindow(hItem);
+				hItem=WM_GetDialogItem(pMsg->hWin,ID_SPINBOX_VALUE_B);
+				WM_HideWindow(hItem);
+				hItem=WM_GetDialogItem(pMsg->hWin,ID_SPINBOX_VALUE_P);
+				SPINBOX_SetFont(hItem,GUI_FONT_16B_ASCII);
+				SPINBOX_SetValue(hItem,CANNode.timerPhase_value);
 				
 				hItem=WM_GetDialogItem(pMsg->hWin,ID_DROPDOWN_MODE);
 				DROPDOWN_AddString(hItem, "PHASE");
@@ -213,7 +215,21 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 			break;	
 			case WM_TIMER:
  				FRAMEWIN_GetUserData(pMsg->hWin,&CANNode,sizeof(CANNode));	//Когда таймер сраб. получим с соотв. окна структуру CAN узла.
-			
+				
+				if(size)
+				{
+					progbar=WM_GetDialogItem(pMsg->hWin,ID_PROGBAR_1);
+					PROGBAR_SetValue(progbar,size/2200);
+				}
+				if(download_firmware)
+				{
+					hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_UPDATE);
+					WM_DisableWindow(hItem);
+					download_firmware=0;
+					progbar=WM_GetDialogItem(pMsg->hWin,ID_PROGBAR_1);
+					
+					
+				}
 				if(widget_changing)
 				{
 					WM_RestartTimer(pMsg->Data.v,1000);
@@ -391,14 +407,15 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 									progbar=PROGBAR_CreateEx(120,240,100,10,pMsg->hWin,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
 									PROGBAR_SetText(progbar,"");	
 									PROGBAR_SetMinMax(progbar,0,100);
-									CAN_Data_TX.ID=(CANNode.index+1)<<8|0x89;
+									countbyte_firmware=0;
+									CAN_Data_TX.ID=(CANNode.index+1)<<8|0x71;
 									CAN_Data_TX.DLC=4;
 									CAN_Data_TX.Data[0]=(uint8_t)size;
 									CAN_Data_TX.Data[1]=(uint8_t)(size>>8);
 									CAN_Data_TX.Data[2]=(uint8_t)(size>>16);
 									CAN_Data_TX.Data[3]=(uint8_t)(size>>24);
-									CAN_Transmit_DataFrame(&CAN_Data_TX);
-									//CAN_Transmit_RemoteFrame(((CANNode.index+1)<<8)|0x89);   // (Core4X9I 0x289) remote UPDATE_FIRMWARE_REQ 0xX89
+									CAN_Transmit_DataFrame(&CAN_Data_TX);				// (Core4X9I 0x271) UPDATE_FIRMWARE_REQ 0x271, 0x371, 0x471
+									//CAN_Transmit_RemoteFrame(((CANNode.index+1)<<8)|0x89);   
 								
 								break;
 							}
