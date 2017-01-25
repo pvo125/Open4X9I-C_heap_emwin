@@ -6,6 +6,7 @@ CANRX_TypeDef CAN_Data_RX[2];
 
 
 //extern CANNode_TypeDef CANNode_Struct[];
+extern volatile int size;
 extern volatile uint8_t new_node;
 extern WM_HWIN WinHandle[];
 extern uint8_t backlight_count;
@@ -318,13 +319,32 @@ void CAN_RXProcess0(void){
 *													CAN_RXProcess1
 ******************************************************************************************************************/
 void CAN_RXProcess1(void){
-	//uint8_t i;
+	uint8_t index;
+	uint32_t size_integer,size_remain;
+	uint32_t i;
+	static uint32_t CAN_update_counter;
 	
 	switch(CAN_Data_RX[1].FMI) {
 		case 4://(id=x88 data get netname ответы с net name)
 			netname_index=CAN_Data_RX[1].Data[0]; 	
 			new_node=1;
 		break;
+		
+		case 5:	//(id=0xX89 ) ответы на запрос UPDATE_FIRMWARE_REQ
+			index=CAN_Data_RX[1].Data[0];
+			if((CAN_Data_RX[1].Data[1]=='o')&&(CAN_Data_RX[1].Data[2]=='k'))
+			{
+				size/8;
+				CAN_update_counter+=8;
+				
+				for(i=0;i<size/8;i++)
+				CAN_Data_TX.Data[0]=*(uint8_t*)0xD0400000;
+				
+			
+			
+			}
+						
+		break;	
 		
 		default:
 		break;	

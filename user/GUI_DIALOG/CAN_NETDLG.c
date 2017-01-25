@@ -20,7 +20,7 @@ TREEVIEW_Handle hTree;
 WM_HWIN CANNetExplore(void);
 WM_HWIN CANNodeDialog(uint8_t index);
 
-
+extern volatile int size;
 extern volatile uint32_t TimeMS;
 volatile uint8_t new_node=0;
 extern volatile uint8_t download_firmware;
@@ -391,7 +391,14 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 									progbar=PROGBAR_CreateEx(120,240,100,10,pMsg->hWin,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
 									PROGBAR_SetText(progbar,"");	
 									PROGBAR_SetMinMax(progbar,0,100);
-									CAN_Transmit_RemoteFrame(((CANNode.index+1)<<8)|0x89);   // (Core4X9I 0x289) remote UPDATE_FIRMWARE_REQ 0xX89
+									CAN_Data_TX.ID=(CANNode.index+1)<<8|0x89;
+									CAN_Data_TX.DLC=4;
+									CAN_Data_TX.Data[0]=(uint8_t)size;
+									CAN_Data_TX.Data[1]=(uint8_t)(size>>8);
+									CAN_Data_TX.Data[2]=(uint8_t)(size>>16);
+									CAN_Data_TX.Data[3]=(uint8_t)(size>>24);
+									CAN_Transmit_DataFrame(&CAN_Data_TX);
+									//CAN_Transmit_RemoteFrame(((CANNode.index+1)<<8)|0x89);   // (Core4X9I 0x289) remote UPDATE_FIRMWARE_REQ 0xX89
 								
 								break;
 							}
