@@ -6,7 +6,8 @@ CANRX_TypeDef CAN_Data_RX[2];
 
 extern volatile uint32_t countbyte_firmware;
 extern volatile int size;
-extern volatile uint8_t download_firmware;
+extern volatile uint8_t download_complete;
+extern volatile uint8_t new_firmware;
 
 extern volatile uint8_t new_node;
 extern WM_HWIN WinHandle[];
@@ -333,9 +334,9 @@ void CAN_RXProcess1(void){
 		
 		case 5:	//(id=0xX72 ) ответы на запрос UPDATE_FIRMWARE_REQ
 			index=CAN_Data_RX[1].Data[0];
-			if((CAN_Data_RX[1].Data[1]=='o')&&(CAN_Data_RX[1].Data[2]=='k'))
+			if(CAN_Data_RX[1].Data[1]=='g')		// получили в сообщении 'g' GET_DATA!
 			{								
-				if(size>=8)
+				if((size-countbyte_firmware)>=8)
 				{
 					for(i=0;i<8;i++)
 						{
@@ -345,25 +346,36 @@ void CAN_RXProcess1(void){
 					CAN_Data_TX.ID=(index<<8)|0x73;
 					CAN_Data_TX.DLC=8;	
 					CAN_Transmit_DataFrame(&CAN_Data_TX);
-					size-=8;	
+					//size-=8;	
 				}
 				else
 				{
-					for(i=0;i<size;i++)
+					CAN_Data_TX.DLC=(uint8_t)(size-countbyte_firmware);	
+					for(i=0;i<(size-countbyte_firmware);i++)
 						{
 							CAN_Data_TX.Data[i]=*(uint8_t*)(0xD0400000+countbyte_firmware);
 							countbyte_firmware++;
 						}
 					CAN_Data_TX.ID=(index<<8)|0x73;
-					CAN_Data_TX.DLC=(uint8_t)size;	
 					CAN_Transmit_DataFrame(&CAN_Data_TX);
-					size=0;
-					download_firmware=1;		
+						
 				}
 					
 			
 			}
-						
+			else if(CAN_Data_RX[1].Data[1]=='c')		// получили в сообщении 'c' CRC OK!
+			{
+				download_complete=1;
+				countbyte_firmware=0;
+				new_firmware=0;
+				GUI_MessageBox("Download complete!","MESSAGE",0);	
+			
+			}
+			else if(CAN_Data_RX[1].Data[1]=='e')		// получили в сообщении 'e' CRC ERROR!
+			{
+				GUI_MessageBox("crc error!","ERROR",0);
+			
+			}				
 		break;	
 		
 		default:

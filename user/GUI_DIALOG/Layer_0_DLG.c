@@ -58,6 +58,8 @@
 
 #define ID_PROGBAR_1     	(GUI_ID_USER + 0x10)
 
+		
+
 extern RTC_TimeTypeDef sTime;
 extern RTC_DateTypeDef sDate;
 
@@ -82,12 +84,13 @@ extern GUI_CONST_STORAGE GUI_BITMAP bmalarm_a;
 extern GUI_CONST_STORAGE GUI_BITMAP bmalarm_a_d;
 extern GUI_CONST_STORAGE GUI_BITMAP bmalarm_b;
 extern GUI_CONST_STORAGE GUI_BITMAP bmalarm_b_d;
-//extern GUI_CONST_STORAGE GUI_BITMAP bmUntitled1copy;
 
 
-/*const GUI_BITMAP *Icons0[]={&bmalarm,&bmsettings,&bmpaint};
-const GUI_BITMAP *Icons1[]={&bmdate,&bmcan,&bmusb};
-const GUI_BITMAP *Icons2[]={&bmalarm_a,&bmalarm_b,&bmalarm_a_d,&bmalarm_b_d};*/
+#ifdef CODEFLASH
+	const GUI_BITMAP *Icons0[]={&bmalarm,&bmsettings,&bmpaint};
+	const GUI_BITMAP *Icons1[]={&bmdate,&bmcan,&bmusb};
+	const GUI_BITMAP *Icons2[]={&bmalarm_a,&bmalarm_b,&bmalarm_a_d,&bmalarm_b_d};
+#endif	
 extern void Touch_calibration(void);
 extern LCD_LayerPropTypedef          layer_prop[GUI_NUM_LAYERS];
 
@@ -115,12 +118,14 @@ char str3[]="crc ok!";
 char str4[]="crc error!";
 uint8_t RxBuffer[12];
 uint8_t TxBuffer[12];
-volatile uint8_t download_firmware=0;
+
 volatile uint8_t tx_message=0;
 volatile uint8_t rx_message=0;
 
 volatile int size=0,dec=1;
 volatile int transaction;
+
+extern volatile uint8_t new_firmware;
 
 
 WM_HWIN hWin0,hWin1,hWin2;
@@ -232,9 +237,12 @@ static void _cbWin_0(WM_MESSAGE * pMsg) {
 		GUI_MULTIBUF_BeginEx(0);
 	break;
 	case WM_PAINT:
-		//GUI_DrawBitmap(&bmxp,0,0);
-		GUI_SetBkColor(GUI_LIGHTBLUE);
-		GUI_Clear();
+		#ifdef CODEFLASH
+			GUI_DrawBitmap(&bmxp,0,0);
+		#else	
+			GUI_SetBkColor(GUI_LIGHTBLUE);
+			GUI_Clear();
+		#endif
 	break;
 	case WM_POST_PAINT:
 		GUI_MULTIBUF_EndEx(0);
@@ -247,7 +255,9 @@ static void _cbWin_0(WM_MESSAGE * pMsg) {
       switch(NCode) {
       case WM_NOTIFICATION_RELEASED:
 			if(!(WM_GetDialogItem(hWin0,(GUI_ID_USER + 0x0F))))
-				//CreateALARM();
+				#ifdef CODEFLASH
+					CreateALARM();
+				#endif
 			break;
 			}
     break;
@@ -268,7 +278,9 @@ static void _cbWin_0(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_RELEASED:
 				WM_HideWindow(hWin0);
 				WM_HideWindow(hWin2);
-				//Touch_calibration();	
+				#ifdef CODEFLASH	
+					Touch_calibration();	
+				#endif
 			break;
       }
     break;
@@ -296,9 +308,12 @@ static void _cbWin_1(WM_MESSAGE * pMsg) {
 		GUI_MULTIBUF_BeginEx(0);
 	break;
 	case WM_PAINT:
-		//GUI_DrawBitmap(&bmxp,0,0);
-		GUI_SetBkColor(GUI_LIGHTBLUE);
-		GUI_Clear();
+		#ifdef CODEFLASH
+			GUI_DrawBitmap(&bmxp,0,0);
+		#else	
+			GUI_SetBkColor(GUI_LIGHTBLUE);
+			GUI_Clear();
+		#endif
 	break;
 	case WM_POST_PAINT:
 	GUI_MULTIBUF_EndEx(0);
@@ -311,7 +326,9 @@ static void _cbWin_1(WM_MESSAGE * pMsg) {
       switch(NCode) {
       case WM_NOTIFICATION_RELEASED:
 			if(!(WM_GetDialogItem(hWin1,(GUI_ID_USER + 0x0F))))
-				//CreateTIME_DATE();
+				#ifdef CODEFLASH 
+					CreateTIME_DATE();
+				#endif
 			break;
 			}
     break;
@@ -363,22 +380,24 @@ static void _cbLayer_1(WM_MESSAGE * pMsg) {
 		
 		GUI_SetBkColor(GUI_TRANSPARENT);
 		GUI_Clear();
-		GUI_MEMDEV_CopyToLCDAt(hMemShadow,15,0);
-		GUI_MEMDEV_CopyToLCD(hMemShadow);	
+		#ifdef CODEFLASH
+			GUI_MEMDEV_CopyToLCDAt(hMemShadow,15,0);
+			GUI_MEMDEV_CopyToLCD(hMemShadow);	
+			
+			GUI_SetTextMode(GUI_TM_TRANS);
+			GUI_SetColor(GUI_YELLOW);
+			GUI_SetFont(&GUI_Font8x16);
+			
+			GUI_DispDecAt(sDate.Date,28,8,2);
+			GUI_DispChar('.');
+			GUI_DispDec(sDate.Month,2);	
+			GUI_DispChar('.');
+			GUI_DispDec(sDate.Year,2);
 		
-		GUI_SetTextMode(GUI_TM_TRANS);
-		GUI_SetColor(GUI_YELLOW);
-		GUI_SetFont(&GUI_Font8x16);
-		
-		GUI_DispDecAt(sDate.Date,28,8,2);
-		GUI_DispChar('.');
-		GUI_DispDec(sDate.Month,2);	
-		GUI_DispChar('.');
-		GUI_DispDec(sDate.Year,2);
-	
-		GUI_DispDecAt(sTime.Hours,412,8,2);
-		GUI_DispChar(':');
-		GUI_DispDec(sTime.Minutes,2);
+			GUI_DispDecAt(sTime.Hours,412,8,2);
+			GUI_DispChar(':');
+			GUI_DispDec(sTime.Minutes,2);
+		#endif
 		
 		
 	break;
@@ -423,13 +442,17 @@ static void _cbLayer_1(WM_MESSAGE * pMsg) {
 				if((RTC->CR&RTC_CR_ALRAE)==RTC_CR_ALRAE)
 							{
 								HAL_RTC_DeactivateAlarm(&hrtc,  RTC_ALARM_A);
-						//		ICONVIEW_AddBitmapItem(hIcon,Icons2[2],"");
+									#ifdef CODEFLASH
+										ICONVIEW_AddBitmapItem(hIcon,Icons2[2],"");
+									#endif
 								
 							}
 							else
 							{
 								HAL_RTC_SetAlarm_IT(&hrtc,&sAlarmA,RTC_FORMAT_BIN);
-						//		ICONVIEW_AddBitmapItem(hIcon,Icons2[0],"");
+									#ifdef CODEFLASH
+										ICONVIEW_AddBitmapItem(hIcon,Icons2[0],"");
+									#endif
 							}
 			break;	
 			case WM_NOTIFICATION_RELEASED:
@@ -448,12 +471,16 @@ static void _cbLayer_1(WM_MESSAGE * pMsg) {
 				if((RTC->CR&RTC_CR_ALRBE)==RTC_CR_ALRBE)
 					{
 						HAL_RTC_DeactivateAlarm(&hrtc,  RTC_ALARM_B);
-					//	ICONVIEW_AddBitmapItem(hIcon,Icons2[3],"");
+							#ifdef CODEFLASH
+								ICONVIEW_AddBitmapItem(hIcon,Icons2[3],"");
+							#endif
 					}
 				else
 					{
 						HAL_RTC_SetAlarm_IT(&hrtc,&sAlarmB,RTC_FORMAT_BIN);
-					//	ICONVIEW_AddBitmapItem(hIcon,Icons2[1],"");
+							#ifdef CODEFLASH
+								ICONVIEW_AddBitmapItem(hIcon,Icons2[1],"");
+							#endif
 					}
 			break;	
 			case WM_NOTIFICATION_RELEASED:
@@ -483,7 +510,9 @@ WM_HWIN Window_0(void) {
 		for(i=0;i<3;i++)
 		{
 			hIcon=ICONVIEW_CreateEx(30,30+70*i,58,58,hWin0,WM_CF_SHOW|WM_CF_HASTRANS,0,(GUI_ID_USER + 0x04+i),48,48);
-			//ICONVIEW_AddBitmapItem(hIcon,Icons0[i],"");
+				#ifdef CODEFLASH
+					ICONVIEW_AddBitmapItem(hIcon,Icons0[i],"");
+				#endif
 			ICONVIEW_SetBkColor(hIcon, ICONVIEW_CI_SEL, GUI_RED|0xC0000000);	
 		}
 		return hWin0;
@@ -498,7 +527,9 @@ WM_HWIN Window_1(void) {
 		for(i=0;i<3;i++)
 		{
 			hIcon=ICONVIEW_CreateEx(30,30+70*i,58,58,hWin1,WM_CF_SHOW|WM_CF_HASTRANS,0,(GUI_ID_USER + 0x07+i),48,48);
-		//	ICONVIEW_AddBitmapItem(hIcon,Icons1[i],"");
+				#ifdef CODEFLASH
+					ICONVIEW_AddBitmapItem(hIcon,Icons1[i],"");
+				#endif
 			ICONVIEW_SetBkColor(hIcon, ICONVIEW_CI_SEL, GUI_RED|0xC0000000);
 		}
 		return hWin1;
@@ -518,7 +549,9 @@ WM_HWIN Layer_1(void) {
 		for(i=0;i<2;i++)
 		{
 			hIcon=ICONVIEW_CreateEx(300+36*i,2,34,34,hWin2,WM_CF_SHOW|WM_CF_HASTRANS,0,(GUI_ID_USER + 0x0A+i),24,24);
-			//ICONVIEW_AddBitmapItem(hIcon,Icons2[i],"");
+				#ifdef CODEFLASH
+					ICONVIEW_AddBitmapItem(hIcon,Icons2[i],"");
+				#endif
 			ICONVIEW_SetBkColor(hIcon, ICONVIEW_CI_SEL, GUI_DARKBLUE|0x80000000);
 		}
 		hSlider=SLIDER_CreateEx(190,205,120, 30,hWin2, WM_CF_SHOW|WM_CF_HASTRANS,0, ID_SLIDER_0);
@@ -536,9 +569,9 @@ void MainTask(void)
 	char temp;
 	char *p;
 	int cmp;	
-
-
-	GUI_MEMDEV_Handle hmem1,hmem2,hmem_L,hmem_R,hmem_T,hmem_B,hmemH,hmemV;
+	#ifdef CODEFLASH
+		GUI_MEMDEV_Handle hmem1,hmem2,hmem_L,hmem_R,hmem_T,hmem_B,hmemH,hmemV;
+	#endif
 	
 	SLIDER_SetDefaultSkin(SLIDER_SKIN_FLEX);
 	PROGBAR_SetDefaultSkin(PROGBAR_SKIN_FLEX);
@@ -562,82 +595,83 @@ void MainTask(void)
 	Window_0();
 	Window_1();
 		
-	GUI_SelectLayer(1);
-	
-	hMemShadow=GUI_MEMDEV_CreateFixed(390,0,90,30,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
-	GUI_MEMDEV_Select(hMemShadow);
-	GUI_SetBkColor(GUI_TRANSPARENT);
-	GUI_Clear();
-	GUI_SetColor(GUI_GRAY);
-	GUI_FillRect(400,10,469,19);
-	
-	hmem1=GUI_MEMDEV_CreateFixed(0,0,20,90,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
-	GUI_MEMDEV_Select(hmem1);
-	GUI_SetBkColor(GUI_TRANSPARENT);
-	GUI_Clear();
-	GUI_DrawGradientH(0,0,20,90,GUI_TRANSPARENT,GUI_GRAY);
-	
-	hmem2=GUI_MEMDEV_CreateFixed(0,0,20,30,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
-	GUI_MEMDEV_Select(hmem2);
-	GUI_SetBkColor(GUI_TRANSPARENT);
-	GUI_Clear();
-	GUI_DrawGradientH(0,0,20,30,GUI_TRANSPARENT,GUI_GRAY);
-	
-	hmemH=GUI_MEMDEV_CreateFixed(0,0,10,90,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
-	GUI_MEMDEV_Select(hmemH);
-	GUI_SetBkColor(GUI_TRANSPARENT);
-	GUI_Clear();
-	
-	hmemV=GUI_MEMDEV_CreateFixed(0,0,10,30,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
-	GUI_MEMDEV_Select(hmemV);
-	GUI_SetBkColor(GUI_TRANSPARENT);
-	GUI_Clear();
-	
-	
-	hmem_L=GUI_MEMDEV_CreateFixed(0,0,10,30,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
-	GUI_MEMDEV_Select(hmem_L);
-	GUI_SetBkColor(GUI_TRANSPARENT);
-	GUI_Clear();
-	hmem_R=GUI_MEMDEV_CreateFixed(0,0,10,30,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
-	GUI_MEMDEV_Select(hmem_R);
-	GUI_SetBkColor(GUI_TRANSPARENT);
-	GUI_Clear();
-	hmem_T=GUI_MEMDEV_CreateFixed(0,0,90,10,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
-	GUI_MEMDEV_Select(hmem_T);
-	GUI_SetBkColor(GUI_TRANSPARENT);
-	GUI_Clear();
-	hmem_B=GUI_MEMDEV_CreateFixed(0,0,90,10,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
-	GUI_MEMDEV_Select(hmem_B);
-	GUI_SetBkColor(GUI_TRANSPARENT);
-	GUI_Clear();
-	
+	#ifdef CODEFLASH
+		GUI_SelectLayer(1);
 		
-	GUI_MEMDEV_Select(hmemH);
-	GUI_MEMDEV_DrawPerspectiveX(hmem1, 0,0,90,70,10,10);
-	GUI_MEMDEV_Select(hmemV);
-	GUI_MEMDEV_DrawPerspectiveX(hmem2, 0,1,28,8,10,10);
+		hMemShadow=GUI_MEMDEV_CreateFixed(390,0,90,30,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
+		GUI_MEMDEV_Select(hMemShadow);
+		GUI_SetBkColor(GUI_TRANSPARENT);
+		GUI_Clear();
+		GUI_SetColor(GUI_GRAY);
+		GUI_FillRect(400,10,469,19);
+		
+		hmem1=GUI_MEMDEV_CreateFixed(0,0,20,90,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
+		GUI_MEMDEV_Select(hmem1);
+		GUI_SetBkColor(GUI_TRANSPARENT);
+		GUI_Clear();
+		GUI_DrawGradientH(0,0,20,90,GUI_TRANSPARENT,GUI_GRAY);
+		
+		hmem2=GUI_MEMDEV_CreateFixed(0,0,20,30,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
+		GUI_MEMDEV_Select(hmem2);
+		GUI_SetBkColor(GUI_TRANSPARENT);
+		GUI_Clear();
+		GUI_DrawGradientH(0,0,20,30,GUI_TRANSPARENT,GUI_GRAY);
+		
+		hmemH=GUI_MEMDEV_CreateFixed(0,0,10,90,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
+		GUI_MEMDEV_Select(hmemH);
+		GUI_SetBkColor(GUI_TRANSPARENT);
+		GUI_Clear();
+		
+		hmemV=GUI_MEMDEV_CreateFixed(0,0,10,30,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
+		GUI_MEMDEV_Select(hmemV);
+		GUI_SetBkColor(GUI_TRANSPARENT);
+		GUI_Clear();
+		
+		
+		hmem_L=GUI_MEMDEV_CreateFixed(0,0,10,30,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
+		GUI_MEMDEV_Select(hmem_L);
+		GUI_SetBkColor(GUI_TRANSPARENT);
+		GUI_Clear();
+		hmem_R=GUI_MEMDEV_CreateFixed(0,0,10,30,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
+		GUI_MEMDEV_Select(hmem_R);
+		GUI_SetBkColor(GUI_TRANSPARENT);
+		GUI_Clear();
+		hmem_T=GUI_MEMDEV_CreateFixed(0,0,90,10,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
+		GUI_MEMDEV_Select(hmem_T);
+		GUI_SetBkColor(GUI_TRANSPARENT);
+		GUI_Clear();
+		hmem_B=GUI_MEMDEV_CreateFixed(0,0,90,10,GUI_MEMDEV_NOTRANS,GUI_MEMDEV_APILIST_32,GUICC_8888);
+		GUI_MEMDEV_Select(hmem_B);
+		GUI_SetBkColor(GUI_TRANSPARENT);
+		GUI_Clear();
+		
 			
-	GUI_MEMDEV_Rotate(hmemH,hmem_T,40,-40, -90*1000,1000);
-	GUI_MEMDEV_Rotate(hmemH,hmem_B,40,-40, 90*1000,1000);
-	GUI_MEMDEV_Rotate(hmemV,hmem_R,0,0,180*1000,1000);
-	
-	GUI_MEMDEV_Select(hMemShadow);
-	GUI_MEMDEV_WriteAt(hmem_T, 390, 0);
-	GUI_MEMDEV_WriteAt(hmem_B, 390, 20);
-	GUI_MEMDEV_WriteAt(hmemV, 390, 0);
-	GUI_MEMDEV_WriteAt(hmem_R, 470, 0);
-	
-	GUI_MEMDEV_Select(0);
-	
-	GUI_MEMDEV_Delete(hmem1);
-	GUI_MEMDEV_Delete(hmem2);
-	GUI_MEMDEV_Delete(hmem_L);
-	GUI_MEMDEV_Delete(hmem_R);
-	GUI_MEMDEV_Delete(hmem_T);
-	GUI_MEMDEV_Delete(hmem_B);
-	GUI_MEMDEV_Delete(hmemH);
-	GUI_MEMDEV_Delete(hmemV);
-	
+		GUI_MEMDEV_Select(hmemH);
+		GUI_MEMDEV_DrawPerspectiveX(hmem1, 0,0,90,70,10,10);
+		GUI_MEMDEV_Select(hmemV);
+		GUI_MEMDEV_DrawPerspectiveX(hmem2, 0,1,28,8,10,10);
+				
+		GUI_MEMDEV_Rotate(hmemH,hmem_T,40,-40, -90*1000,1000);
+		GUI_MEMDEV_Rotate(hmemH,hmem_B,40,-40, 90*1000,1000);
+		GUI_MEMDEV_Rotate(hmemV,hmem_R,0,0,180*1000,1000);
+		
+		GUI_MEMDEV_Select(hMemShadow);
+		GUI_MEMDEV_WriteAt(hmem_T, 390, 0);
+		GUI_MEMDEV_WriteAt(hmem_B, 390, 20);
+		GUI_MEMDEV_WriteAt(hmemV, 390, 0);
+		GUI_MEMDEV_WriteAt(hmem_R, 470, 0);
+		
+		GUI_MEMDEV_Select(0);
+		
+		GUI_MEMDEV_Delete(hmem1);
+		GUI_MEMDEV_Delete(hmem2);
+		GUI_MEMDEV_Delete(hmem_L);
+		GUI_MEMDEV_Delete(hmem_R);
+		GUI_MEMDEV_Delete(hmem_T);
+		GUI_MEMDEV_Delete(hmem_B);
+		GUI_MEMDEV_Delete(hmemH);
+		GUI_MEMDEV_Delete(hmemV);
+	#endif
 	Layer_1();
 	//WM_ShowWindow(hWin1);	
 	WM_ShowWindow(hWin0);
@@ -727,7 +761,7 @@ while(1)
 			 USART1->DR=TxBuffer[0];
 			 __HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
 			tx_message=0;
-			download_firmware=1;	
+			new_firmware=1;	
 			}
 			else
 			{

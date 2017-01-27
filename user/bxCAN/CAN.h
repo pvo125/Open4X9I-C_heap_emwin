@@ -6,6 +6,8 @@
 #include "DIALOG.h"
 
 
+//#define CODEFLASH
+
 typedef enum
 {
 	CAN_TXOK=0,

@@ -8,7 +8,7 @@
 
 #define NUMBER_NODE 5					// Зададим максимальное количество для CAN сети
 
-volatile uint32_t countbyte_firmware;			// Глобальная переменная счетчик отправленных байт firmware  при обновлении по CAN
+volatile uint32_t countbyte_firmware=0;			// Глобальная переменная счетчик отправленных байт firmware  при обновлении по CAN
 const char  *netname_array[]={"Open4X9I","Core4x9I","F103_KIT","32VLDisc"}; //массив указателей на имена узлов CAN сети соотв. netname_index (0,1,2...)
 volatile uint8_t netname_index;
 uint8_t window_index;
@@ -24,7 +24,8 @@ WM_HWIN CANNodeDialog(uint8_t index);
 extern volatile int size;
 extern volatile uint32_t TimeMS;
 volatile uint8_t new_node=0;
-extern volatile uint8_t download_firmware;
+volatile uint8_t download_complete=0;
+volatile uint8_t new_firmware=0;
 
 extern WM_HWIN hWin1;
 					
@@ -107,6 +108,7 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 	CANNode_TypeDef CANNode;
 	static uint8_t widget_changing=0;
 	WM_HWIN hItem;
+	uint32_t temp;
 	uint8_t index;
 	int     NCode;
   int     Id;
@@ -139,7 +141,7 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 				WM_CreateTimer(hItem,0,1000,0);				// Создадим таймер для обновления соотв. окна диалога для каждого узла.
 				
 				Id=strcmp((const char*)netname_array[window_index],(const char*)0xD0400020);
-				if(Id)
+				if(Id || (new_firmware==0))
 					{
 						hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_UPDATE);
 						WM_DisableWindow(hItem);	
@@ -216,17 +218,19 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 			case WM_TIMER:
  				FRAMEWIN_GetUserData(pMsg->hWin,&CANNode,sizeof(CANNode));	//Когда таймер сраб. получим с соотв. окна структуру CAN узла.
 				
-				if(size)
+				if(countbyte_firmware)
 				{
+					temp=(countbyte_firmware*100)/size;
 					progbar=WM_GetDialogItem(pMsg->hWin,ID_PROGBAR_1);
-					PROGBAR_SetValue(progbar,size/2200);
+					PROGBAR_SetValue(progbar,temp);
 				}
-				if(download_firmware)
+				if(download_complete)
 				{
 					hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_UPDATE);
 					WM_DisableWindow(hItem);
-					download_firmware=0;
+					download_complete=0;
 					progbar=WM_GetDialogItem(pMsg->hWin,ID_PROGBAR_1);
+					WM_DeleteWindow(progbar);
 					
 					
 				}
@@ -415,8 +419,6 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 									CAN_Data_TX.Data[2]=(uint8_t)(size>>16);
 									CAN_Data_TX.Data[3]=(uint8_t)(size>>24);
 									CAN_Transmit_DataFrame(&CAN_Data_TX);				// (Core4X9I 0x271) UPDATE_FIRMWARE_REQ 0x271, 0x371, 0x471
-									//CAN_Transmit_RemoteFrame(((CANNode.index+1)<<8)|0x89);   
-								
 								break;
 							}
 					break;			
@@ -469,7 +471,9 @@ void _Browse_CANNet_FirstEntry(void){
 			//	}
 			hNode=TREEVIEW_InsertItem(hTree,TREEVIEW_ITEM_TYPE_LEAF,hNode,TREEVIEW_INSERT_BELOW,netname_array[netname_index]);
 			TREEVIEW_ITEM_SetUserData(hNode,(uint32_t)(netname_index));
-			TREEVIEW_ITEM_SetImage(hNode, TREEVIEW_BI_LEAF,&bmchip);
+			#ifdef CODEFLASH
+				TREEVIEW_ITEM_SetImage(hNode, TREEVIEW_BI_LEAF,&bmchip);
+			#endif
 			count++;
 			new_node=0;
 		}
@@ -504,7 +508,9 @@ void	_Browse_CANNet(void){
 				
 			hNode=TREEVIEW_InsertItem(hTree,TREEVIEW_ITEM_TYPE_LEAF,hNode,TREEVIEW_INSERT_BELOW,netname_array[netname_index]);
 			TREEVIEW_ITEM_SetUserData(hNode,(uint32_t)(netname_index));
-			TREEVIEW_ITEM_SetImage(hNode, TREEVIEW_BI_LEAF,&bmchip);
+			#ifdef CODEFLASH
+				TREEVIEW_ITEM_SetImage(hNode, TREEVIEW_BI_LEAF,&bmchip);
+			#endif
 			count++;
 			new_node=0;
 		}
