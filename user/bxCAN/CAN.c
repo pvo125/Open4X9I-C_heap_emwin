@@ -343,7 +343,7 @@ void CAN_RXProcess1(void){
 							CAN_Data_TX.Data[i]=*(uint8_t*)(0xD0400000+countbyte_firmware);
 							countbyte_firmware++;
 						}
-					CAN_Data_TX.ID=(index<<8)|0x73;
+					CAN_Data_TX.ID=((index+1)<<8)|0x73;
 					CAN_Data_TX.DLC=8;	
 					CAN_Transmit_DataFrame(&CAN_Data_TX);
 					//size-=8;	
@@ -351,12 +351,12 @@ void CAN_RXProcess1(void){
 				else
 				{
 					CAN_Data_TX.DLC=(uint8_t)(size-countbyte_firmware);	
-					for(i=0;i<(size-countbyte_firmware);i++)
+					for(i=0;i<CAN_Data_TX.DLC;i++)
 						{
 							CAN_Data_TX.Data[i]=*(uint8_t*)(0xD0400000+countbyte_firmware);
 							countbyte_firmware++;
 						}
-					CAN_Data_TX.ID=(index<<8)|0x73;
+					CAN_Data_TX.ID=((index+1)<<8)|0x73;
 					CAN_Transmit_DataFrame(&CAN_Data_TX);
 						
 				}
@@ -368,13 +368,17 @@ void CAN_RXProcess1(void){
 				download_complete=1;
 				countbyte_firmware=0;
 				new_firmware=0;
-				GUI_MessageBox("Download complete!","MESSAGE",0);	
-			
+				//GUI_SelectLayer(0);
+				//GUI_MessageBox("Download complete!","MESSAGE",0);	
+				//GUI_SelectLayer(1);
 			}
 			else if(CAN_Data_RX[1].Data[1]=='e')		// получили в сообщении 'e' CRC ERROR!
 			{
-				GUI_MessageBox("crc error!","ERROR",0);
-			
+				download_complete=1;
+				countbyte_firmware=0;
+				//GUI_SelectLayer(0);
+				//GUI_MessageBox("crc error!","ERROR",0);
+				//GUI_SelectLayer(1);
 			}				
 		break;	
 		

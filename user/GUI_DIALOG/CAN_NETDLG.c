@@ -298,7 +298,7 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 				{
 					CANNode.count++;
 					FRAMEWIN_SetUserData(pMsg->hWin,&CANNode,sizeof(CANNode));
-					if(CANNode.count>1)		// Доп. проверка если 2 раза таймер сработал и не было новых данных от узла 
+					if(CANNode.count>4)		// Доп. проверка если 3 раза таймер сработал и не было новых данных от узла 
 					{
 						CANNode.count=0;							//
 						CANNode.newmsg=0;							//
@@ -408,11 +408,12 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 					case ID_BUTTON_UPDATE: // Notifications sent by BUTTON_UPDATE
 							switch(NCode){
 								case WM_NOTIFICATION_RELEASED:
+									FRAMEWIN_GetUserData(pMsg->hWin,&CANNode,sizeof(CANNode));//FRAMEWIN_GetUserData(pMsg->hWin,&index,1);
 									progbar=PROGBAR_CreateEx(120,240,100,10,pMsg->hWin,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
 									PROGBAR_SetText(progbar,"");	
 									PROGBAR_SetMinMax(progbar,0,100);
 									countbyte_firmware=0;
-									CAN_Data_TX.ID=(CANNode.index+1)<<8|0x71;
+									CAN_Data_TX.ID=((CANNode.index+1)<<8)|0x71;
 									CAN_Data_TX.DLC=4;
 									CAN_Data_TX.Data[0]=(uint8_t)size;
 									CAN_Data_TX.Data[1]=(uint8_t)(size>>8);
