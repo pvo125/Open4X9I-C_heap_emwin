@@ -88,6 +88,8 @@ RTC_AlarmTypeDef sAlarmA,sAlarmB;
 /* Private variables ---------------------------------------------------------*/
 
 uint8_t Input_Device; 
+
+extern uint8_t RxBuffer[];
 extern PS2_MOUSE_t 		PS2_MOUSE;
  /* USER CODE END PV */
 
@@ -342,7 +344,7 @@ void MX_DMA2_Init(void){
 
 	
 	__DMA2_CLK_ENABLE();
-	
+	//RX
 	 hdma2.Instance=DMA2_Stream2;
 	 hdma2.Init.Channel=DMA_CHANNEL_4;
 	 hdma2.Init.Direction=DMA_PERIPH_TO_MEMORY;
@@ -357,10 +359,26 @@ void MX_DMA2_Init(void){
 	 hdma2.Init.PeriphInc=DMA_PINC_DISABLE;
 	 hdma2.Init.Priority=DMA_PRIORITY_LOW;
 	 HAL_DMA_Init(&hdma2);
-	
-	NVIC_EnableIRQ(DMA2_Stream2_IRQn);
-	
-	
+	//__HAL_DMA_ENABLE_IT(&hdma2,DMA_IT_TC);
+		
+	 HAL_DMA_Start(&hdma2,(uint32_t)&USART1->DR,(uint32_t)&RxBuffer[0],20);
+	//TX
+	 hdma2.Instance=DMA2_Stream7;
+	 hdma2.Init.Channel=DMA_CHANNEL_4;
+	 hdma2.Init.Direction=DMA_MEMORY_TO_PERIPH;
+	 hdma2.Init.FIFOMode=DMA_FIFOMODE_DISABLE;
+	 hdma2.Init.FIFOThreshold=DMA_FIFO_THRESHOLD_1QUARTERFULL;
+	 hdma2.Init.MemBurst=DMA_MBURST_SINGLE;
+	 hdma2.Init.MemDataAlignment=DMA_MDATAALIGN_BYTE;
+	 hdma2.Init.MemInc=DMA_MINC_ENABLE;
+	 hdma2.Init.Mode=DMA_NORMAL;
+	 hdma2.Init.PeriphBurst=DMA_PBURST_SINGLE;
+	 hdma2.Init.PeriphDataAlignment=DMA_PDATAALIGN_BYTE;
+	 hdma2.Init.PeriphInc=DMA_PINC_DISABLE;
+	 hdma2.Init.Priority=DMA_PRIORITY_LOW;
+	 HAL_DMA_Init(&hdma2);
+	 __HAL_DMA_ENABLE_IT(&hdma2,DMA_IT_TC);
+	 NVIC_EnableIRQ(DMA2_Stream7_IRQn);
 }
 
 void MX_UART1_Init(void)
@@ -377,9 +395,11 @@ void MX_UART1_Init(void)
 	huart1.Init.WordLength=UART_WORDLENGTH_8B;
 	HAL_UART_Init(&huart1);
 	
-	//__HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
-	__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+	USART1->CR3 |=USART_CR3_DMAR|USART_CR3_DMAT;		// usart1 использует DMA на прием и передачу
 	
+	//__HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
+	//__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);	
 
 }	
 /* LTDC init function */

@@ -4,6 +4,7 @@
 CANTX_TypeDef CAN_Data_TX;
 CANRX_TypeDef CAN_Data_RX[2];
 
+extern volatile uint8_t message_flag;
 extern volatile uint32_t countbyte_firmware;
 extern volatile int size;
 extern volatile uint8_t download_complete;
@@ -368,17 +369,13 @@ void CAN_RXProcess1(void){
 				download_complete=1;
 				countbyte_firmware=0;
 				new_firmware=0;
-				//GUI_SelectLayer(0);
-				//GUI_MessageBox("Download complete!","MESSAGE",0);	
-				//GUI_SelectLayer(1);
+				message_flag=1;
 			}
 			else if(CAN_Data_RX[1].Data[1]=='e')		// получили в сообщении 'e' CRC ERROR!
 			{
 				download_complete=1;
 				countbyte_firmware=0;
-				//GUI_SelectLayer(0);
-				//GUI_MessageBox("crc error!","ERROR",0);
-				//GUI_SelectLayer(1);
+				message_flag=2;
 			}				
 		break;	
 		

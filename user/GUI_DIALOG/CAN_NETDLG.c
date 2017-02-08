@@ -2,6 +2,7 @@
 
 #include "stm32f4xx_hal.h"
 #include "DIALOG.h"
+#include "MESSAGEBOX.h"
 #include "CAN.h"
 #include "stdlib.h"
 #include "string.h"
@@ -21,6 +22,7 @@ TREEVIEW_Handle hTree;
 WM_HWIN CANNetExplore(void);
 WM_HWIN CANNodeDialog(uint8_t index);
 
+volatile uint8_t message_flag=0;
 extern volatile int size;
 extern volatile uint32_t TimeMS;
 volatile uint8_t new_node=0;
@@ -218,6 +220,17 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 			case WM_TIMER:
  				FRAMEWIN_GetUserData(pMsg->hWin,&CANNode,sizeof(CANNode));	//Когда таймер сраб. получим с соотв. окна структуру CAN узла.
 				
+				if(message_flag)
+				{
+					TEXT_SetDefaultTextColor(GUI_BLACK);
+					GUI_SelectLayer(0);
+					if(message_flag==1)
+						MESSAGEBOX_Create("Download complete!","MESSAGE",0);	
+					else if(message_flag==2)
+						MESSAGEBOX_Create("CRC ERROR!","ERROR",0);	
+						
+					message_flag=0;
+				}
 				if(countbyte_firmware)
 				{
 					temp=(countbyte_firmware*100)/size;

@@ -116,8 +116,15 @@ char str1[]="get size";
 char str2[]="get data";
 char str3[]="crc ok!";
 char str4[]="crc error!";
-uint8_t RxBuffer[12];
-uint8_t TxBuffer[12];
+uint8_t RxBuffer[16];
+uint8_t TxBuffer[16];
+
+
+volatile uint8_t uart_newmessage;
+volatile uint8_t uart_data_message=0;
+volatile uint8_t uart_get_size=0;
+volatile uint8_t uart_get_data=0;
+volatile uint8_t uart_end_transaction=0;
 
 volatile uint8_t tx_message=0;
 volatile uint8_t rx_message=0;
@@ -132,6 +139,7 @@ WM_HWIN hWin0,hWin1,hWin2;
 extern WM_HWIN CreateTIME_DATE(void);
 extern WM_HWIN CreateALARM(void);
 
+void UART_Terminal_DMATran(char *p);
 uint32_t crc32_check(const uint8_t *buff,uint32_t count);
 
 /*********************************************************************
@@ -703,8 +711,108 @@ while(1)
 		//}
 		//else
 		//	GUI_TOUCH_StoreStateEx(&State);
-		cmp=strcmp("hello st\r",(const char*)RxBuffer);
-		if(!cmp) 
+			if(uart_newmessage)
+			{
+				if((strcmp("hello st\r",(const char*)RxBuffer))==0)
+				{
+					*(uint64_t*)(RxBuffer+0)=(uint64_t)0;
+					*(uint64_t*)(RxBuffer+8)=(uint64_t)0;	
+					
+					// перенастроим DMA для приема след. сообщения
+					DMA2_Stream2->CR &=~DMA_SxCR_EN;
+					DMA2_Stream2->NDTR=16;
+					DMA2->LIFCR |=DMA_LIFCR_CTCIF2|DMA_LIFCR_CHTIF2;
+					DMA2_Stream2->CR |=DMA_SxCR_EN;
+					uart_newmessage=0;
+					
+					__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+					UART_Terminal_DMATran("get size\r\n");
+					uart_data_message=1;
+				}
+				else
+				{
+					*(uint64_t*)(RxBuffer+0)=(uint64_t)0;
+					*(uint64_t*)(RxBuffer+8)=(uint64_t)0;
+									
+					DMA2_Stream2->CR &=~DMA_SxCR_EN;
+					DMA2_Stream2->NDTR=20;
+					DMA2->LIFCR |=DMA_LIFCR_CTCIF2|DMA_LIFCR_CHTIF2;
+					DMA2_Stream2->CR |=DMA_SxCR_EN;
+					uart_newmessage=0;
+				}
+			}
+			if(uart_get_size)
+			{
+				size=0;
+				//p=strchr((char*)RxBuffer,'\0');		// '\r' = ENTER key
+				m=strlen((char*)RxBuffer)-1;
+				p=(char*)(RxBuffer+m-1);
+				for(i=0;i<m;i++)
+				{
+					temp=*(char*)(p-i);
+					size+=(temp&0x0f)*dec;
+					dec*=10;
+				}
+				__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+				UART_Terminal_DMATran("get data\r\n");
+				
+				progbar=PROGBAR_CreateEx(20,250,450,5,hWin2,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
+				PROGBAR_SetText(progbar,"");	
+				PROGBAR_SetMinMax(progbar,0,100);
+				backlight_count=0;
+				TIM7->CNT=0;
+				TIM13->CCR1=70;
+						
+				DMA2_Stream2->CR &=~DMA_SxCR_EN;
+				DMA2_Stream2->NDTR=20000;
+				DMA2_Stream2->M0AR=0xD0400000;
+				DMA2->LIFCR |=DMA_LIFCR_CTCIF2|DMA_LIFCR_CHTIF2;
+				DMA2_Stream2->CR |=DMA_SxCR_EN;
+								
+				uart_data_message=1;
+				transaction=0;		
+				uart_get_size=0;
+			}
+			if(uart_get_data)
+			{
+				uart_data_message=1;
+				__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+				UART_Terminal_DMATran("get data\r\n");
+				DMA2_Stream2->CR &=~DMA_SxCR_EN;
+				DMA2_Stream2->M0AR=(0xD0400000+10000*transaction);
+				DMA2->LIFCR |=DMA_LIFCR_CTCIF2|DMA_LIFCR_CHTIF2;
+				DMA2_Stream2->CR |=DMA_SxCR_EN;
+				transaction++;
+			}
+			if(uart_end_transaction)
+			{
+				crc=crc32_check((const uint8_t *)0xd0400000,(size-4));
+				
+				// перенастроим DMA для приема след. сообщения
+				DMA2_Stream2->CR &=~DMA_SxCR_EN;
+				DMA2_Stream2->M0AR=(uint32_t)RxBuffer;
+				DMA2_Stream2->NDTR=16;
+				DMA2->LIFCR |=DMA_LIFCR_CTCIF2|DMA_LIFCR_CHTIF2;
+				DMA2_Stream2->CR |=DMA_SxCR_EN;
+				if(crc==*(uint32_t*)(0xd0400000+size-4))
+			{
+				__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+				UART_Terminal_DMATran("crc ok\r\n");
+			new_firmware=1;	
+			}
+			else
+			{
+				__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+				UART_Terminal_DMATran("crc error\r\n");
+			}
+			//size=0;
+			dec=1;
+			WM_DeleteWindow(progbar);
+			
+			
+			}
+			
+		/*if(!cmp) 
 		{
 			
 			*(uint32_t*)(RxBuffer+0)=(uint32_t)0;
@@ -716,7 +824,7 @@ while(1)
 			__HAL_UART_ENABLE_IT(&huart1, UART_IT_TXE);
 			rx_message=1;								                   
 		
-		}
+		
 		if(rx_message==2)			
 		{
 			size=0;
@@ -780,9 +888,24 @@ while(1)
 			WM_DeleteWindow(progbar);
 		}
 	
-	
+	}*/
 		GUI_Delay(10);
 	}
+
+}
+
+void UART_Terminal_DMATran(char *p){
+
+	uint8_t count=0;	
+	char *s=p;
+	
+	while((*p++)!=0x0)
+		count++;
+	DMA2_Stream7->PAR=(uint32_t)&USART1->DR;
+	DMA2_Stream7->M0AR=(uint32_t)s;
+	DMA2_Stream7->NDTR=count;
+	DMA2->HIFCR |=DMA_HIFCR_CTCIF7|DMA_HIFCR_CHTIF7;
+	DMA2_Stream7->CR |=DMA_SxCR_EN;	
 
 }
 

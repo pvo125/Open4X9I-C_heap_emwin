@@ -70,7 +70,12 @@ uint32_t GUI_UsedBytes;
 uint8_t backlight_count=0;
 //static volatile uint8_t row;
 
+extern volatile uint8_t uart_get_size;
+extern volatile uint8_t uart_get_data;
+extern volatile uint8_t uart_end_transaction;
 
+extern volatile uint8_t uart_data_message;
+extern  volatile uint8_t uart_newmessage;
 
 extern PS2_MOUSE_t 		PS2_MOUSE;
 extern volatile uint8_t scancode;
@@ -135,65 +140,39 @@ void RTC_WKUP_IRQHandler(void)
   /* USER CODE END RTC_WKUP_IRQn 1 */
 }
  void USART1_IRQHandler(void){
- 
+	uint32_t temp;
   
+	 
  /* USER CODE BEGIN USART1_IRQn 0 */
-		
-	 
-	
-		if(USART1->SR & USART_SR_RXNE)
-		{
+		if(uart_data_message)
+		{											// если принимаем данные (data)
 			
-			if(USART1->DR!='\r')
+				if(DMA2_Stream2->NDTR>16)
 				{
-				RxBuffer[RXcount]=USART1->DR;
-				RXcount++;
-				}
-			else
-				{
-				RxBuffer[RXcount]=USART1->DR;
-				//RxBuffer[RXcount+1]='\0';	
-				//GUI_DispString((const char*)RxBuffer);
-				//GUI_DispNextLine();
-				RXcount=0;
-				if(rx_message==1)
-					rx_message=2;
-				
-							
-				//	else if(rx_message==1)
 					
-				//	else if(rx_message==2)
-						
+					if(transaction==(size/10000+1))
+					{
+						uart_end_transaction=1;
+						uart_get_data=0;
+					}
+					else
+						uart_get_data=1;
 				}
-			//USART1->SR &=~USART_SR_RXNE;
-		}
-		else if(USART1->SR & USART_SR_TXE)
-		{
-			TXcount++;
-			if(TxBuffer[TXcount]!='\0')
-			{
-				USART1->DR=TxBuffer[TXcount];
+				else
+					uart_get_size=1;
 				
-			}
-			else
-			{
-				//USART1->CR1 &=~USART_CR1_TXEIE;
 				
-				TXcount=0;
-				__HAL_UART_DISABLE_IT(&huart1, UART_IT_TXE);
-				NVIC_ClearPendingIRQ(USART1_IRQn);
-			
-			}
-		
 		}
-		/*if((USART1->SR & USART_SR_TC))
-		{
+		else
+		{															// если принимаем сообщение	(message)
+			uart_newmessage=1;					//  выставляем флаг нового сообщения	
+					
+		}
+		// Сбросим бит IDLE след последовательностью
+		temp=USART1->SR;
+		temp=USART1->DR;
 		
-		}*/
-	
-	 
-	 
-  /* USER CODE END USART1_IRQn 0 */
+	/* USER CODE END USART1_IRQn 0 */
 	//HAL_UART_IRQHandler(&huart1);
 	/* USER CODE BEGIN USART1_IRQn 1 */
 	
@@ -329,12 +308,14 @@ void TIM7_IRQHandler(void)
   /* USER CODE END TIM7_IRQn 1 */
 }
 
-void DMA2_Stream2_IRQHandler(void)
+void DMA2_Stream7_IRQHandler(void)
 {
-	PROGBAR_Handle progbar;
-	uint8_t i;
-	
-	progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
+	//PROGBAR_Handle progbar;
+	//uint8_t i;
+	__HAL_DMA_CLEAR_FLAG(&hdma2,DMA_FLAG_TCIF3_7);
+	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+					//uart_newmessage=0;
+	/*progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
 	__HAL_DMA_CLEAR_FLAG(&hdma2,DMA_FLAG_TCIF2_6);	
 	
 	
@@ -373,7 +354,7 @@ void DMA2_Stream2_IRQHandler(void)
 		i=(transaction*100)/size;
 		PROGBAR_SetValue(progbar,i);
 		
-	}
+	}*/
 	
 }
 
