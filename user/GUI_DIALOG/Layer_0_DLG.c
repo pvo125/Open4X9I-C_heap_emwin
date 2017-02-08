@@ -571,12 +571,12 @@ WM_HWIN Layer_1(void) {
 
 void MainTask(void)
 {
-	PROGBAR_Handle progbar;
+	//PROGBAR_Handle progbar;
 	uint32_t crc;
 	uint8_t i,m;
 	char temp;
 	char *p;
-	int cmp;	
+	
 	#ifdef CODEFLASH
 		GUI_MEMDEV_Handle hmem1,hmem2,hmem_L,hmem_R,hmem_T,hmem_B,hmemH,hmemV;
 	#endif
@@ -726,7 +726,7 @@ while(1)
 					uart_newmessage=0;
 					
 					__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-					UART_Terminal_DMATran("get size\r\n");
+					UART_Terminal_DMATran("get size");
 					uart_data_message=1;
 				}
 				else
@@ -744,7 +744,6 @@ while(1)
 			if(uart_get_size)
 			{
 				size=0;
-				//p=strchr((char*)RxBuffer,'\0');		// '\r' = ENTER key
 				m=strlen((char*)RxBuffer)-1;
 				p=(char*)(RxBuffer+m-1);
 				for(i=0;i<m;i++)
@@ -754,11 +753,11 @@ while(1)
 					dec*=10;
 				}
 				__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-				UART_Terminal_DMATran("get data\r\n");
+				UART_Terminal_DMATran("get data");
 				
-				progbar=PROGBAR_CreateEx(20,250,450,5,hWin2,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
-				PROGBAR_SetText(progbar,"");	
-				PROGBAR_SetMinMax(progbar,0,100);
+				//progbar=PROGBAR_CreateEx(20,250,450,5,hWin2,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
+				//PROGBAR_SetText(progbar,"");	
+				//PROGBAR_SetMinMax(progbar,0,100);
 				backlight_count=0;
 				TIM7->CNT=0;
 				TIM13->CCR1=70;
@@ -776,18 +775,29 @@ while(1)
 			if(uart_get_data)
 			{
 				uart_data_message=1;
-				__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-				UART_Terminal_DMATran("get data\r\n");
+				uart_get_data=0;
+								
 				DMA2_Stream2->CR &=~DMA_SxCR_EN;
-				DMA2_Stream2->M0AR=(0xD0400000+10000*transaction);
+				transaction+=(19999-DMA2_Stream2->NDTR);
+				DMA2_Stream2->M0AR+=(19999-DMA2_Stream2->NDTR);
 				DMA2->LIFCR |=DMA_LIFCR_CTCIF2|DMA_LIFCR_CHTIF2;
 				DMA2_Stream2->CR |=DMA_SxCR_EN;
-				transaction++;
+				if((size-transaction)>0)
+				{
+					__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+					UART_Terminal_DMATran("get data");
+				}
+				else
+				{
+					uart_end_transaction=1;
+					uart_get_data=0;
+				}
 			}
 			if(uart_end_transaction)
 			{
 				crc=crc32_check((const uint8_t *)0xd0400000,(size-4));
-				
+				uart_data_message=0;
+				uart_end_transaction=0;
 				// перенастроим DMA для приема след. сообщения
 				DMA2_Stream2->CR &=~DMA_SxCR_EN;
 				DMA2_Stream2->M0AR=(uint32_t)RxBuffer;
@@ -795,21 +805,18 @@ while(1)
 				DMA2->LIFCR |=DMA_LIFCR_CTCIF2|DMA_LIFCR_CHTIF2;
 				DMA2_Stream2->CR |=DMA_SxCR_EN;
 				if(crc==*(uint32_t*)(0xd0400000+size-4))
-			{
-				__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-				UART_Terminal_DMATran("crc ok\r\n");
-			new_firmware=1;	
-			}
-			else
-			{
-				__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-				UART_Terminal_DMATran("crc error\r\n");
-			}
-			//size=0;
-			dec=1;
-			WM_DeleteWindow(progbar);
-			
-			
+				{
+					__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+					UART_Terminal_DMATran("crc ok!");
+					new_firmware=1;	
+				}
+				else
+				{
+					__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+					UART_Terminal_DMATran("crc error!");
+				}
+				dec=1;
+				//WM_DeleteWindow(progbar);
 			}
 			
 		/*if(!cmp) 

@@ -46,14 +46,19 @@
 
 extern  uint8_t RxBuffer[];
 extern  uint8_t TxBuffer[];
+extern volatile uint8_t uart_get_size;
+extern volatile uint8_t uart_get_data;
+extern volatile uint8_t uart_end_transaction;
+extern volatile uint8_t uart_data_message;
+extern  volatile uint8_t uart_newmessage;
 
 //const char str3[]="ok";
-extern char str2[];
-extern volatile uint8_t tx_message;
-extern volatile uint8_t rx_message;
+//extern char str2[];
+//extern volatile uint8_t tx_message;
+//extern volatile uint8_t rx_message;
 
-static volatile uint8_t RXcount,TXcount;
-extern volatile uint8_t count_message;
+//static volatile uint8_t RXcount,TXcount;
+//extern volatile uint8_t count_message;
 extern volatile int size;
 extern volatile int transaction;
 extern volatile GUI_TIMER_TIME OS_TimeMS;
@@ -68,14 +73,7 @@ extern GUI_PID_STATE State;
 extern PROGBAR_Handle PROGBAR_MEM;
 uint32_t GUI_UsedBytes;
 uint8_t backlight_count=0;
-//static volatile uint8_t row;
 
-extern volatile uint8_t uart_get_size;
-extern volatile uint8_t uart_get_data;
-extern volatile uint8_t uart_end_transaction;
-
-extern volatile uint8_t uart_data_message;
-extern  volatile uint8_t uart_newmessage;
 
 extern PS2_MOUSE_t 		PS2_MOUSE;
 extern volatile uint8_t scancode;
@@ -149,18 +147,13 @@ void RTC_WKUP_IRQHandler(void)
 			
 				if(DMA2_Stream2->NDTR>16)
 				{
-					
-					if(transaction==(size/10000+1))
-					{
-						uart_end_transaction=1;
-						uart_get_data=0;
-					}
-					else
-						uart_get_data=1;
+					uart_get_data=1;
+						
 				}
 				else
+				{
 					uart_get_size=1;
-				
+				}
 				
 		}
 		else
