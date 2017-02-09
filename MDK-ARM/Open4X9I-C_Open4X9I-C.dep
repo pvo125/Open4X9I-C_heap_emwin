@@ -1581,7 +1581,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x588715BD)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x588715BD)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x588715BD)
 I (..\user\PS2_mouse\PS2_Mouse.h)(0x588715C4)
-F (..\user\bxCAN\CAN.c)(0x589A7E0B)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O1 -Otime --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I..\user -I..\user\inc -I..\user\PS2_mouse -I..\user\GUI -I..\user\bxCAN --C99-I D:\Keil\ARM\RV31\INC-I D:\Keil\ARM\CMSIS\Include-DUSE_HAL_DRIVER -DSTM32F429xx-o .\output\can.o --omf_browse .\output\can.crf --depend .\output\can.d)
+F (..\user\bxCAN\CAN.c)(0x589C3BCF)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O1 -Otime --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I..\user -I..\user\inc -I..\user\PS2_mouse -I..\user\GUI -I..\user\bxCAN --C99-I D:\Keil\ARM\RV31\INC-I D:\Keil\ARM\CMSIS\Include-DUSE_HAL_DRIVER -DSTM32F429xx-o .\output\can.o --omf_browse .\output\can.crf --depend .\output\can.d)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x588715BC)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h)(0x588715BC)
 I (../Drivers/CMSIS/Include/core_cm4.h)(0x588715BC)
@@ -1664,7 +1664,7 @@ I (..\user\inc\SPINBOX.h)(0x588715C5)
 I (..\user\inc\TEXT.h)(0x588715C5)
 I (..\user\inc\TREEVIEW.h)(0x588715C5)
 I (..\user\inc\KNOB.h)(0x588715C4)
-F (..\user\GUI_DIALOG\Layer_0_DLG.c)(0x589ADAE5)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I..\user -I..\user\inc -I..\user\PS2_mouse -I..\user\GUI -I..\user\bxCAN --C99-I D:\Keil\ARM\RV31\INC-I D:\Keil\ARM\CMSIS\Include-DUSE_HAL_DRIVER -DSTM32F429xx-o .\output\layer_0_dlg.o --omf_browse .\output\layer_0_dlg.crf --depend .\output\layer_0_dlg.d)
+F (..\user\GUI_DIALOG\Layer_0_DLG.c)(0x589C3BCD)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I../Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I..\user -I..\user\inc -I..\user\PS2_mouse -I..\user\GUI -I..\user\bxCAN --C99-I D:\Keil\ARM\RV31\INC-I D:\Keil\ARM\CMSIS\Include-DUSE_HAL_DRIVER -DSTM32F429xx-o .\output\layer_0_dlg.o --omf_browse .\output\layer_0_dlg.crf --depend .\output\layer_0_dlg.d)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x588715BC)
 I (../Inc/stm32f4xx_hal_conf.h)(0x588715BE)
 I (../Inc/mxconstants.h)(0x588715BE)

@@ -4,6 +4,8 @@
 CANTX_TypeDef CAN_Data_TX;
 CANRX_TypeDef CAN_Data_RX[2];
 
+char Download_bytes[]={"Download      bytes"}; 
+
 extern volatile uint8_t message_flag;
 extern volatile uint32_t countbyte_firmware;
 extern volatile int size;
@@ -13,6 +15,8 @@ extern volatile uint8_t new_firmware;
 extern volatile uint8_t new_node;
 extern WM_HWIN WinHandle[];
 extern uint8_t backlight_count;
+
+extern void UART_Terminal_DMATran(char *p);
 /****************************************************************************************************************
 *														bxCAN_Init
 ****************************************************************************************************************/
@@ -347,7 +351,9 @@ void CAN_RXProcess1(void){
 					CAN_Data_TX.ID=((index+1)<<8)|0x73;
 					CAN_Data_TX.DLC=8;	
 					CAN_Transmit_DataFrame(&CAN_Data_TX);
-					//size-=8;	
+						
+					*(uint8_t*)(Download_bytes+10)=countbyte_firmware;	
+					UART_Terminal_DMATran(Download_bytes);
 				}
 				else
 				{
