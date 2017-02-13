@@ -4,7 +4,7 @@
 CANTX_TypeDef CAN_Data_TX;
 CANRX_TypeDef CAN_Data_RX[2];
 
-char Download_bytes[]={"Download      bytes"}; 
+ 
 
 extern volatile uint8_t message_flag;
 extern volatile uint32_t countbyte_firmware;
@@ -12,11 +12,13 @@ extern volatile int size;
 extern volatile uint8_t download_complete;
 extern volatile uint8_t new_firmware;
 
+extern void UART_Terminal_DMATran(char *p);
+extern UART_HandleTypeDef huart1;
+
 extern volatile uint8_t new_node;
 extern WM_HWIN WinHandle[];
 extern uint8_t backlight_count;
 
-extern void UART_Terminal_DMATran(char *p);
 /****************************************************************************************************************
 *														bxCAN_Init
 ****************************************************************************************************************/
@@ -87,8 +89,8 @@ void bxCAN_Init(void){
 	CAN1->FS1R&=~(CAN_FS1R_FSC14|CAN_FS1R_FSC15|CAN_FS1R_FSC16);				// Filters bank 14 15 16  scale 16 bits
 	CAN1->FFA1R&=~(CAN_FFA1R_FFA14|CAN_FFA1R_FFA15|CAN_FFA1R_FFA16);		// Filters bank 14 15 16  FIFO0		
 		
-	CAN1->FM1R|=CAN_FM1R_FBM17|CAN_FM1R_FBM19;													// Filters bank 17  19  mode ID List		
-	CAN1->FM1R&=~CAN_FM1R_FBM18;																				// Filters bank 18 mode ID mask
+	CAN1->FM1R|=CAN_FM1R_FBM17;																					// Filters bank 17      mode ID List		
+	CAN1->FM1R&=~	(CAN_FM1R_FBM18|CAN_FM1R_FBM19);											// Filters bank 18  19   mode ID mask
 	CAN1->FS1R&=~(CAN_FS1R_FSC17|CAN_FS1R_FSC18|CAN_FS1R_FSC19);				// Filters bank 17 18 19  scale 16 bits	
 	CAN1->FFA1R|=CAN_FFA1R_FFA17|CAN_FFA1R_FFA18|CAN_FFA1R_FFA19;				// Filters bank 17 18 19  FIFO1		
 
@@ -116,8 +118,8 @@ void bxCAN_Init(void){
 																						//								
 	CAN1->sFilterRegister[18].FR2=0x1FFF4E40;	//Filters bank 18 fmi=05 ID=0xX72 IDE=0 RTR=0	фильтр для сообщ(0x172,0x272,0x372...) на запрос 0xX71 UPDATE_FIRMWARE_REQ 
 																						// 								
-	CAN1->sFilterRegister[19].FR1=0x31503140;	//Filters bank 19 fmi=06 ID=0x18A IDE=0 RTR=0	
-																						//								fmi=07 ID=0x18A IDE=0 RTR=1
+	CAN1->sFilterRegister[19].FR1=0x1FFF4E80;	//Filters bank 19 fmi=06 ID=0xX74 IDE=0 RTR=0	фильтр для 0xX74 (0x174) 0x274 0x374) запрос от bootloader GET_FIRMWARE	
+																						//								
 	CAN1->sFilterRegister[19].FR2=0x31703160;	//Filters bank 19 fmi=08 ID=0x18B IDE=0 RTR=0
 																						// 								fmi=09 ID=0x18B IDE=0 RTR=1	
 	/* Filters activation  */	
@@ -327,9 +329,7 @@ void CAN_RXProcess0(void){
 ******************************************************************************************************************/
 void CAN_RXProcess1(void){
 	uint8_t index;
-	//uint32_t size_integer,size_remain;
 	uint32_t i;
-	//static uint32_t CAN_update_counter;
 	
 	switch(CAN_Data_RX[1].FMI) {
 		case 4://(id=x88 data get netname ответы с net name)
@@ -352,8 +352,7 @@ void CAN_RXProcess1(void){
 					CAN_Data_TX.DLC=8;	
 					CAN_Transmit_DataFrame(&CAN_Data_TX);
 						
-					*(uint8_t*)(Download_bytes+10)=countbyte_firmware;	
-					UART_Terminal_DMATran(Download_bytes);
+					
 				}
 				else
 				{
@@ -376,6 +375,7 @@ void CAN_RXProcess1(void){
 				countbyte_firmware=0;
 				new_firmware=0;
 				message_flag=1;
+				
 			}
 			else if(CAN_Data_RX[1].Data[1]=='e')		// получили в сообщении 'e' CRC ERROR!
 			{
@@ -385,6 +385,19 @@ void CAN_RXProcess1(void){
 			}				
 		break;	
 		
+		case 6://(id=x74 get_firmware)
+		
+		countbyte_firmware=0;
+		netname_index=CAN_Data_RX[1].Data[0];
+		CAN_Data_TX.ID=((netname_index+1)<<8)|0x71;
+		CAN_Data_TX.DLC=4;
+		CAN_Data_TX.Data[0]=(uint8_t)size;
+		CAN_Data_TX.Data[1]=(uint8_t)(size>>8);
+		CAN_Data_TX.Data[2]=(uint8_t)(size>>16);
+		CAN_Data_TX.Data[3]=(uint8_t)(size>>24);
+		CAN_Transmit_DataFrame(&CAN_Data_TX);				// (Core4X9I 0x271) UPDATE_FIRMWARE_REQ 0x271, 0x371, 0x471
+		
+		break;	
 		default:
 		break;	
 	}
