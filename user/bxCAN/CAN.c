@@ -387,16 +387,18 @@ void CAN_RXProcess1(void){
 		
 		case 6://(id=x74 get_firmware)
 		
-		countbyte_firmware=0;
 		netname_index=CAN_Data_RX[1].Data[0];
-		CAN_Data_TX.ID=((netname_index+1)<<8)|0x71;
-		CAN_Data_TX.DLC=4;
-		CAN_Data_TX.Data[0]=(uint8_t)size;
-		CAN_Data_TX.Data[1]=(uint8_t)(size>>8);
-		CAN_Data_TX.Data[2]=(uint8_t)(size>>16);
-		CAN_Data_TX.Data[3]=(uint8_t)(size>>24);
-		CAN_Transmit_DataFrame(&CAN_Data_TX);				// (Core4X9I 0x271) UPDATE_FIRMWARE_REQ 0x271, 0x371, 0x471
-		
+			if(netname_index==new_firmware)
+			{
+				countbyte_firmware=0;
+				CAN_Data_TX.ID=((netname_index+1)<<8)|0x71;
+				CAN_Data_TX.DLC=4;
+				CAN_Data_TX.Data[0]=(uint8_t)size;
+				CAN_Data_TX.Data[1]=(uint8_t)(size>>8);
+				CAN_Data_TX.Data[2]=(uint8_t)(size>>16);
+				CAN_Data_TX.Data[3]=(uint8_t)(size>>24);
+				CAN_Transmit_DataFrame(&CAN_Data_TX);				// (Core4X9I 0x271) UPDATE_FIRMWARE_REQ 0x271, 0x371, 0x471
+			}
 		break;	
 		default:
 		break;	

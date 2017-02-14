@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\output\Open4X9I-C.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\output\Open4X9I-C.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Sun Feb 12 21:07:20 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Tue Feb 14 11:41:46 2017
 <BR><P>
 <H3>Maximum Stack Usage =        824 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -789,7 +789,6 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = strcmp
 </UL>
 <BR>[Called By]<UL><LI><a href="#[40c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MainTask
-<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_cbCANNodeDialog
 </UL>
 
 <P><STRONG><a name="[2f4]"></a>memcmp</STRONG> (Thumb, 26 bytes, Stack size 12 bytes, memcmp.o(.text))
@@ -965,7 +964,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f429xx.o(RESET)
 </UL>
 <P><STRONG><a name="[6f]"></a>CAN2_RX1_IRQHandler</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, stm32f4xx_it.o(i.CAN2_RX1_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = CAN2_RX1_IRQHandler &rArr; CAN_RXProcess1 &rArr; CAN_Transmit_DataFrame
+<BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = CAN2_RX1_IRQHandler &rArr; CAN_RXProcess1 &rArr; CAN_Transmit_DataFrame
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Receive_IRQHandler
 <LI><a href="#[1ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_RXProcess1
@@ -1005,8 +1004,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN2_RX0_IRQHandler
 </UL>
 
-<P><STRONG><a name="[1ab]"></a>CAN_RXProcess1</STRONG> (Thumb, 276 bytes, Stack size 20 bytes, can.o(i.CAN_RXProcess1))
-<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = CAN_RXProcess1 &rArr; CAN_Transmit_DataFrame
+<P><STRONG><a name="[1ab]"></a>CAN_RXProcess1</STRONG> (Thumb, 298 bytes, Stack size 24 bytes, can.o(i.CAN_RXProcess1))
+<BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = CAN_RXProcess1 &rArr; CAN_Transmit_DataFrame
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Transmit_DataFrame
 </UL>
@@ -6759,7 +6758,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[40c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MainTask
 </UL>
 
-<P><STRONG><a name="[40c]"></a>MainTask</STRONG> (Thumb, 888 bytes, Stack size 0 bytes, layer_0_dlg.o(i.MainTask))
+<P><STRONG><a name="[40c]"></a>MainTask</STRONG> (Thumb, 926 bytes, Stack size 0 bytes, layer_0_dlg.o(i.MainTask))
 <BR><BR>[Stack]<UL><LI>Max Depth = 680<LI>Call Chain = MainTask &rArr; GUI_Delay &rArr; GUI_Exec &rArr; GUI_Exec1 &rArr; WM_Exec &rArr; _DrawNext &rArr; WM__Paint &rArr; GUI_MEMDEV_Draw &rArr; GUI_MEMDEV_CopyToLCD &rArr; GUI_MEMDEV_CopyToLCDAt &rArr; GUI_MEMDEV__WriteToActiveOpaque &rArr; _WriteToActiveOpaque_8 &rArr; LCD__DrawBitmap_1bpp &rArr; LCD_FillRect
 </UL>
 <BR>[Calls]<UL><LI><a href="#[36d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_GetTime
@@ -10375,7 +10374,7 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> can_netdlg.o(i.CANNetExplore)
 </UL>
-<P><STRONG><a name="[8d]"></a>_cbCANNodeDialog</STRONG> (Thumb, 2722 bytes, Stack size 56 bytes, can_netdlg.o(i._cbCANNodeDialog))
+<P><STRONG><a name="[8d]"></a>_cbCANNodeDialog</STRONG> (Thumb, 2698 bytes, Stack size 56 bytes, can_netdlg.o(i._cbCANNodeDialog))
 <BR><BR>[Stack]<UL><LI>Max Depth = 480<LI>Call Chain = _cbCANNodeDialog &rArr; FRAMEWIN_AddMinButton &rArr; FRAMEWIN_AddButton &rArr; BUTTON_CreateAsChild &rArr; BUTTON_CreateEx &rArr; BUTTON_CreateUser &rArr; WM_CreateWindowAsChild &rArr; WM_BringToBottom &rArr; WM__InvalidateRectEx &rArr; WM__InvalidateRect &rArr;  WM__InvalidateRect (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WM_RestartTimer
@@ -10413,7 +10412,6 @@ Local Symbols
 <LI><a href="#[1b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Transmit_DataFrame
 <LI><a href="#[28d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WM_ShowWindow
 <LI><a href="#[27d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GUI_SelectLayer
-<LI><a href="#[417]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcmp
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> can_netdlg.o(i.CANNodeDialog)
 </UL>

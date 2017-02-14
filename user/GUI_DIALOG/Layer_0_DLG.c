@@ -133,6 +133,7 @@ volatile int size=0,dec=1;
 volatile int transaction;
 
 extern volatile uint8_t new_firmware;
+extern const char  *netname_array[];
 
 
 WM_HWIN hWin0,hWin1,hWin2;
@@ -808,7 +809,10 @@ while(1)
 				{
 					__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
 					UART_Terminal_DMATran("crc ok!");
-					new_firmware=1;	
+					
+					new_firmware=0;
+					while(strcmp((const char*)netname_array[new_firmware],(const char*)0xD0400020))
+						new_firmware++;	
 				}
 				else
 				{

@@ -149,8 +149,8 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 				hItem=WM_GetClientWindow(pMsg->hWin);	
 				WM_CreateTimer(hItem,0,1000,0);				// Создадим таймер для обновления соотв. окна диалога для каждого узла.
 				
-				Id=strcmp((const char*)netname_array[window_index],(const char*)0xD0400020);
-				if(Id || (new_firmware==0))
+				//Id=strcmp((const char*)netname_array[window_index],(const char*)0xD0400020);
+				if(new_firmware!=window_index)//if(Id || (new_firmware==0))
 					{
 						hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_UPDATE);
 						WM_DisableWindow(hItem);	
