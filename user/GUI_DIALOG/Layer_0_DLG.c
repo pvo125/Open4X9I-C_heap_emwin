@@ -572,7 +572,6 @@ WM_HWIN Layer_1(void) {
 
 void MainTask(void)
 {
-	//PROGBAR_Handle progbar;
 	uint32_t crc;
 	uint8_t i,m;
 	char temp;
@@ -756,9 +755,9 @@ while(1)
 				__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
 				UART_Terminal_DMATran("get data");
 				
-				//progbar=PROGBAR_CreateEx(20,250,450,5,hWin2,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
-				//PROGBAR_SetText(progbar,"");	
-				//PROGBAR_SetMinMax(progbar,0,100);
+				/*progbar=PROGBAR_CreateEx(20,250,450,5,hWin2,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
+				PROGBAR_SetText(progbar,"");	
+				PROGBAR_SetMinMax(progbar,0,100);*/
 				backlight_count=0;
 				TIM7->CNT=0;
 				TIM13->CCR1=70;

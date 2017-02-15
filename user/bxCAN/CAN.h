@@ -6,7 +6,7 @@
 #include "DIALOG.h"
 
 
-//#define CODEFLASH
+#define CODEFLASH
 
 typedef enum
 {

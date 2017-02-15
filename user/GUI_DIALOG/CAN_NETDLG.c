@@ -236,36 +236,26 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 						__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
 						UART_Terminal_DMATran("Download complete!\r\n");
 						
-						//MESSAGEBOX_Create("Download complete!","MESSAGE",0);	
+						MESSAGEBOX_Create("Download complete!","MESSAGE",0);	
 					}
 					else if(message_flag==2)
 					{
 						__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
 						UART_Terminal_DMATran("Error download!\r\n");
 						
-						//MESSAGEBOX_Create("CRC ERROR!","ERROR",0);	
+						MESSAGEBOX_Create("CRC ERROR!","ERROR",0);	
 					}
 					message_flag=0;
 				}
-				if(countbyte_firmware)
-				{
-					temp=(countbyte_firmware*100)/size;
-					*(uint8_t*)(Download_bytes+9)=(temp/10)|0x30;
-					*(uint8_t*)(Download_bytes+10)=(temp%10)|0x30;		
-					__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-					UART_Terminal_DMATran(Download_bytes);
-					
-					//progbar=WM_GetDialogItem(pMsg->hWin,ID_PROGBAR_1);
-					//PROGBAR_SetValue(progbar,temp);
-				}
+				
 				if(download_complete)
 				{
 					hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_UPDATE);
 					WM_DisableWindow(hItem);
 					download_complete=0;
 					
-					//progbar=WM_GetDialogItem(pMsg->hWin,ID_PROGBAR_1);
-					//WM_DeleteWindow(progbar);
+					progbar=WM_GetDialogItem(pMsg->hWin,ID_PROGBAR_1);
+					WM_DeleteWindow(progbar);
 					
 					
 				}
@@ -444,9 +434,9 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 							switch(NCode){
 								case WM_NOTIFICATION_RELEASED:
 									FRAMEWIN_GetUserData(pMsg->hWin,&CANNode,sizeof(CANNode));//FRAMEWIN_GetUserData(pMsg->hWin,&index,1);
-									/*progbar=PROGBAR_CreateEx(120,240,100,10,pMsg->hWin,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
+									progbar=PROGBAR_CreateEx(120,240,100,10,pMsg->hWin,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
 									PROGBAR_SetText(progbar,"");	
-									PROGBAR_SetMinMax(progbar,0,100);*/
+									PROGBAR_SetMinMax(progbar,0,100);
 								
 									countbyte_firmware=0;
 									CAN_Data_TX.ID=((CANNode.index+1)<<8)|0x71;

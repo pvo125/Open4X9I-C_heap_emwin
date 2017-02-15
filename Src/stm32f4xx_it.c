@@ -44,6 +44,10 @@
 
 #define ID_PROGBAR_1     	(GUI_ID_USER + 0x10)
 
+extern void UART_Terminal_DMATran(char *p);
+extern char Download_bytes[];
+extern volatile uint32_t countbyte_firmware;
+
 extern  uint8_t RxBuffer[];
 extern  uint8_t TxBuffer[];
 extern volatile uint8_t uart_get_size;
@@ -125,11 +129,24 @@ void SysTick_Handler(void)
 */
 void RTC_WKUP_IRQHandler(void)
 {
-  /* USER CODE BEGIN RTC_WKUP_IRQn 0 */
+  uint32_t temp;
+	/* USER CODE BEGIN RTC_WKUP_IRQn 0 */
 	//RTC->ISR&=~RTC_ISR_WUTF;
 		HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
 	
 //	WM_SendMessageNoPara(hWin2,WM_USER);
+	
+	if(countbyte_firmware)
+				{
+					temp=(countbyte_firmware*100)/size;
+					*(uint8_t*)(Download_bytes+9)=(temp/10)|0x30;
+					*(uint8_t*)(Download_bytes+10)=(temp%10)|0x30;		
+					__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+					UART_Terminal_DMATran(Download_bytes);
+					
+					//progbar=WM_GetDialogItem(pMsg->hWin,ID_PROGBAR_1);
+					//ROGBAR_SetValue(progbar,temp);
+				}
 
 	/* USER CODE END RTC_WKUP_IRQn 0 */
   HAL_RTCEx_WakeUpTimerIRQHandler(&hrtc);
