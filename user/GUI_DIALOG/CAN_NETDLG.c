@@ -16,6 +16,9 @@ uint8_t window_index;
 uint8_t count_node;
 WM_HWIN WinHandle[NUMBER_NODE];		//Соответствующий стат. массив где хранятся дескрипторы окон узлов CAN сети
 
+#define ID_PROGBAR_1     	(GUI_ID_USER + 0x10)
+ 
+extern WM_HWIN hWin2;
 
 
 extern UART_HandleTypeDef huart1;
@@ -233,15 +236,15 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 					GUI_SelectLayer(0);
 					if(message_flag==1)
 					{
-						__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-						UART_Terminal_DMATran("Download complete!\r\n");
+						//__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+						//UART_Terminal_DMATran("Download complete!\r\n");
 						
 						MESSAGEBOX_Create("Download complete!","MESSAGE",0);	
 					}
 					else if(message_flag==2)
 					{
-						__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-						UART_Terminal_DMATran("Error download!\r\n");
+						//__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+						//UART_Terminal_DMATran("Error download!\r\n");
 						
 						MESSAGEBOX_Create("CRC ERROR!","ERROR",0);	
 					}
@@ -434,10 +437,7 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 							switch(NCode){
 								case WM_NOTIFICATION_RELEASED:
 									FRAMEWIN_GetUserData(pMsg->hWin,&CANNode,sizeof(CANNode));//FRAMEWIN_GetUserData(pMsg->hWin,&index,1);
-									progbar=PROGBAR_CreateEx(120,240,100,10,pMsg->hWin,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
-									PROGBAR_SetText(progbar,"");	
-									PROGBAR_SetMinMax(progbar,0,100);
-								
+																	
 									countbyte_firmware=0;
 									CAN_Data_TX.ID=((CANNode.index+1)<<8)|0x71;
 									CAN_Data_TX.DLC=4;
@@ -446,6 +446,9 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 									CAN_Data_TX.Data[2]=(uint8_t)(size>>16);
 									CAN_Data_TX.Data[3]=(uint8_t)(size>>24);
 									CAN_Transmit_DataFrame(&CAN_Data_TX);				// (Core4X9I 0x271) UPDATE_FIRMWARE_REQ 0x271, 0x371, 0x471
+									
+									progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
+									WM_ShowWindow(progbar);
 								break;
 							}
 					break;			

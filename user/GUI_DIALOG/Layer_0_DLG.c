@@ -84,7 +84,7 @@ extern GUI_CONST_STORAGE GUI_BITMAP bmalarm_a;
 extern GUI_CONST_STORAGE GUI_BITMAP bmalarm_a_d;
 extern GUI_CONST_STORAGE GUI_BITMAP bmalarm_b;
 extern GUI_CONST_STORAGE GUI_BITMAP bmalarm_b_d;
-
+extern GUI_CONST_STORAGE GUI_BITMAP bmupdate;
 
 #ifdef CODEFLASH
 	const GUI_BITMAP *Icons0[]={&bmalarm,&bmsettings,&bmpaint};
@@ -370,7 +370,8 @@ static void _cbWin_1(WM_MESSAGE * pMsg) {
 *       _cbLayer_1
 */
 static void _cbLayer_1(WM_MESSAGE * pMsg) {
-  int     NCode;
+  
+	int     NCode;
   int     Id;
 	WM_HWIN hWin;
 	ICONVIEW_Handle hIcon;
@@ -390,6 +391,9 @@ static void _cbLayer_1(WM_MESSAGE * pMsg) {
 		GUI_SetBkColor(GUI_TRANSPARENT);
 		GUI_Clear();
 		#ifdef CODEFLASH
+			if(new_firmware)
+				GUI_DrawBitmap(&bmupdate,255,0);
+						
 			GUI_MEMDEV_CopyToLCDAt(hMemShadow,15,0);
 			GUI_MEMDEV_CopyToLCD(hMemShadow);	
 			
@@ -572,6 +576,7 @@ WM_HWIN Layer_1(void) {
 
 void MainTask(void)
 {
+	PROGBAR_Handle progbar;
 	uint32_t crc;
 	uint8_t i,m;
 	char temp;
@@ -754,10 +759,7 @@ while(1)
 				}
 				__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
 				UART_Terminal_DMATran("get data");
-				
-				/*progbar=PROGBAR_CreateEx(20,250,450,5,hWin2,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
-				PROGBAR_SetText(progbar,"");	
-				PROGBAR_SetMinMax(progbar,0,100);*/
+								
 				backlight_count=0;
 				TIM7->CNT=0;
 				TIM13->CCR1=70;
@@ -812,6 +814,12 @@ while(1)
 					new_firmware=0;
 					while(strcmp((const char*)netname_array[new_firmware],(const char*)0xD0400020))
 						new_firmware++;	
+					
+					progbar=PROGBAR_CreateEx(246,38,50,5,hWin2,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
+					PROGBAR_SetText(progbar,"");	
+					PROGBAR_SetMinMax(progbar,0,100);
+					
+					WM_SendMessageNoPara(hWin2,WM_USER);// сообщение окну hWin2 верхнего слоя layer 1 перерисовыаться и поверх символ update
 				}
 				else
 				{

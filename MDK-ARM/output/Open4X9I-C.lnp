@@ -45,6 +45,7 @@
 ".\output\chip.o"
 ".\output\rtc_back.o"
 ".\output\netcan.o"
+".\output\update.o"
 ".\output\main.o"
 ".\output\stm32f4xx_hal_msp.o"
 ".\output\stm32f4xx_it.o"

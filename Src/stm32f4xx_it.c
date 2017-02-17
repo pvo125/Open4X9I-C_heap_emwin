@@ -129,24 +129,12 @@ void SysTick_Handler(void)
 */
 void RTC_WKUP_IRQHandler(void)
 {
-  uint32_t temp;
-	/* USER CODE BEGIN RTC_WKUP_IRQn 0 */
+  /* USER CODE BEGIN RTC_WKUP_IRQn 0 */
 	//RTC->ISR&=~RTC_ISR_WUTF;
 		HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
 	
-//	WM_SendMessageNoPara(hWin2,WM_USER);
-	
-	if(countbyte_firmware)
-				{
-					temp=(countbyte_firmware*100)/size;
-					*(uint8_t*)(Download_bytes+9)=(temp/10)|0x30;
-					*(uint8_t*)(Download_bytes+10)=(temp%10)|0x30;		
-					__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-					UART_Terminal_DMATran(Download_bytes);
-					
-					//progbar=WM_GetDialogItem(pMsg->hWin,ID_PROGBAR_1);
-					//ROGBAR_SetValue(progbar,temp);
-				}
+  	WM_SendMessageNoPara(hWin2,WM_USER);
+		
 
 	/* USER CODE END RTC_WKUP_IRQn 0 */
   HAL_RTCEx_WakeUpTimerIRQHandler(&hrtc);
@@ -155,8 +143,8 @@ void RTC_WKUP_IRQHandler(void)
   /* USER CODE END RTC_WKUP_IRQn 1 */
 }
  void USART1_IRQHandler(void){
-	uint32_t temp;
-  
+	
+	 uint32_t temp;
 	 
  /* USER CODE BEGIN USART1_IRQn 0 */
 		if(uart_data_message)
@@ -171,7 +159,6 @@ void RTC_WKUP_IRQHandler(void)
 				{
 					uart_get_size=1;
 				}
-				
 		}
 		else
 		{															// если принимаем сообщение	(message)

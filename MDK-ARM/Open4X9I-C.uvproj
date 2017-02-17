@@ -655,6 +655,11 @@
               <FileType>1</FileType>
               <FilePath>..\user\icons\netcan.c</FilePath>
             </File>
+            <File>
+              <FileName>update.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\icons\update.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

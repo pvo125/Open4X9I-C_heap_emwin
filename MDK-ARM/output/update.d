@@ -1,0 +1,9 @@
+.\output\update.o: ..\user\icons\update.c
+.\output\update.o: D:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
+.\output\update.o: ..\user\inc\GUI.h
+.\output\update.o: ..\user\inc\GUI_ConfDefaults.h
+.\output\update.o: ..\user\GUI\GUIConf.h
+.\output\update.o: ..\user\inc\GUI_Type.h
+.\output\update.o: ..\user\inc\LCD.h
+.\output\update.o: ..\user\inc\Global.h
+.\output\update.o: ..\user\inc\GUI_Version.h

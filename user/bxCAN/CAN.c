@@ -4,7 +4,9 @@
 CANTX_TypeDef CAN_Data_TX;
 CANRX_TypeDef CAN_Data_RX[2];
 
+#define ID_PROGBAR_1     	(GUI_ID_USER + 0x10)
  
+extern WM_HWIN hWin2;
 
 extern volatile uint8_t message_flag;
 extern volatile uint32_t countbyte_firmware;
@@ -74,13 +76,13 @@ void bxCAN_Init(void){
 	CAN2->BTR|=CAN_BTR_SJW_0;															/*SJW[1:0]=1  (SJW[1:0]+1)*tCAN=tRJW PROP_SEG =+- 2* tq	*/		
 	
 	//CAN2->BTR&=~CAN_BTR_TS1_0;
-	CAN2->BTR|=CAN_BTR_TS1_2;								/* TS1[3:0]=0X07 */ //tBS1=tq*(7+1)=8tq
+	CAN2->BTR|=CAN_BTR_TS1_2;															/* TS1[3:0]=0X07 */ //tBS1=tq*(7+1)=8tq
 	
 	//CAN2->BTR&=~CAN_BTR_TS2_1;	
-	//CAN2->BTR|=CAN_BTR_TS2_0;				  			/* TS2[2:0]=0X02 */ //tBS2=tq*(2+1)=3tq
-																												// | 1uS |  	7uS 					 |  2uS			| 		T=10uS f=100kHz
+	//CAN2->BTR|=CAN_BTR_TS2_0;				  									/* TS2[2:0]=0X02 */ //tBS2=tq*(2+1)=3tq
+																												// | 1uS |  	8uS 					 |  3uS			| 		T=12*tq=12*2/3=8us f=125kHz
 																												// |-------------------------|----------|		
-																												//				Sample point = 80%
+																												//				Sample point = 75%
 	/*Init filters*/
 	CAN1->FMR|=	CAN_FMR_FINIT;																		// Filter Init Mode
 		
@@ -329,7 +331,8 @@ void CAN_RXProcess0(void){
 ******************************************************************************************************************/
 void CAN_RXProcess1(void){
 	uint8_t index;
-	uint32_t i;
+	uint32_t i,temp;
+	PROGBAR_Handle progbar;
 	
 	switch(CAN_Data_RX[1].FMI) {
 		case 4://(id=x88 data get netname ответы с net name)
@@ -339,6 +342,8 @@ void CAN_RXProcess1(void){
 		
 		case 5:	//(id=0xX72 ) ответы на запрос UPDATE_FIRMWARE_REQ
 			index=CAN_Data_RX[1].Data[0];
+		
+			progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
 			if(CAN_Data_RX[1].Data[1]=='g')		// получили в сообщении 'g' GET_DATA!
 			{								
 				if((size-countbyte_firmware)>=8)
@@ -352,7 +357,13 @@ void CAN_RXProcess1(void){
 					CAN_Data_TX.DLC=8;	
 					CAN_Transmit_DataFrame(&CAN_Data_TX);
 						
+					temp=(countbyte_firmware*100)/size;
+					//*(uint8_t*)(Download_bytes+9)=(temp/10)|0x30;
+					//*(uint8_t*)(Download_bytes+10)=(temp%10)|0x30;		
+					//__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+					//UART_Terminal_DMATran(Download_bytes);
 					
+					PROGBAR_SetValue(progbar,temp);
 				}
 				else
 				{
@@ -376,12 +387,18 @@ void CAN_RXProcess1(void){
 				new_firmware=0;
 				message_flag=1;
 				
+				WM_DeleteWindow(progbar);
+				
+				WM_SendMessageNoPara(hWin2,WM_USER);// сообщение окну hWin2 верхнего слоя layer 1 перерисовыаться и очистить символ update
+				
 			}
 			else if(CAN_Data_RX[1].Data[1]=='e')		// получили в сообщении 'e' CRC ERROR!
 			{
 				download_complete=1;
 				countbyte_firmware=0;
 				message_flag=2;
+				
+				WM_DeleteWindow(progbar);
 			}				
 		break;	
 		
@@ -390,6 +407,9 @@ void CAN_RXProcess1(void){
 		netname_index=CAN_Data_RX[1].Data[0];
 			if(netname_index==new_firmware)
 			{
+				progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
+				WM_ShowWindow(progbar);
+				
 				countbyte_firmware=0;
 				CAN_Data_TX.ID=((netname_index+1)<<8)|0x71;
 				CAN_Data_TX.DLC=4;
