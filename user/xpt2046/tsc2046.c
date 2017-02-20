@@ -214,7 +214,9 @@ void Touch_calibration(void){
 	{
 		GUI_DispStringHCenterAt("PRESS",Xd[i],Yd[i]+10);
 		DrawTarget(Xd[i],Yd[i]);
-		while(_TouchIsPresset()==0) {}  //while((GPIOE->IDR&GPIO_IDR_IDR_3)!=GPIO_IDR_IDR_3) {}  такое выражение компилятор выкидывает.
+		
+		/*while(_TouchIsPresset()==0) {} */while(GPIOE->IDR&GPIO_IDR_IDR_3) {}  //такое выражение компилятор выкидывает.
+		
 		GUI_Delay(1500);
 		XPT2046_CS_GPIO_Port->BSRR=GPIO_BSRR_BR_5;
 		Xt[i]=_TouchPositionX();

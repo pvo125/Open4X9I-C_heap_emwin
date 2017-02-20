@@ -16,8 +16,6 @@ uint8_t window_index;
 uint8_t count_node;
 WM_HWIN WinHandle[NUMBER_NODE];		//Соответствующий стат. массив где хранятся дескрипторы окон узлов CAN сети
 
-#define ID_PROGBAR_1     	(GUI_ID_USER + 0x10)
- 
 extern WM_HWIN hWin2;
 
 

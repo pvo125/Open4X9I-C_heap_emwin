@@ -4,7 +4,7 @@
 CANTX_TypeDef CAN_Data_TX;
 CANRX_TypeDef CAN_Data_RX[2];
 
-#define ID_PROGBAR_1     	(GUI_ID_USER + 0x10)
+#define ID_PROGBAR_1     	(GUI_ID_USER + 0x3C)
  
 extern WM_HWIN hWin2;
 

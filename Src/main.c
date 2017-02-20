@@ -676,11 +676,16 @@ void MX_GPIO_Init(void)
   __GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pins : XPT2046_BUSY_Pin XPT2046_IRQ_Pin */
-  GPIO_InitStruct.Pin = XPT2046_BUSY_Pin|XPT2046_IRQ_Pin;
+  GPIO_InitStruct.Pin = XPT2046_IRQ_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = XPT2046_BUSY_Pin;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
 
 	/*Configure GPIO pin : XPT2046_CS_Pin */
   GPIO_InitStruct.Pin = GPIO_PIN_5;

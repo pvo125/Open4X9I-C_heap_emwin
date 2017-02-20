@@ -56,7 +56,7 @@
 #define ID_BUTTON_NEXT	(GUI_ID_USER + 0xE)
 #define ID_BUTTON_PREV	(GUI_ID_USER + 0xF)
 
-#define ID_PROGBAR_1     	(GUI_ID_USER + 0x10)
+#define ID_PROGBAR_1     	(GUI_ID_USER + 0x3C)
 
 		
 
@@ -287,9 +287,9 @@ static void _cbWin_0(WM_MESSAGE * pMsg) {
       case WM_NOTIFICATION_RELEASED:
 				WM_HideWindow(hWin0);
 				WM_HideWindow(hWin2);
-				#ifdef CODEFLASH	
+			//#ifdef CODEFLASH	
 					Touch_calibration();	
-				#endif
+				//#endif
 			break;
       }
     break;
@@ -815,7 +815,7 @@ while(1)
 					while(strcmp((const char*)netname_array[new_firmware],(const char*)0xD0400020))
 						new_firmware++;	
 					
-					progbar=PROGBAR_CreateEx(246,38,50,5,hWin2,WM_CF_SHOW|WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
+					progbar=PROGBAR_CreateEx(246,32,50,5,hWin2,WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
 					PROGBAR_SetText(progbar,"");	
 					PROGBAR_SetMinMax(progbar,0,100);
 					

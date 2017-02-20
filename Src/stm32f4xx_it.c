@@ -42,7 +42,6 @@
 #include "PS2_Mouse.h"
 #include "CAN.h"
 
-#define ID_PROGBAR_1     	(GUI_ID_USER + 0x10)
 
 extern void UART_Terminal_DMATran(char *p);
 extern char Download_bytes[];
