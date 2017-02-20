@@ -46,12 +46,19 @@
 
 #define constant 0x10
 
-#define XPT2046_BUSY_Pin GPIO_PIN_2
-#define XPT2046_BUSY_GPIO_Port GPIOE
-#define XPT2046_IRQ_Pin GPIO_PIN_3
-#define XPT2046_IRQ_GPIO_Port GPIOE
-#define XPT2046_CS_Pin GPIO_PIN_5
-#define XPT2046_CS_GPIO_Port GPIOD
+#define XPT2046_BUSY_Pin         GPIO_PIN_2
+#define XPT2046_BUSY_GPIO_Port   GPIOE
+
+#define XPT2046_IRQ_Pin          GPIO_PIN_8
+#define XPT2046_IRQ_GPIO_Port    GPIOI
+#define XPT2046_IRQ_MASK_IDR     GPIO_IDR_IDR_8
+
+
+#define XPT2046_CS_Pin           GPIO_PIN_5
+#define XPT2046_CS_GPIO_Port     GPIOD
+#define XPT2046_CS_LOW			     GPIO_BSRR_BR_5
+#define XPT2046_CS_HIGH			     GPIO_BSRR_BS_5
+
 /* USER CODE BEGIN Private defines */
 #define SET_MOUSE_RESOLUTION              0xE8
 #define SET_MOUSE_SAMPLING_RATE           0xF3

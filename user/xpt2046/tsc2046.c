@@ -102,7 +102,7 @@ uint16_t _TouchPositionY(void)
 }
 uint8_t _TouchIsPresset(void)
 {
-	if(( XPT2046_IRQ_GPIO_Port->IDR&GPIO_IDR_IDR_3)==RESET)   //GPIO_ReadInputDataBit ( GPIOB,GPIO_Pin_11 ) == RESET )
+	if(( XPT2046_IRQ_GPIO_Port->IDR&XPT2046_IRQ_MASK_IDR)==RESET)   //GPIO_ReadInputDataBit ( GPIOB,GPIO_Pin_11 ) == RESET )
 		return 1;
 	else
 		return 0;
@@ -111,7 +111,8 @@ void Touch_GetData(void)
 {			uint16_t Xd,Yd,Xt,Xt1,Xt2,Yt,Yt1,Yt2;
 			uint16_t z1,z2;
 						
-		if((GPIOE->IDR&GPIO_IDR_IDR_3)==RESET)
+	
+	if((XPT2046_IRQ_GPIO_Port->IDR&XPT2046_IRQ_MASK_IDR)==RESET)
 			{
 				backlight_count=0;
 				TIM7->CNT=0;
@@ -121,7 +122,7 @@ void Touch_GetData(void)
 					TIM7->CR1|=TIM_CR1_CEN;
 					
 				}
-				XPT2046_CS_GPIO_Port->BSRR=GPIO_BSRR_BR_5;
+				XPT2046_CS_GPIO_Port->BSRR=XPT2046_CS_LOW;
 				z1=_ReadZ1();
 				z2=_ReadZ2();
 				Touch_SendCMD(0xD4);
@@ -133,7 +134,7 @@ void Touch_GetData(void)
 				Yt=Touch_GetResult();	
 				Yt1=_TouchPositionY();
 				Yt2=_TouchPositionY();	
-				XPT2046_CS_GPIO_Port->BSRR=GPIO_BSRR_BS_5;
+				XPT2046_CS_GPIO_Port->BSRR=XPT2046_CS_HIGH;
 				
 				if((Xt<=Xt1)&&(Xt<=Xt2)){
 						Xt=( Xt1<=Xt2) ? Xt1 : Xt2;
@@ -208,20 +209,30 @@ void Touch_calibration(void){
 	GUI_SetFont(GUI_FONT_16_ASCII);
 	GUI_SetBkColor(GUI_DARKBLUE);
 	GUI_Clear();
-	GUI_Delay(1000);
+	
 	GUI_SetColor(GUI_WHITE);
 	for(i=1;i<6;i++)
 	{
+		
 		GUI_DispStringHCenterAt("PRESS",Xd[i],Yd[i]+10);
 		DrawTarget(Xd[i],Yd[i]);
+		GUI_Delay(1000);
 		
-		/*while(_TouchIsPresset()==0) {} */while(GPIOE->IDR&GPIO_IDR_IDR_3) {}  //такое выражение компилятор выкидывает.
+		for(;;)                            //while(XPT2046_IRQ_GPIO_Port->IDR&XPT2046_IRQ_MASK_IDR) 
+		{
+			if(!(XPT2046_IRQ_GPIO_Port->IDR&XPT2046_IRQ_MASK_IDR))
+			{
+				GUI_Delay(10);
+				if(!(XPT2046_IRQ_GPIO_Port->IDR&XPT2046_IRQ_MASK_IDR))
+					break;
+			}
+		}  
 		
 		GUI_Delay(1500);
-		XPT2046_CS_GPIO_Port->BSRR=GPIO_BSRR_BR_5;
+		XPT2046_CS_GPIO_Port->BSRR=XPT2046_CS_LOW;
 		Xt[i]=_TouchPositionX();
 		Yt[i]=_TouchPositionY();
-		XPT2046_CS_GPIO_Port->BSRR=GPIO_BSRR_BS_5;
+		XPT2046_CS_GPIO_Port->BSRR=XPT2046_CS_HIGH;
 		GUI_Clear();
 		GUI_Delay(2000);
 		

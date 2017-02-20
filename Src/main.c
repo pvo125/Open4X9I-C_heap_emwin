@@ -102,7 +102,7 @@ static void MX_FMC_Init(void);
 static void MX_LTDC_Init(void);
 static void MX_RTC_Init(void);
 static void MX_SPI2_Init(void);
-static void MX_SPI5_Init(void);
+//static void MX_SPI5_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM7_Init(void);
 static void MX_TIM13_Init(void);
@@ -141,29 +141,31 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_CRC_Init();
-  MX_DMA2D_Init();
+	MX_RTC_Init();
+  
+	MX_DMA2D_Init();
   MX_FMC_Init();
    /* USER CODE BEGIN 2 */
 	SDRAM_Initialization_sequence(REFRESH_COUNT);	
 	 /* USER CODE END 2 */
 	MX_LTDC_Init();
-  MX_RTC_Init();
-  MX_SPI2_Init();
-  MX_SPI5_Init();
+  //MX_SPI5_Init();
   MX_TIM6_Init();
   MX_TIM7_Init();
 	MX_TIM13_Init();
 	 /* USER CODE BEGIN 3 */
-	__HAL_SPI_ENABLE(&hspi2);
 	
 	MX_UART1_Init();
 	MX_DMA2_Init();
-		
+	bxCAN_Init();	
 	
 	DBGMCU->APB1FZ|=DBGMCU_APB1_FZ_DBG_TIM4_STOP;
 	
 	PS2_Mouse_Init();
 	PS2_Mouse_Start();
+	
+	MX_SPI2_Init();
+	__HAL_SPI_ENABLE(&hspi2);
 	
 	if(PS2_MOUSE.status==MOUSE_AKTIV)
 	{
@@ -173,17 +175,14 @@ int main(void)
 		htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
 		htim6.Init.Period = 20;
 		HAL_TIM_Base_Init(&htim6);
-		XPT2046_CS_GPIO_Port->BSRR=GPIO_BSRR_BS_5;
 	}
 	else
 	{
 		Input_Device=INPUT_DEV_TOUCH;
 		PS2_Mouse_DeInit();
-		Touch_SendCMD(0xD0);
-		Touch_GetResult();
-		XPT2046_CS_GPIO_Port->BSRR=GPIO_BSRR_BS_5;
+		
 	}
-		bxCAN_Init();
+		
 	
 	/*__HAL_RTC_WRITEPROTECTION_DISABLE(&hrtc);
 	__HAL_RTC_WAKEUPTIMER_DISABLE(&hrtc);
@@ -679,20 +678,22 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = XPT2046_IRQ_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(XPT2046_IRQ_GPIO_Port, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = XPT2046_BUSY_Pin;
+	/*GPIO_InitStruct.Pin = XPT2046_BUSY_Pin;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);*/
 
 
 	/*Configure GPIO pin : XPT2046_CS_Pin */
-  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  GPIO_InitStruct.Pin = XPT2046_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+  HAL_GPIO_Init(XPT2046_CS_GPIO_Port, &GPIO_InitStruct);
+	
+	XPT2046_CS_GPIO_Port->BSRR=XPT2046_CS_HIGH;
 	
 	/*Configure GPIO pin : Joystick */
   GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_9|GPIO_PIN_10;

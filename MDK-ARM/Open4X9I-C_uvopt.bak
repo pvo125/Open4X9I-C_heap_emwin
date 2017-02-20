@@ -145,7 +145,7 @@
           <Type>0</Type>
           <LineNumber>448</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>536994930</Address>
+          <Address>536994874</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -154,7 +154,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>D:\STM32_ГЇГ°Г®ГҐГЄГІГ»\Open4X9I-C_heap_emwin\user\GUI_DIALOG\CAN_NETDLG.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Open4X9I_C\../user/GUI_DIALOG/CAN_NETDLG.c\448</Expression>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -162,6 +162,11 @@
           <count>0</count>
           <WinNumber>1</WinNumber>
           <ItemText>countbyte_firmware</ItemText>
+        </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>State.Layer</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -202,12 +207,6 @@
       </DebugFlag>
       <LintExecutable></LintExecutable>
       <LintConfigFile></LintConfigFile>
-      <SystemViewers>
-        <Entry>
-          <Name>System Viewer\GPIOE</Name>
-          <WinId>35905</WinId>
-        </Entry>
-      </SystemViewers>
     </TargetOption>
   </Target>
 
@@ -225,7 +224,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>198</TopLine>
+      <TopLine>195</TopLine>
       <CurrentLine>202</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>../Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/arm/startup_stm32f429xx.s</PathWithFileName>
@@ -489,8 +488,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>308</TopLine>
-      <CurrentLine>313</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal.c</FilenameWithoutPath>
@@ -671,7 +670,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>38</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
@@ -697,7 +696,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>76</TopLine>
+      <TopLine>72</TopLine>
       <CurrentLine>79</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\GUI\GUI_X.c</PathWithFileName>
@@ -1017,7 +1016,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>131</TopLine>
+      <TopLine>128</TopLine>
       <CurrentLine>136</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>../Src/main.c</PathWithFileName>
@@ -1031,10 +1030,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>29</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>363</TopLine>
+      <CurrentLine>385</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>../Src/stm32f4xx_hal_msp.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_msp.c</FilenameWithoutPath>
@@ -1049,8 +1048,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>269</TopLine>
-      <CurrentLine>272</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>../Src/stm32f4xx_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_it.c</FilenameWithoutPath>
@@ -1063,10 +1062,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>20</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>215</TopLine>
-      <CurrentLine>218</CurrentLine>
+      <TopLine>203</TopLine>
+      <CurrentLine>222</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\xpt2046\tsc2046.c</PathWithFileName>
       <FilenameWithoutPath>tsc2046.c</FilenameWithoutPath>
@@ -1081,8 +1080,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>25</TopLine>
-      <CurrentLine>26</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\PS2_mouse\PS2_Mouse.c</PathWithFileName>
       <FilenameWithoutPath>PS2_Mouse.c</FilenameWithoutPath>
@@ -1095,10 +1094,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>104</ColumnNumber>
+      <ColumnNumber>3</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>82</TopLine>
-      <CurrentLine>97</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\bxCAN\CAN.c</PathWithFileName>
       <FilenameWithoutPath>CAN.c</FilenameWithoutPath>
@@ -1119,10 +1118,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>10</ColumnNumber>
+      <ColumnNumber>17</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>704</TopLine>
+      <CurrentLine>709</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\GUI_DIALOG\Layer_0_DLG.c</PathWithFileName>
       <FilenameWithoutPath>Layer_0_DLG.c</FilenameWithoutPath>
