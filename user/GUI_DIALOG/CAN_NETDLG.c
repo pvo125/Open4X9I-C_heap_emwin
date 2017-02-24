@@ -255,8 +255,8 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 					WM_DisableWindow(hItem);
 					download_complete=0;
 					
-					progbar=WM_GetDialogItem(pMsg->hWin,ID_PROGBAR_1);
-					WM_DeleteWindow(progbar);
+					//progbar=WM_GetDialogItem(pMsg->hWin,ID_PROGBAR_1);
+					//WM_DeleteWindow(progbar);
 					
 					
 				}

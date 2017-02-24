@@ -394,10 +394,8 @@ void CAN_RXProcess1(void){
 			}
 			else if(CAN_Data_RX[1].Data[1]=='e')		// получили в сообщении 'e' CRC ERROR!
 			{
-				download_complete=1;
 				countbyte_firmware=0;
 				message_flag=2;
-				
 				WM_DeleteWindow(progbar);
 			}				
 		break;	

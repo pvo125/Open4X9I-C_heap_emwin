@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\output\Open4X9I-C.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\output\Open4X9I-C.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Mon Feb 20 14:23:04 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Fri Feb 24 00:06:10 2017
 <BR><P>
 <H3>Maximum Stack Usage =        824 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1096,7 +1096,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN2_RX0_IRQHandler
 </UL>
 
-<P><STRONG><a name="[1c7]"></a>CAN_RXProcess1</STRONG> (Thumb, 386 bytes, Stack size 40 bytes, can.o(i.CAN_RXProcess1))
+<P><STRONG><a name="[1c7]"></a>CAN_RXProcess1</STRONG> (Thumb, 384 bytes, Stack size 40 bytes, can.o(i.CAN_RXProcess1))
 <BR><BR>[Stack]<UL><LI>Max Depth = 248<LI>Call Chain = CAN_RXProcess1 &rArr; PROGBAR_SetValue &rArr; WM_InvalidateRect &rArr; WM__InvalidateRectEx &rArr; WM__InvalidateRect &rArr;  WM__InvalidateRect (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WM_SendMessageNoPara
@@ -9285,7 +9285,6 @@ Global Symbols
 <LI><a href="#[515]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_DeleteAllChildren
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_RXProcess1
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_cbCANNodeDialog
 <LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_cbDialog
 <LI><a href="#[1ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GUI_CreateDialogBox
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_cbLayer_1
@@ -11695,7 +11694,7 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> can_netdlg.o(i.CANNetExplore)
 </UL>
-<P><STRONG><a name="[95]"></a>_cbCANNodeDialog</STRONG> (Thumb, 2618 bytes, Stack size 56 bytes, can_netdlg.o(i._cbCANNodeDialog))
+<P><STRONG><a name="[95]"></a>_cbCANNodeDialog</STRONG> (Thumb, 2594 bytes, Stack size 56 bytes, can_netdlg.o(i._cbCANNodeDialog))
 <BR><BR>[Stack]<UL><LI>Max Depth = 480<LI>Call Chain = _cbCANNodeDialog &rArr; FRAMEWIN_AddMinButton &rArr; FRAMEWIN_AddButton &rArr; BUTTON_CreateAsChild &rArr; BUTTON_CreateEx &rArr; BUTTON_CreateUser &rArr; WM_CreateWindowAsChild &rArr; WM_BringToBottom &rArr; WM__InvalidateRectEx &rArr; WM__InvalidateRect &rArr;  WM__InvalidateRect (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[222]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WM_RestartTimer
@@ -11727,7 +11726,6 @@ Local Symbols
 <LI><a href="#[458]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WM_GetId
 <LI><a href="#[1a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WM_DefaultProc
 <LI><a href="#[1cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WM_GetDialogItem
-<LI><a href="#[1d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WM_DeleteWindow
 <LI><a href="#[1ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FRAMEWIN_SetUserData
 <LI><a href="#[1cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FRAMEWIN_GetUserData
 <LI><a href="#[5df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Transmit_RemoteFrame
