@@ -246,6 +246,17 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 						
 						MESSAGEBOX_Create("CRC ERROR!","ERROR",0);	
 					}
+					else if(message_flag==3)
+					{
+						//__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+						//UART_Terminal_DMATran("Error download!\r\n");
+						progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
+						WM_DeleteWindow(progbar);
+						
+						WM_SendMessageNoPara(hWin2,WM_USER);// сообщение окну hWin2 верхнего слоя layer 1 перерисовыаться и очистить символ update
+						
+						MESSAGEBOX_Create("SIZE FIRMWARE ERROR!","ERROR",0);	
+					}
 					message_flag=0;
 				}
 				
@@ -447,6 +458,10 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 									
 									progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
 									WM_ShowWindow(progbar);
+									
+									hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_UPDATE);
+									WM_DisableWindow(hItem);	
+								
 								break;
 							}
 					break;			

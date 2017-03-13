@@ -397,7 +397,14 @@ void CAN_RXProcess1(void){
 				countbyte_firmware=0;
 				message_flag=2;
 				WM_DeleteWindow(progbar);
-			}				
+			}
+			else if(CAN_Data_RX[1].Data[1]=='s')		// получили в сообщении 's' SIZE ERROR!
+			{
+				countbyte_firmware=0;
+				new_firmware=0;
+				message_flag=3;
+				
+			}		
 		break;	
 		
 		case 6://(id=x74 get_firmware)
