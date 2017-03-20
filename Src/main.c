@@ -115,9 +115,6 @@ extern void Touch_SendCMD(uint8_t Data);
 extern uint16_t Touch_GetResult(void);
 extern void Touch_calibration(void);
 extern CANRX_TypeDef CAN_Data_RX1;
-
-//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
-
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -134,31 +131,25 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
-  /* Configure the system clock */
+ /* Configure the system clock */
   SystemClock_Config();
-
-  /* Initialize all configured peripherals */
+ /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_CRC_Init();
 	MX_RTC_Init();
-  
 	MX_DMA2D_Init();
   MX_FMC_Init();
-   /* USER CODE BEGIN 2 */
-	SDRAM_Initialization_sequence(REFRESH_COUNT);	
-	 /* USER CODE END 2 */
+  /* USER CODE BEGIN 2 */
+	SDRAM_Initialization_sequence(REFRESH_COUNT);
 	MX_LTDC_Init();
-  //MX_SPI5_Init();
   MX_TIM6_Init();
   MX_TIM7_Init();
-	MX_TIM13_Init();
-	 /* USER CODE BEGIN 3 */
-	
+	MX_TIM13_Init();	
+ /* USER CODE END 2 */
+ /* USER CODE BEGIN 3 */
 	MX_UART1_Init();
 	MX_DMA2_Init();
 	bxCAN_Init();	
-	
 	DBGMCU->APB1FZ|=DBGMCU_APB1_FZ_DBG_TIM4_STOP;
 	
 	PS2_Mouse_Init();
@@ -180,10 +171,8 @@ int main(void)
 	{
 		Input_Device=INPUT_DEV_TOUCH;
 		PS2_Mouse_DeInit();
-		
 	}
 		
-	
 	/*__HAL_RTC_WRITEPROTECTION_DISABLE(&hrtc);
 	__HAL_RTC_WAKEUPTIMER_DISABLE(&hrtc);
 	while(__HAL_RTC_WAKEUPTIMER_GET_FLAG(&hrtc, RTC_FLAG_WUTWF) == RESET) {}
@@ -191,9 +180,7 @@ int main(void)
 	__HAL_RTC_WRITEPROTECTION_ENABLE(&hrtc);*/
 	__HAL_RTC_WAKEUPTIMER_CLEAR_FLAG(&hrtc, RTC_FLAG_WUTF);
 	
-		
-		
-		GUI_Init();
+	GUI_Init();
 		//LCD_SetSizeEx(0,200,250);
 		//LCD_SetSizeEx(1,200,250);
 		//LCD_SetVSizeEx(0, 200, 250);
@@ -243,32 +230,16 @@ int main(void)
 			TIM13->CCR1=i;
 			GUI_Delay(50);
 		}
-		//Boot_menu();	
-		
 	/* USER CODE END 3 */
-
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-				
-	
-	
-	 while (1)
+		 while (1)
 	{
-		
-
-
-		
 	}
 	/* USER CODE END WHILE */
-  
-	/* USER CODE BEGIN 4 */
-	
-	
-	
+  /* USER CODE BEGIN 4 */
 	/* USER CODE END 4 */
 }
-
-
 
 /** System Clock Configuration
 */
@@ -805,13 +776,5 @@ void assert_failed(uint8_t* file, uint32_t line)
 }
 
 #endif
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-*/ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

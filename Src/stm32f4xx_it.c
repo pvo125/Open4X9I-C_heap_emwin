@@ -148,11 +148,9 @@ void RTC_WKUP_IRQHandler(void)
  /* USER CODE BEGIN USART1_IRQn 0 */
 		if(uart_data_message)
 		{											// если принимаем данные (data)
-			
-				if(DMA2_Stream2->NDTR>16)
+			if(DMA2_Stream2->NDTR>16)
 				{
 					uart_get_data=1;
-						
 				}
 				else
 				{
@@ -162,7 +160,6 @@ void RTC_WKUP_IRQHandler(void)
 		else
 		{															// если принимаем сообщение	(message)
 			uart_newmessage=1;					//  выставляем флаг нового сообщения	
-					
 		}
 		// Сбросим бит IDLE след последовательностью
 		temp=USART1->SR;
@@ -411,14 +408,5 @@ void CAN2_SCE_IRQHandler(void){
 	GUI_DispChar('f');	
 
 }
-/*void EXTI9_5_IRQHandler (void){
-	
-	
-			PS2_Mouse_ISR_EXTI();
-			EXTI->PR=EXTI_PR_PR6;
-		
-}
 
-*/
-/* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

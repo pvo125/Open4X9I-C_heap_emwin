@@ -1,5 +1,3 @@
-
-
 #include "stm32f4xx_hal.h"
 #include "DIALOG.h"
 
@@ -37,9 +35,7 @@ int maskA,maskB;
 static uint8_t hour,minute;
 static uint16_t day;										
 /*********************************************************************
-*
-*       Defines
-*
+*       									Defines
 **********************************************************************/
 #define ID_FRAMEWIN_0     (GUI_ID_USER + 0x0F)
 #define ID_DROPDOWN_0     (GUI_ID_USER + 0x10)
@@ -51,10 +47,9 @@ static uint16_t day;
 #define ID_BUTTON_SAVE	   (GUI_ID_USER + 0x16)
 #define ID_RADIO_0     (GUI_ID_USER + 0x17)
 #define ID_DROPDOWN_1     (GUI_ID_USER + 0x18)
-/*********************************************************************
-*
-*       _aDialogCreate
-*/
+/**************************************************************************
+*       									_aDialogCreate
+***************************************************************************/
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { FRAMEWIN_CreateIndirect, "ALARM", ID_FRAMEWIN_0 , 120, 90, 280, 210, 0, 0x0, 0 },
   { DROPDOWN_CreateIndirect, NULL, ID_DROPDOWN_0, 10, 120, 75, 35, 0, 0x0, 0 },
@@ -66,20 +61,11 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	{ BUTTON_CreateIndirect, "SAVE", ID_BUTTON_SAVE, 200, 120, 50, 30, 0, 0x0, 0 },
 };
 
-/*********************************************************************
-*
-*       Public code
-*
-**********************************************************************
-*/
-/*********************************************************************
-*
-*    
-*/
-
+/**************************************************************************
+*    											_cbDialog
+***************************************************************************/
 static void _cbDialog(WM_MESSAGE * pMsg) {
- 	
-	uint8_t i;
+ 	uint8_t i;
 	WM_HWIN hItem;
   int     NCode;
   int     Id;
@@ -403,6 +389,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 	}
 }
 			
+/**************************************************************************
+*    											CreateALARM
+***************************************************************************/
 WM_HWIN CreateALARM(void) {
   hWin_alarm = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, hWin0, 0, 0);
   return hWin_alarm;

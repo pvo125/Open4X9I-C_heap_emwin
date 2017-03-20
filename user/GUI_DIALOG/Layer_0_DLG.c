@@ -29,11 +29,8 @@
 #include "CAN.h"
 #include <string.h>
 /*********************************************************************
-*
-*       Defines
-*
-**********************************************************************
-*/
+*       									Defines
+**********************************************************************/
 #define ID_WINDOW_0     (GUI_ID_USER + 0x01)
 #define ID_WINDOW_1     (GUI_ID_USER + 0x02)
 #define ID_WINDOW_2     (GUI_ID_USER + 0x03)
@@ -42,25 +39,18 @@
 #define ID_ICON_settings   (GUI_ID_USER + 0x05)
 #define ID_ICON_paint   (GUI_ID_USER + 0x06)
 
-
 #define ID_ICON_date   (GUI_ID_USER + 0x07)
 #define ID_ICON_net   (GUI_ID_USER + 0x08)
 #define ID_ICON_usb   (GUI_ID_USER + 0x09)
 
 #define ID_ICON_alarma   (GUI_ID_USER + 0x0A)
 #define ID_ICON_alarmb   (GUI_ID_USER + 0x0B)
-
-
-
 #define ID_SLIDER_0     (GUI_ID_USER + 0xC)
 #define ID_PROGBAR     	(GUI_ID_USER + 0xD)
 #define ID_BUTTON_NEXT	(GUI_ID_USER + 0xE)
 #define ID_BUTTON_PREV	(GUI_ID_USER + 0xF)
 
 #define ID_PROGBAR_1     	(GUI_ID_USER + 0x3C)
-
-		
-
 extern RTC_TimeTypeDef sTime;
 extern RTC_DateTypeDef sDate;
 
@@ -110,7 +100,6 @@ WM_HWIN _Paint(void);
 WM_HWIN hWin_paint;
 
 GUI_MEMDEV_Handle hMemShadow,hMemShadow1;
-
 uint8_t Layer;
 
 char str1[]="get size";
@@ -120,24 +109,21 @@ char str4[]="crc error!";
 uint8_t RxBuffer[16];
 uint8_t TxBuffer[16];
 
-
 volatile uint8_t uart_newmessage;
 volatile uint8_t uart_data_message=0;
 volatile uint8_t uart_get_size=0;
 volatile uint8_t uart_get_data=0;
 volatile uint8_t uart_end_transaction=0;
 
-volatile uint8_t tx_message=0;
-volatile uint8_t rx_message=0;
+//volatile uint8_t tx_message=0;
+//volatile uint8_t rx_message=0;
 
 volatile int size=0,dec=1;
 volatile int transaction;
 
-
 extern volatile uint8_t message_flag;
 extern volatile uint8_t new_firmware;
 extern const char  *netname_array[];
-
 
 WM_HWIN hWin0,hWin1,hWin2;
 extern WM_HWIN CreateTIME_DATE(void);
@@ -147,7 +133,6 @@ void UART_Terminal_DMATran(char *p);
 uint32_t crc32_check(const uint8_t *buff,uint32_t count);
 
 /*********************************************************************
-*
 *       _cbBK
 */
 /*static void _cbBK(WM_MESSAGE * pMsg) {
@@ -164,12 +149,10 @@ uint32_t crc32_check(const uint8_t *buff,uint32_t count);
   }
 }*/
 /*********************************************************************
-*
-*       _cbPaint_0
-*/
+*       								_cbPaint_0
+**********************************************************************/
 static void _cbPaint_0(WM_MESSAGE * pMsg) {
-  //int     NCode;
-  //int     Id;
+ 
 	switch (pMsg->MsgId) {
 	case WM_PRE_PAINT:
 		GUI_MULTIBUF_BeginEx(0);
@@ -188,17 +171,12 @@ static void _cbPaint_0(WM_MESSAGE * pMsg) {
     break;
   }
 }
-
-
-	
 	
 /*********************************************************************
-*
-*       _cbPaint_0
-*/
+*       								_cbPaint_1
+**********************************************************************/
 static void _cbPaint_1(WM_MESSAGE * pMsg) {
-  //int     NCode;
-  //int     Id;
+ 
 	switch (pMsg->MsgId) {
 	case WM_PRE_PAINT:
 		GUI_MULTIBUF_BeginEx(1);
@@ -221,20 +199,20 @@ static void _cbPaint_1(WM_MESSAGE * pMsg) {
   }
 }
 
-WM_HWIN _Paint(void) {
-	
-		
+/*********************************************************************
+*       									_Paint
+**********************************************************************/
+WM_HWIN _Paint(void){
+			
 	WM_CreateWindowAsChild(0,0,480,272,WM_GetDesktopWindowEx(0),WM_CF_SHOW, _cbPaint_0,0);	
 	hWin_paint=WM_CreateWindowAsChild(0,0,480,272,WM_GetDesktopWindowEx(1),WM_CF_SHOW, _cbPaint_1,0);
 	Layer=1;
 	return hWin_paint;
-		
 }
 	
 /*********************************************************************
-*
-*       _cbWin_0
-*/
+*       									_cbWin_0
+**********************************************************************/
 static void _cbWin_0(WM_MESSAGE * pMsg) {
   int     NCode;
   int     Id;
@@ -243,7 +221,6 @@ static void _cbWin_0(WM_MESSAGE * pMsg) {
   switch (pMsg->MsgId) {
 	case WM_PID_STATE_CHANGED:
 		Layer=1;
-		
 	break;
 	case WM_PRE_PAINT:
 		GUI_MULTIBUF_BeginEx(0);
@@ -305,9 +282,8 @@ static void _cbWin_0(WM_MESSAGE * pMsg) {
 }
 
 /*********************************************************************
-*
-*       _cbWin_1
-*/
+*       									_cbWin_1
+**********************************************************************/
 static void _cbWin_1(WM_MESSAGE * pMsg) {
   int     NCode;
   int     Id;
@@ -369,9 +345,8 @@ static void _cbWin_1(WM_MESSAGE * pMsg) {
 
 
 /*********************************************************************
-*
-*       _cbLayer_1
-*/
+*      										_cbLayer_1
+**********************************************************************/
 static void _cbLayer_1(WM_MESSAGE * pMsg) {
   
 	int     NCode;
@@ -513,10 +488,8 @@ static void _cbLayer_1(WM_MESSAGE * pMsg) {
   }
 }
 /*********************************************************************
-*
-*       CreateMENU
-*/
-
+*       										Window_0
+**********************************************************************/
 WM_HWIN Window_0(void) {
 	
 		uint8_t i;
@@ -533,7 +506,9 @@ WM_HWIN Window_0(void) {
 		}
 		return hWin0;
 }
-
+/*********************************************************************
+*       										Window_1
+**********************************************************************/
 WM_HWIN Window_1(void) {
 	
 		uint8_t i;
@@ -550,7 +525,9 @@ WM_HWIN Window_1(void) {
 		}
 		return hWin1;
 }
-
+/*********************************************************************
+*      											Layer_1
+**********************************************************************/
 WM_HWIN Layer_1(void) {
 	
 		uint8_t i;
@@ -575,10 +552,10 @@ WM_HWIN Layer_1(void) {
 		SLIDER_SetRange(hSlider,1,2);
 		return hWin2;
 }
-
-
-void MainTask(void)
-{
+/**********************************************************************
+*														MainTask
+**********************************************************************/
+void MainTask(void){
 	PROGBAR_Handle progbar;
 	uint32_t crc;
 	uint8_t i,m;
@@ -691,7 +668,6 @@ void MainTask(void)
 	Layer_1();
 	//WM_ShowWindow(hWin1);	
 	WM_ShowWindow(hWin0);
-	//
 	if(Input_Device==1)
 	{GUI_CURSOR_Show();
 		Layer=1;
@@ -700,7 +676,6 @@ void MainTask(void)
 		//GUI_MOUSE_StoreState(&State);
 		//GUI_CURSOR_SetPosition(State.x,State.y);
 	}
-	
 	for(i=20;i<70;i++)
 		{
 			TIM13->CCR1=i;
@@ -871,8 +846,10 @@ while(1)
 
 }
 
+/*********************************************************************
+*       							UART_Terminal_DMATran
+**********************************************************************/
 void UART_Terminal_DMATran(char *p){
-
 	uint8_t count=0;	
 	char *s=p;
 	
@@ -886,9 +863,10 @@ void UART_Terminal_DMATran(char *p){
 
 }
 
-// USER START (Optionally insert additional public code)
-const uint32_t crc32_table[256]=
-{	
+/*********************************************************************
+*       										crc32 table
+**********************************************************************/
+const uint32_t crc32_table[256]={	
 		0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA,
     0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3,
     0x0EDB8832, 0x79DCB8A4, 0xE0D5E91E, 0x97D2D988,
@@ -955,6 +933,9 @@ const uint32_t crc32_table[256]=
     0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
 };
 
+/*********************************************************************
+*      										crc32_check
+**********************************************************************/
 uint32_t crc32_check(const uint8_t *buff,uint32_t count){
 
 	uint32_t crc=0xffffffff;
@@ -964,6 +945,5 @@ uint32_t crc32_check(const uint8_t *buff,uint32_t count){
 	return crc^0xffffffff;
 
 }
-// USER END
 
 /*************************** End of file ****************************/

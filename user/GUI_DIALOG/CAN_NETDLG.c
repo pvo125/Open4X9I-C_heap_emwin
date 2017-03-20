@@ -1,5 +1,3 @@
-
-
 #include "stm32f4xx_hal.h"
 #include "DIALOG.h"
 #include "CAN.h"
@@ -36,13 +34,9 @@ volatile uint8_t new_firmware=0;
 
 extern WM_HWIN hWin1;
 
-
 extern GUI_CONST_STORAGE GUI_BITMAP bmchip;
-
 /*********************************************************************
-*
 *       Defines
-*
 **********************************************************************/
 #define ID_FRAMEWIN_1    (GUI_ID_USER + 0x20)
 #define ID_TEXT_TIME	   (GUI_ID_USER + 0x22)
@@ -73,10 +67,12 @@ extern GUI_CONST_STORAGE GUI_BITMAP bmchip;
 #define ID_TEXT_ERF    (GUI_ID_USER+0x3A)
 #define ID_BUTTON_UPDATE    (GUI_ID_USER+0x3B)
 #define ID_PROGBAR_1     	(GUI_ID_USER + 0x3C)
+
+#define ID_FRAMEWIN_0     (GUI_ID_USER + 0x40)
+#define ID_TREE_0     		(GUI_ID_USER + 0x41)
 /*********************************************************************
-*
-*       _aDialogCreate
-*/
+*       									_aCANNodeDialog
+***********************************************************************/
 static const GUI_WIDGET_CREATE_INFO _aCANNodeDialog[] = {
   { FRAMEWIN_CreateIndirect,NULL , ID_FRAMEWIN_1 , 20, 5, 230, 270, 0, 0x0, 15},
 	{ TEXT_CreateIndirect, "Time", ID_TEXT_TIME, 15, 14, 50, 20, 0, 0x0,0},
@@ -112,6 +108,9 @@ static const GUI_WIDGET_CREATE_INFO _aCANNodeDialog[] = {
 	{ TEXT_CreateIndirect, ".", ID_TEXT_3, 145, 35, 5, 20, 0, 0x0,0},
 	};
 
+/*********************************************************************
+*       									_cbCANNodeDialog
+***********************************************************************/
 static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 	CANNode_TypeDef CANNode;
 	static uint8_t widget_changing=0;
@@ -429,29 +428,15 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 }
 				
 /*********************************************************************
-*
-*       Defines
-*
+*       									_aCANNetExplore
 **********************************************************************/
-#define ID_FRAMEWIN_0     (GUI_ID_USER + 0x40)
-#define ID_TREE_0     		(GUI_ID_USER + 0x41)
-/*********************************************************************
-*
-*       _aDialogCreate
-*/
 static const GUI_WIDGET_CREATE_INFO _aCANNetExplore[] = {
   { FRAMEWIN_CreateIndirect, "CAN_NET", ID_FRAMEWIN_0 , 120, 90, 250, 150, 0, 0x0, 0 },
 	{ TREEVIEW_CreateIndirect, NULL, ID_TREE_0, 0, 0, 250, 150, 0, 0x0,0},
 	};
 
 /*********************************************************************
-*
-*       Public code
-*/
-/*********************************************************************
-*
-*
-*
+*									 				_Browse_CANNet_FirstEntry
 **********************************************************************/
 void _Browse_CANNet_FirstEntry(void){
 	TREEVIEW_ITEM_Handle hNode;
@@ -476,11 +461,9 @@ void _Browse_CANNet_FirstEntry(void){
 		}
 }
 
-/**************************************************************************
-*
-*
-*
-****************************************************************************/	
+/************************************************************************
+*													_Browse_CANNet
+*************************************************************************/	
 void	_Browse_CANNet(void){
 	TREEVIEW_ITEM_Handle hNode;
 	uint8_t count=0;
@@ -513,10 +496,9 @@ void	_Browse_CANNet(void){
 		}
 
 }
-/*********************************************************************
-*
-*/
-
+/************************************************************************
+*													_cbCANNetExplore		
+*************************************************************************/
 static void _cbCANNetExplore(WM_MESSAGE * pMsg) {
  	TREEVIEW_ITEM_Handle hNode;
 	WM_HWIN hItem;
@@ -580,19 +562,20 @@ static void _cbCANNetExplore(WM_MESSAGE * pMsg) {
 	}
 }
 			
+/************************************************************************
+*													CANNetExplore		
+*************************************************************************/
 WM_HWIN CANNetExplore(void) {
   hWin_CANNetExplore = GUI_CreateDialogBox(_aCANNetExplore, GUI_COUNTOF(_aCANNetExplore), _cbCANNetExplore, hWin1, 0, 0);
  	return hWin_CANNetExplore;
-
 }
+/************************************************************************
+*													CANNodeDialog		
+*************************************************************************/
 WM_HWIN CANNodeDialog(uint8_t index){
 	
-	
 	TEXT_SetDefaultTextColor(GUI_YELLOW);
-	
-	
 	WinHandle[index]=GUI_CreateDialogBox(_aCANNodeDialog, GUI_COUNTOF(_aCANNodeDialog), _cbCANNodeDialog, hWin1, 0, 0);
-	
 	return WinHandle[index];
 }
 
