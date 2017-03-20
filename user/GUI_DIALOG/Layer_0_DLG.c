@@ -22,6 +22,7 @@
 // USER END
 #include "stm32f4xx_hal.h"
 #include "DIALOG.h"
+#include "MESSAGEBOX.h"
 #include "GUI.h"
 #include "LCDConf.h"
 #include "PS2_Mouse.h" 
@@ -132,6 +133,8 @@ volatile uint8_t rx_message=0;
 volatile int size=0,dec=1;
 volatile int transaction;
 
+
+extern volatile uint8_t message_flag;
 extern volatile uint8_t new_firmware;
 extern const char  *netname_array[];
 
@@ -827,11 +830,43 @@ while(1)
 					UART_Terminal_DMATran("crc error!");
 				}
 				dec=1;
-				//WM_DeleteWindow(progbar);
+				
 			}
 			
 		
-		GUI_Delay(10);
+			if(message_flag)
+				{
+					TEXT_SetDefaultTextColor(GUI_BLACK);
+					GUI_SelectLayer(0);
+					if(message_flag==1)
+					{
+						//__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+						//UART_Terminal_DMATran("Download complete!\r\n");
+						WM_DeleteWindow(progbar);
+						
+						MESSAGEBOX_Create("Download complete!","MESSAGE",0);	
+					}
+					else if(message_flag==2)
+					{
+						//__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+						//UART_Terminal_DMATran("Error download!\r\n");
+						WM_SendMessageNoPara(hWin2,WM_USER);// сообщение окну hWin2 верхнего слоя layer 1 перерисовыаться и очистить символ update
+						WM_DeleteWindow(progbar);
+						MESSAGEBOX_Create("CRC ERROR!","ERROR",0);	
+					}
+					else if(message_flag==3)
+					{
+						//__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
+						//UART_Terminal_DMATran("Error download!\r\n");
+						progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
+						WM_DeleteWindow(progbar);
+						WM_SendMessageNoPara(hWin2,WM_USER);// сообщение окну hWin2 верхнего слоя layer 1 перерисовыаться и очистить символ update
+						MESSAGEBOX_Create("SIZE FIRMWARE ERROR!","ERROR",0);	
+					}
+					message_flag=0;
+				}
+			
+			GUI_Delay(10);
 	}
 
 }

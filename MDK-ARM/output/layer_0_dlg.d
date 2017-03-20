@@ -83,6 +83,7 @@
 .\output\layer_0_dlg.o: ..\user\inc\TEXT.h
 .\output\layer_0_dlg.o: ..\user\inc\TREEVIEW.h
 .\output\layer_0_dlg.o: ..\user\inc\KNOB.h
+.\output\layer_0_dlg.o: ..\user\inc\MESSAGEBOX.h
 .\output\layer_0_dlg.o: ..\user\GUI\LCDConf.h
 .\output\layer_0_dlg.o: ..\user\main.h
 .\output\layer_0_dlg.o: ..\user\inc\GUIDRV_Lin.h

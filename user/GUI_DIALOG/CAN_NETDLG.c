@@ -2,7 +2,6 @@
 
 #include "stm32f4xx_hal.h"
 #include "DIALOG.h"
-#include "MESSAGEBOX.h"
 #include "CAN.h"
 #include "stdlib.h"
 #include "string.h"
@@ -33,7 +32,6 @@ volatile uint8_t message_flag=0;
 extern volatile int size;
 extern volatile uint32_t TimeMS;
 volatile uint8_t new_node=0;
-volatile uint8_t download_complete=0;
 volatile uint8_t new_firmware=0;
 
 extern WM_HWIN hWin1;
@@ -118,7 +116,6 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 	CANNode_TypeDef CANNode;
 	static uint8_t widget_changing=0;
 	WM_HWIN hItem;
-	uint32_t temp;
 	uint8_t index;
 	int     NCode;
   int     Id;
@@ -151,6 +148,7 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 				WM_CreateTimer(hItem,0,1000,0);				// Создадим таймер для обновления соотв. окна диалога для каждого узла.
 				
 				//Id=strcmp((const char*)netname_array[window_index],(const char*)0xD0400020);
+				
 				if(new_firmware!=window_index)//if(Id || (new_firmware==0))
 					{
 						hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_UPDATE);
@@ -227,50 +225,7 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 			break;	
 			case WM_TIMER:
  				FRAMEWIN_GetUserData(pMsg->hWin,&CANNode,sizeof(CANNode));	//Когда таймер сраб. получим с соотв. окна структуру CAN узла.
-				
-				if(message_flag)
-				{
-					TEXT_SetDefaultTextColor(GUI_BLACK);
-					GUI_SelectLayer(0);
-					if(message_flag==1)
-					{
-						//__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-						//UART_Terminal_DMATran("Download complete!\r\n");
-						
-						MESSAGEBOX_Create("Download complete!","MESSAGE",0);	
-					}
-					else if(message_flag==2)
-					{
-						//__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-						//UART_Terminal_DMATran("Error download!\r\n");
-						
-						MESSAGEBOX_Create("CRC ERROR!","ERROR",0);	
-					}
-					else if(message_flag==3)
-					{
-						//__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
-						//UART_Terminal_DMATran("Error download!\r\n");
-						progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
-						WM_DeleteWindow(progbar);
-						
-						WM_SendMessageNoPara(hWin2,WM_USER);// сообщение окну hWin2 верхнего слоя layer 1 перерисовыаться и очистить символ update
-						
-						MESSAGEBOX_Create("SIZE FIRMWARE ERROR!","ERROR",0);	
-					}
-					message_flag=0;
-				}
-				
-				if(download_complete)
-				{
-					hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_UPDATE);
-					WM_DisableWindow(hItem);
-					download_complete=0;
-					
-					//progbar=WM_GetDialogItem(pMsg->hWin,ID_PROGBAR_1);
-					//WM_DeleteWindow(progbar);
-					
-					
-				}
+								
 				if(widget_changing)
 				{
 					WM_RestartTimer(pMsg->Data.v,1000);
@@ -458,7 +413,6 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 									
 									progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
 									WM_ShowWindow(progbar);
-									
 									hItem=WM_GetDialogItem(pMsg->hWin,ID_BUTTON_UPDATE);
 									WM_DisableWindow(hItem);	
 								

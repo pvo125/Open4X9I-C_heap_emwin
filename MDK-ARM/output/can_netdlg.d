@@ -83,7 +83,6 @@
 .\output\can_netdlg.o: ..\user\inc\TEXT.h
 .\output\can_netdlg.o: ..\user\inc\TREEVIEW.h
 .\output\can_netdlg.o: ..\user\inc\KNOB.h
-.\output\can_netdlg.o: ..\user\inc\MESSAGEBOX.h
 .\output\can_netdlg.o: ..\user\bxCAN\CAN.h
 .\output\can_netdlg.o: D:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
 .\output\can_netdlg.o: D:\Keil\ARM\ARMCC\bin\..\include\string.h

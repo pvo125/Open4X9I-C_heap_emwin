@@ -11,7 +11,6 @@ extern WM_HWIN hWin2;
 extern volatile uint8_t message_flag;
 extern volatile uint32_t countbyte_firmware;
 extern volatile int size;
-extern volatile uint8_t download_complete;
 extern volatile uint8_t new_firmware;
 
 extern void UART_Terminal_DMATran(char *p);
@@ -375,41 +374,30 @@ void CAN_RXProcess1(void){
 						}
 					CAN_Data_TX.ID=((index+1)<<8)|0x73;
 					CAN_Transmit_DataFrame(&CAN_Data_TX);
-						
 				}
-					
-			
 			}
 			else if(CAN_Data_RX[1].Data[1]=='c')		// получили в сообщении 'c' CRC OK!
 			{
-				download_complete=1;
 				countbyte_firmware=0;
 				new_firmware=0;
 				message_flag=1;
-				
-				WM_DeleteWindow(progbar);
-				
-				WM_SendMessageNoPara(hWin2,WM_USER);// сообщение окну hWin2 верхнего слоя layer 1 перерисовыаться и очистить символ update
-				
 			}
 			else if(CAN_Data_RX[1].Data[1]=='e')		// получили в сообщении 'e' CRC ERROR!
 			{
 				countbyte_firmware=0;
+				new_firmware=0;
 				message_flag=2;
-				WM_DeleteWindow(progbar);
 			}
 			else if(CAN_Data_RX[1].Data[1]=='s')		// получили в сообщении 's' SIZE ERROR!
 			{
 				countbyte_firmware=0;
 				new_firmware=0;
 				message_flag=3;
-				
 			}		
 		break;	
 		
 		case 6://(id=x74 get_firmware)
-		
-		netname_index=CAN_Data_RX[1].Data[0];
+			netname_index=CAN_Data_RX[1].Data[0];
 			if(netname_index==new_firmware)
 			{
 				progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
