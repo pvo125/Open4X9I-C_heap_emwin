@@ -252,14 +252,14 @@ void CAN_RXProcess0(void){
 		//
 		if(WinHandle[index])
 		{
-			FRAMEWIN_GetUserData(WinHandle[index],&CANNode,sizeof(CANNode));
-			CANNode.time[0]=CAN_Data_RX[0].Data[1];
+			FRAMEWIN_GetUserData(WinHandle[index],&CANNode,sizeof(CANNode)); // Заполняем всю структуру CANNode_TypeDef CANNode данными  с окна 	
+			CANNode.time[0]=CAN_Data_RX[0].Data[1];													
 			CANNode.time[1]=CAN_Data_RX[0].Data[2];
 			CANNode.date[0]=CAN_Data_RX[0].Data[3];
 			CANNode.date[1]=CAN_Data_RX[0].Data[4];
-			CANNode.date[2]=CAN_Data_RX[0].Data[5];
+			CANNode.date[2]=CAN_Data_RX[0].Data[5];														// Меняем только нужные поля 	
 			CANNode.newmsg=1;
-			FRAMEWIN_SetUserData(WinHandle[index],&CANNode,sizeof(CANNode));
+			FRAMEWIN_SetUserData(WinHandle[index],&CANNode,sizeof(CANNode));	// Сохраняем структуры данных соотв. узла в окне. 
 			/*CANNode_Struct[CAN_Data_RX[0].Data[0]].time[0]=CAN_Data_RX[0].Data[1];
 			CANNode_Struct[CAN_Data_RX[0].Data[0]].time[1]=CAN_Data_RX[0].Data[2];
 			CANNode_Struct[CAN_Data_RX[0].Data[0]].date[0]=CAN_Data_RX[0].Data[3];
@@ -394,14 +394,14 @@ void CAN_RXProcess1(void){
 		break;	
 		
 		case 6://(id=x74 get_firmware)
-			netname_index=CAN_Data_RX[1].Data[0];
-			if(netname_index==new_firmware)
+			index=CAN_Data_RX[1].Data[0];
+			if(index==new_firmware)
 			{
 				progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
 				WM_ShowWindow(progbar);
 				
 				countbyte_firmware=0;
-				CAN_Data_TX.ID=((netname_index+1)<<8)|0x71;
+				CAN_Data_TX.ID=((index+1)<<8)|0x71;
 				CAN_Data_TX.DLC=4;
 				CAN_Data_TX.Data[0]=(uint8_t)size;
 				CAN_Data_TX.Data[1]=(uint8_t)(size>>8);

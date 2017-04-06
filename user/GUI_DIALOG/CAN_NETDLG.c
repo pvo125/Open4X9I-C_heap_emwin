@@ -122,12 +122,12 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 	
   switch (pMsg->MsgId) {
 			case WM_DELETE:
-				FRAMEWIN_GetUserData(pMsg->hWin,&index,1);
+				FRAMEWIN_GetUserData(pMsg->hWin,&index,1);		// index=CANNode.index
 				WinHandle[index]=0;
 			break;	
 			case WM_INIT_DIALOG:
 				
-			memset(&CANNode,0,sizeof(CANNode));	//Инизиализируем структуру CANNode нулями
+				memset(&CANNode,0,sizeof(CANNode));	//Инизиализируем структуру CANNode нулями
 				
 				hItem=pMsg->hWin;
 				FRAMEWIN_SetTitleHeight(hItem, 25);
@@ -388,9 +388,9 @@ static void _cbCANNodeDialog(WM_MESSAGE * pMsg){
 								if(CANNode.timer0nOff)
 									CAN_Transmit_RemoteFrame(((CANNode.index+1)<<8)|0x82);   // Core4X9I 0x283 remote enable timer
 								else
-									CAN_Transmit_RemoteFrame(((CANNode.index+1)<<8)|0x83);	// // Core4X9I 0x283 remote disable timer	
+									CAN_Transmit_RemoteFrame(((CANNode.index+1)<<8)|0x83);	 // Core4X9I 0x283 remote disable timer	
 								
-								FRAMEWIN_SetUserData(pMsg->hWin,&CANNode,sizeof(CANNode));
+								FRAMEWIN_SetUserData(pMsg->hWin,&CANNode,sizeof(CANNode));	// Сохраняем всю структуру CANNode в соотв. окне.
 								//widget_changing=0;
 							break;
 							
