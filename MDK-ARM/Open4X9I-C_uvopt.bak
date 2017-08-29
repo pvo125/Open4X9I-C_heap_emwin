@@ -666,7 +666,7 @@
       <Focus>0</Focus>
       <ColumnNumber>2</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>102</TopLine>
+      <TopLine>98</TopLine>
       <CurrentLine>114</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>../Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c</PathWithFileName>
@@ -690,7 +690,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>76</TopLine>
+      <TopLine>78</TopLine>
       <CurrentLine>79</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\GUI\GUI_X.c</PathWithFileName>
@@ -722,8 +722,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>722</TopLine>
+      <CurrentLine>729</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\GUI\LCDConf_stm324x9i_eval_MB1046.c</PathWithFileName>
       <FilenameWithoutPath>LCDConf_stm324x9i_eval_MB1046.c</FilenameWithoutPath>
@@ -1088,10 +1088,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>30</ColumnNumber>
+      <ColumnNumber>12</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>2</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\bxCAN\CAN.c</PathWithFileName>
       <FilenameWithoutPath>CAN.c</FilenameWithoutPath>
@@ -1130,8 +1130,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>368</TopLine>
-      <CurrentLine>109</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\GUI_DIALOG\ALARMDLG.c</PathWithFileName>
       <FilenameWithoutPath>ALARMDLG.c</FilenameWithoutPath>
@@ -1146,8 +1146,8 @@
       <Focus>0</Focus>
       <ColumnNumber>13</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>2</TopLine>
-      <CurrentLine>5</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\GUI_DIALOG\CAN_NETDLG.c</PathWithFileName>
       <FilenameWithoutPath>CAN_NETDLG.c</FilenameWithoutPath>
@@ -1160,9 +1160,9 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>2</ColumnNumber>
+      <ColumnNumber>1</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>797</TopLine>
+      <TopLine>799</TopLine>
       <CurrentLine>806</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\GUI_DIALOG\MAINWINDOW.c</PathWithFileName>
@@ -1176,10 +1176,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>16</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>273</TopLine>
-      <CurrentLine>280</CurrentLine>
+      <TopLine>339</TopLine>
+      <CurrentLine>340</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\GUI_DIALOG\SETTINGSDLG.c</PathWithFileName>
       <FilenameWithoutPath>SETTINGSDLG.c</FilenameWithoutPath>

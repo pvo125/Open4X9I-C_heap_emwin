@@ -1176,10 +1176,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>16</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>339</TopLine>
-      <CurrentLine>340</CurrentLine>
+      <CurrentLine>341</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\user\GUI_DIALOG\SETTINGSDLG.c</PathWithFileName>
       <FilenameWithoutPath>SETTINGSDLG.c</FilenameWithoutPath>
