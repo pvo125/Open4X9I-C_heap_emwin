@@ -278,7 +278,7 @@ void Touch_calibration(void){
 	NVIC_EnableIRQ(TIM6_DAC_IRQn);
 	NVIC_EnableIRQ(TIM7_IRQn);
 	NVIC_EnableIRQ(RTC_WKUP_IRQn);
-	GUI_SelectLayer(1);
+	//GUI_SelectLayer(1);
 	WM_ShowWindow(hWin0);
 	WM_ShowWindow(hWin2);
 	LCD_SetAlphaEx(1, 255);

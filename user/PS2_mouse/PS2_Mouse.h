@@ -46,8 +46,9 @@
 
 extern volatile uint8_t PS2_NewData;
 
-#define INPUT_DEV_MOUSE        1
-#define INPUT_DEV_TOUCH  			 2
+#define INPUT_DEV_TOUCH  			 1
+#define INPUT_DEV_MOUSE        0
+
 
 #define  PS2_MOUSE_XPOS_MAX    480
 #define  PS2_MOUSE_XPOS_START  240

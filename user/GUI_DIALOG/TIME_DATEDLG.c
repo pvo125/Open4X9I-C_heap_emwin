@@ -1,18 +1,25 @@
+
 #include "stm32f4xx_hal.h"
 #include "DIALOG.h"
 
+
 WM_HWIN CreateTIME_DATE(void);
+
+
 WM_HWIN hWin_time;
-extern WM_HWIN hWin1,hWin2;
+extern WM_HWIN hWin1;
 extern GUI_PID_STATE State;
 extern RTC_TimeTypeDef sTime;
 extern RTC_DateTypeDef sDate;
 extern RTC_HandleTypeDef hrtc;
 
 extern uint8_t Layer;
-
+extern uint8_t Input_Device;
+extern volatile uint8_t timeupdate_flag;
 static uint8_t hour,minute;
 static uint8_t day,month,year;
+
+
 
 const char *_hours[]={"00","01","02","03","04","05","06","07","08","09",
 												"10","11","12","13","14","15","16","17",
@@ -36,7 +43,9 @@ const char *_years[]={"2000","2001","2002","2003","2004","2005","2006","2007","2
 											"2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021",
 											"2022","2023","2024","2025","2026","2027","2028","2029","2030",NULL};
 /*********************************************************************
-*       									Defines
+*
+*       Defines
+*
 **********************************************************************/
 #define ID_FRAMEWIN_0     (GUI_ID_USER + 0x0F)
 #define ID_LISTWHEEL_0		(GUI_ID_USER + 0x11)
@@ -46,9 +55,10 @@ const char *_years[]={"2000","2001","2002","2003","2004","2005","2006","2007","2
 #define ID_LISTWHEEL_4		(GUI_ID_USER + 0x15)
 #define ID_BUTTON_SAVE	   (GUI_ID_USER + 0x16)
 
-/********************************************************************
-*       									_aDialogCreate
-*********************************************************************/
+/****************************************************************
+*
+*       _aDialogCreate
+*/
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { FRAMEWIN_CreateIndirect, "TIME_DATE", ID_FRAMEWIN_0 , 150, 60, 280, 200, 0, 0x0, 0 },
  	{ LISTWHEEL_CreateIndirect, NULL, ID_LISTWHEEL_0, 10, 20, 30, 83, 0, 0x0, 0 },
@@ -60,9 +70,18 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 };
 
 /*********************************************************************
-*    											_cbDialog
-*********************************************************************/
+*
+*       Public code
+*
+**********************************************************************
+*/
+/*********************************************************************
+*
+*    
+*/
+
 static void _cbDialog(WM_MESSAGE * pMsg) {
+  
 	WM_HWIN hItem;
   int     NCode;
   int     Id;
@@ -71,7 +90,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				hWin_time=0;
 			break;	
 			case WM_TOUCH://WM_PID_STATE_CHANGED:
-				Layer=1;
+				if(Input_Device)
+					Layer=1;
 			break;	
 			case WM_INIT_DIALOG:
 				hItem = pMsg->hWin;
@@ -192,7 +212,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 								sDate.Month=month+1;
 								sDate.Date=day+1;
 								HAL_RTC_SetDate(&hrtc,&sDate,RTC_FORMAT_BIN);
-								WM_SendMessageNoPara(hWin2,WM_USER);
+								timeupdate_flag=1;
 							break;
 							}
 				break;				
@@ -204,11 +224,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 	}
 }
 			
-/*********************************************************************
-*    										CreateTIME_DATE
-*********************************************************************/
 WM_HWIN CreateTIME_DATE(void) {
-		/*hWin_time=FRAMEWIN_CreateEx(150,60,280,200,hWin1,WM_CF_SHOW,FRAMEWIN_CF_MOVEABLE,ID_FRAMEWIN_0,"TIME_DATE",_cbDialog);
+	
+	/*hWin_time=FRAMEWIN_CreateEx(150,60,280,200,hWin1,WM_CF_SHOW,FRAMEWIN_CF_MOVEABLE,ID_FRAMEWIN_0,"TIME_DATE",_cbDialog);
 	FRAMEWIN_SetClientColor(hWin_time,GUI_LIGHTGRAY);
 	FRAMEWIN_SetTitleHeight(hWin_time, 25);
 	FRAMEWIN_SetFont(hWin_time,GUI_FONT_16_ASCII);

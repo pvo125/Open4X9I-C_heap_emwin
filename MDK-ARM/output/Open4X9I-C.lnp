@@ -52,10 +52,11 @@
 ".\output\tsc2046.o"
 ".\output\ps2_mouse.o"
 ".\output\can.o"
-".\output\layer_0_dlg.o"
 ".\output\time_datedlg.o"
 ".\output\alarmdlg.o"
 ".\output\can_netdlg.o"
+".\output\mainwindow.o"
+".\output\settingsdlg.o"
 --library_type=microlib --strict --scatter "..\user\Open4X9I.sct"
 
 --diag_suppress=L6329 --summary_stderr --info summarysizes --map --xref --callgraph --symbols

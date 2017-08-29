@@ -157,7 +157,7 @@
             <CpuDllArguments></CpuDllArguments>
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
-            <InitializationFile>..\user\Dbg_NORESET.ini</InitializationFile>
+            <InitializationFile></InitializationFile>
             <Driver>STLink\ST-LINKIII-KEIL_SWO.dll</Driver>
           </TargetDlls>
         </DebugOption>
@@ -761,11 +761,6 @@
           <GroupName>GUI_DIALOG</GroupName>
           <Files>
             <File>
-              <FileName>Layer_0_DLG.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\GUI_DIALOG\Layer_0_DLG.c</FilePath>
-            </File>
-            <File>
               <FileName>TIME_DATEDLG.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\GUI_DIALOG\TIME_DATEDLG.c</FilePath>
@@ -779,6 +774,16 @@
               <FileName>CAN_NETDLG.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\GUI_DIALOG\CAN_NETDLG.c</FilePath>
+            </File>
+            <File>
+              <FileName>MAINWINDOW.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\GUI_DIALOG\MAINWINDOW.c</FilePath>
+            </File>
+            <File>
+              <FileName>SETTINGSDLG.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\GUI_DIALOG\SETTINGSDLG.c</FilePath>
             </File>
           </Files>
         </Group>

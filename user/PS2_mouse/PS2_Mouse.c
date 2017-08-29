@@ -11,6 +11,8 @@ ErrorStatus PS2_Mouse_Tx(uint8_t cmd);
 void PS2_Mouse_GetData(void);
 void PS2_Mouse_CheckScancode(uint8_t scan);
 void PS2_Mouse_ISR(void);
+
+
 //	PA7 clk    timer
 //	PC1 data	 gpio
 
@@ -19,6 +21,7 @@ volatile uint8_t parity;
 
 PS2_MOUSE_t 			PS2_MOUSE;
 volatile PS2_MOUSE_VAR_t 	PS2_MOUSE_VAR;
+
 
 void PS2_Mouse_Init(void){
 	
@@ -36,7 +39,7 @@ void PS2_Mouse_Init(void){
 	MOUSE_CLOCK_PORT->PUPDR|=CLOCK_PUPDR_PUPDRx;							// Pull-up
 	MOUSE_CLOCK_PORT->BSRR=CLOCK_BSRR_BS;																			// clock  в :1
 	
-	MOUSE_CLOCK_PORT->AFR|=GPIO_AFIO;							//  Настроим мультиплексор на AF2 TIM3. Порт пока в General purpose output mode
+	MOUSE_CLOCK_PORT->AFR|=GPIO_AFIO;							//  Настроим мультиплексор на AF2 TIM4. Порт пока в General purpose output mode
 	
 	
 	__TIMx_CLK_ENABLE();
@@ -200,10 +203,12 @@ ErrorStatus PS2_Mouse_Timeout_RX ( volatile uint32_t nCount ){
 /*
 */
 ErrorStatus PS2_Mouse_Tx(uint8_t cmd){
+	
 	uint16_t i;
 	
 	parity=0;
 	PS2_MOUSE_VAR.send_code=cmd;
+			
 	for(i=0;i<8;i++)									//
 	{																	//
 		if(cmd&0x01)										//	Вычислим бит паритета таким примитивным способом.	
@@ -214,6 +219,8 @@ ErrorStatus PS2_Mouse_Tx(uint8_t cmd){
 		parity=0x0;											//
 	else
 		parity=0x01;										//
+	
+	
 	//TIM->DIER&=~TIM_DIER_TIE;							//Запрет прерывания от TIM на время дерганья ножкой clock
 	MOUSE_CLOCK_PORT->MODER&=~CLOCK_MODER_MODERx_1;
 	MOUSE_CLOCK_PORT->MODER|=CLOCK_MODER_MODERx;  			//General purpose output mode
@@ -247,6 +254,8 @@ ErrorStatus PS2_Mouse_Tx(uint8_t cmd){
 */
 void PS2_Mouse_GetData(void){
 		uint8_t temp;
+	
+	
 /**************** Left Button **********/
 		if((PS2_MOUSE_VAR.buff[0]&0x01)!=0)
 		{
@@ -265,6 +274,7 @@ void PS2_Mouse_GetData(void){
 		{
 			PS2_MOUSE.RButton=BTN_RELEASED;
 		}
+		
 /**************** X Pos **********/		
 		if((PS2_MOUSE_VAR.buff[0]&0x10)!=0)
 		{
@@ -281,7 +291,7 @@ void PS2_Mouse_GetData(void){
 		else
 		{
 			temp=PS2_MOUSE_VAR.buff[1];
-			if(PS2_MOUSE.xPos<=(480-temp))
+			if(PS2_MOUSE.xPos<=(479-temp))
 				{
 					PS2_MOUSE.xPos+=temp;
 				}
@@ -306,7 +316,7 @@ void PS2_Mouse_GetData(void){
 		else
 		{
 			temp=PS2_MOUSE_VAR.buff[2];
-			if(PS2_MOUSE.yPos<=(272-temp))
+			if(PS2_MOUSE.yPos<=(271-temp))
 				{
 					PS2_MOUSE.yPos+=temp;
 				}

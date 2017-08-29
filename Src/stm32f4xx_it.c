@@ -55,6 +55,10 @@ extern volatile uint8_t uart_end_transaction;
 extern volatile uint8_t uart_data_message;
 extern  volatile uint8_t uart_newmessage;
 
+volatile uint8_t hwin=0;
+extern volatile uint8_t change_Layer;
+volatile WM_HWIN current_widget;
+volatile WM_HWIN last_widget;
 //const char str3[]="ok";
 //extern char str2[];
 //extern volatile uint8_t tx_message;
@@ -69,6 +73,8 @@ volatile uint32_t TimeMS;
 extern void Touch_GetData(void);
 extern CANRX_TypeDef CAN_Data_RX;
 
+volatile uint8_t timeupdate_flag;
+extern uint8_t lcd_bright;
 extern RTC_TimeTypeDef sTime;
 extern RTC_DateTypeDef sDate;
 
@@ -129,28 +135,25 @@ void SysTick_Handler(void)
 void RTC_WKUP_IRQHandler(void)
 {
   /* USER CODE BEGIN RTC_WKUP_IRQn 0 */
-	//RTC->ISR&=~RTC_ISR_WUTF;
 		HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-	
-  	WM_SendMessageNoPara(hWin2,WM_USER);
-		
-
-	/* USER CODE END RTC_WKUP_IRQn 0 */
+		timeupdate_flag=1;
+  /* USER CODE END RTC_WKUP_IRQn 0 */
   HAL_RTCEx_WakeUpTimerIRQHandler(&hrtc);
   /* USER CODE BEGIN RTC_WKUP_IRQn 1 */
 		
   /* USER CODE END RTC_WKUP_IRQn 1 */
 }
  void USART1_IRQHandler(void){
-	
+	/* USER CODE BEGIN USART1_IRQn 0 */
 	 uint32_t temp;
 	 
- /* USER CODE BEGIN USART1_IRQn 0 */
-		if(uart_data_message)
+	 if(uart_data_message)
 		{											// если принимаем данные (data)
-			if(DMA2_Stream2->NDTR>16)
+			
+				if(DMA2_Stream2->NDTR>16)
 				{
 					uart_get_data=1;
+						
 				}
 				else
 				{
@@ -160,6 +163,7 @@ void RTC_WKUP_IRQHandler(void)
 		else
 		{															// если принимаем сообщение	(message)
 			uart_newmessage=1;					//  выставляем флаг нового сообщения	
+					
 		}
 		// Сбросим бит IDLE след последовательностью
 		temp=USART1->SR;
@@ -240,24 +244,34 @@ void TIM6_DAC_IRQHandler(void)
 			PS2_MOUSE.status=MOUSE_AKTIV;
 			State.x=PS2_MOUSE.xPos;
 			State.y=272-PS2_MOUSE.yPos;
-			State.Pressed=PS2_MOUSE.LButton;
+			State.Pressed=0;
+			if(PS2_MOUSE.LButton==BTN_PRESSED)
+			{
+				//if(State.Layer)
+					//change_Layer=1;
+				//State.Layer=0;
+				State.Pressed|=1;
+			}
+			if(PS2_MOUSE.RButton==BTN_PRESSED)
+			{
+				//if(!State.Layer)
+					//change_Layer=1;
+				//State.Layer=1;
+				State.Pressed|=2;
+			}
 			GUI_MOUSE_StoreState(&State);
+			
+			//current_widget=WM_Screen2hWin(State.x,State.y);
+			//if(!WM_HasFocus(current_widget))
+				//WM_SetFocus(current_widget);
+			
 			backlight_count=0;
 			TIMx->CNT=0;
 			TIM7->CNT=0;
-			TIM13->CCR1=70;
+			TIM13->CCR1=lcd_bright;
 			if((TIM7->CR1&TIM_CR1_CEN)!=TIM_CR1_CEN)
 				TIM7->CR1|=TIM_CR1_CEN;
 		}
-		else
-		{	
-			GUI_MOUSE_GetState(&State);
-			if(State.Pressed==1)
-			{
-				State.Pressed=0;
-				GUI_MOUSE_StoreState(&State);
-			}
-		}	
 	}
 	else
 		Touch_GetData();
@@ -408,5 +422,16 @@ void CAN2_SCE_IRQHandler(void){
 	GUI_DispChar('f');	
 
 }
-
+void EXTI2_IRQHandler (void){
+	if(GPIOG->IDR & GPIO_IDR_IDR_2)
+		hwin=2;
+	__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_2);
+}
+void EXTI15_10_IRQHandler (void){
+	
+	if(GPIOG->IDR & GPIO_IDR_IDR_10)
+		hwin=10;
+	__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_10);
+}
+/* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

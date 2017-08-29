@@ -1,3 +1,5 @@
+
+
 #include "stm32f4xx_hal.h"
 #include "DIALOG.h"
 
@@ -24,7 +26,7 @@ uint32_t ALARMA_ACTION;
 uint32_t ALARMB_ACTION;
 
 WM_HWIN hWin_alarm;
-extern WM_HWIN hWin0,hWin2;
+extern WM_HWIN hWin0;
 extern RTC_AlarmTypeDef sAlarmA,sAlarmB;		   	  									
 extern RTC_HandleTypeDef hrtc;
 											
@@ -35,7 +37,9 @@ int maskA,maskB;
 static uint8_t hour,minute;
 static uint16_t day;										
 /*********************************************************************
-*       									Defines
+*
+*       Defines
+*
 **********************************************************************/
 #define ID_FRAMEWIN_0     (GUI_ID_USER + 0x0F)
 #define ID_DROPDOWN_0     (GUI_ID_USER + 0x10)
@@ -47,9 +51,10 @@ static uint16_t day;
 #define ID_BUTTON_SAVE	   (GUI_ID_USER + 0x16)
 #define ID_RADIO_0     (GUI_ID_USER + 0x17)
 #define ID_DROPDOWN_1     (GUI_ID_USER + 0x18)
-/**************************************************************************
-*       									_aDialogCreate
-***************************************************************************/
+/*********************************************************************
+*
+*       _aDialogCreate
+*/
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { FRAMEWIN_CreateIndirect, "ALARM", ID_FRAMEWIN_0 , 120, 90, 280, 210, 0, 0x0, 0 },
   { DROPDOWN_CreateIndirect, NULL, ID_DROPDOWN_0, 10, 120, 75, 35, 0, 0x0, 0 },
@@ -61,11 +66,20 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 	{ BUTTON_CreateIndirect, "SAVE", ID_BUTTON_SAVE, 200, 120, 50, 30, 0, 0x0, 0 },
 };
 
-/**************************************************************************
-*    											_cbDialog
-***************************************************************************/
+/*********************************************************************
+*
+*       Public code
+*
+**********************************************************************
+*/
+/*********************************************************************
+*
+*    
+*/
+
 static void _cbDialog(WM_MESSAGE * pMsg) {
- 	uint8_t i;
+ 	
+	uint8_t i;
 	WM_HWIN hItem;
   int     NCode;
   int     Id;
@@ -336,9 +350,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 									{	
 										if((RTC->CR&RTC_CR_ALRAE)==RTC_CR_ALRAE)
 										{
-											GUI_SelectLayer(0);
+											//GUI_SelectLayer(0);
 											GUI_MessageBox("DISABLE ALARM_A", "Message", 0);
-											GUI_SelectLayer(1);
+											//GUI_SelectLayer(1);
 											break;
 										}	
 										HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR0, ALARMA_ACTION);
@@ -349,19 +363,19 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 										sAlarmA.AlarmDateWeekDaySel=RTC_ALARMDATEWEEKDAYSEL_DATE;
 										sAlarmA.Alarm = RTC_ALARM_A;
 										HAL_RTC_SetAlarm_IT(&hrtc,&sAlarmA,RTC_FORMAT_BIN);
-										hItem = WM_GetDialogItem(hWin2, GUI_ID_USER + 0x0A);
+										hItem = WM_GetDialogItem(hWin0, GUI_ID_USER + 0x0A);
 										WM_DeleteWindow(hItem);
-										hItem=ICONVIEW_CreateEx(300,2,34,34,hWin2,WM_CF_SHOW|WM_CF_HASTRANS,0,(GUI_ID_USER + 0x0A),24,24);
+										hItem=ICONVIEW_CreateEx(300,2,34,34,hWin0,WM_CF_SHOW|WM_CF_HASTRANS,0,(GUI_ID_USER + 0x0A),24,24);
 										ICONVIEW_SetBkColor(hItem, ICONVIEW_CI_SEL, GUI_DARKBLUE|0x80000000);
-										//ICONVIEW_AddBitmapItem(hItem,Icons2[0],"");
+										ICONVIEW_AddBitmapItem(hItem,Icons2[0],"");
 									}	
 								 else
 									{
 										if((RTC->CR&RTC_CR_ALRBE)==RTC_CR_ALRBE)
 										{
-											GUI_SelectLayer(0);
+											//GUI_SelectLayer(0);
 											GUI_MessageBox("DISABLE ALARM_B", "Message", 0);
-											GUI_SelectLayer(1);
+											//GUI_SelectLayer(1);
 											break;
 										}	
 										HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR1, ALARMB_ACTION);
@@ -372,11 +386,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 										sAlarmB.AlarmDateWeekDay=(day+1);
 										sAlarmA.Alarm = RTC_ALARM_B;
 										HAL_RTC_SetAlarm_IT(&hrtc,&sAlarmB,RTC_FORMAT_BIN);
-										hItem = WM_GetDialogItem(hWin2, GUI_ID_USER + 0x0B);
+										hItem = WM_GetDialogItem(hWin0, GUI_ID_USER + 0x0B);
 										WM_DeleteWindow(hItem);
-										hItem=ICONVIEW_CreateEx(336,2,34,34,hWin2,WM_CF_SHOW|WM_CF_HASTRANS,0,(GUI_ID_USER + 0x0B),24,24);
+										hItem=ICONVIEW_CreateEx(336,2,34,34,hWin0,WM_CF_SHOW|WM_CF_HASTRANS,0,(GUI_ID_USER + 0x0B),24,24);
 										ICONVIEW_SetBkColor(hItem, ICONVIEW_CI_SEL, GUI_DARKBLUE|0x80000000);
-										//ICONVIEW_AddBitmapItem(hItem,Icons2[1],"");
+										ICONVIEW_AddBitmapItem(hItem,Icons2[1],"");
 									}
 							break;
 							}
@@ -389,9 +403,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 	}
 }
 			
-/**************************************************************************
-*    											CreateALARM
-***************************************************************************/
 WM_HWIN CreateALARM(void) {
   hWin_alarm = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, hWin0, 0, 0);
   return hWin_alarm;
