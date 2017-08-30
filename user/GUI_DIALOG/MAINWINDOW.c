@@ -896,26 +896,7 @@ void MainTask(void){
 			GUI_Delay(50);
 		}
 while(1)	
-{			
-		
-		/*if(change_Layer)
-		{
-			change_Layer=0;
-			if(State.Layer)
-			{
-				GUI_CURSOR_Hide();
-				GUI_SelectLayer(1);
-				GUI_CURSOR_Show();
-			}
-			else
-			{
-				GUI_CURSOR_Hide();
-				GUI_SelectLayer(0);
-				GUI_CURSOR_Show();
-			}
-		}*/
-		//if(PS2_MOUSE.status==MOUSE_AKTIV)
-		//	GUI_CURSOR_SetPosition(State.x,State.y);
+{				
 		if(timeupdate_flag)
 			WM_Paint(hWin2);
 		if(hwin)
@@ -1034,8 +1015,7 @@ while(1)
 					progbar=PROGBAR_CreateEx(246,32,50,5,hWin2,WM_CF_HASTRANS,PROGBAR_CF_HORIZONTAL,ID_PROGBAR_1);
 					PROGBAR_SetText(progbar,"");	
 					PROGBAR_SetMinMax(progbar,0,100);
-					
-					WM_SendMessageNoPara(hWin2,WM_USER);// сообщение окну hWin2 верхнего слоя layer 1 перерисовыаться и поверх символ update
+					WM_Paint(hWin2);// Перерисуем hWin2 верхнего слоя layer 1 для отображения символа update
 				}
 				else
 				{
@@ -1050,21 +1030,20 @@ while(1)
 			if(message_flag)
 				{
 					TEXT_SetDefaultTextColor(GUI_BLACK);
-					GUI_SelectLayer(0);
 					if(message_flag==1)
 					{
 						//__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
 						//UART_Terminal_DMATran("Download complete!\r\n");
 						WM_DeleteWindow(progbar);
-						
+						WM_Paint(hWin2);// Перерисуем hWin2 верхнего слоя layer 1 для того чтобы очистить символ update
 						MESSAGEBOX_Create("Download complete!","MESSAGE",0);	
 					}
 					else if(message_flag==2)
 					{
 						//__HAL_UART_DISABLE_IT(&huart1, UART_IT_IDLE);
 						//UART_Terminal_DMATran("Error download!\r\n");
-						WM_SendMessageNoPara(hWin2,WM_USER);// сообщение окну hWin2 верхнего слоя layer 1 перерисовыаться и очистить символ update
 						WM_DeleteWindow(progbar);
+						WM_Paint(hWin2);// Перерисуем hWin2 верхнего слоя layer 1 для того чтобы очистить символ update
 						MESSAGEBOX_Create("CRC ERROR!","ERROR",0);	
 					}
 					else if(message_flag==3)
@@ -1073,7 +1052,7 @@ while(1)
 						//UART_Terminal_DMATran("Error download!\r\n");
 						progbar=WM_GetDialogItem(hWin2,ID_PROGBAR_1);
 						WM_DeleteWindow(progbar);
-						WM_SendMessageNoPara(hWin2,WM_USER);// сообщение окну hWin2 верхнего слоя layer 1 перерисовыаться и очистить символ update
+						WM_Paint(hWin2);// Перерисуем hWin2 верхнего слоя layer 1 для того чтобы очистить символ update
 						MESSAGEBOX_Create("SIZE FIRMWARE ERROR!","ERROR",0);	
 					}
 					message_flag=0;
